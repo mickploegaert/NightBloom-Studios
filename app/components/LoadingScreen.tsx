@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from "framer-motion";
    Only shows on very first page load per session
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-const STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-const STEP_DURATION = 180;
-const HOLD_END = 400;
-const EXIT_DURATION = 900;
+const STEPS = [0, 4, 14, 28, 43, 61, 76, 88, 96, 100];
+const STEP_DURATION = 250;
+const HOLD_END = 600;
+const EXIT_DURATION = 1000;
 
 export default function LoadingScreen() {
   const [show, setShow] = useState<boolean | null>(null);
@@ -48,28 +48,31 @@ export default function LoadingScreen() {
 
   // Hold at 100 then exit
   useEffect(() => {
-    if (phase !== "done") return;
-    const t1 = setTimeout(() => setPhase("exit"), HOLD_END);
-    const t2 = setTimeout(() => {
-      sessionStorage.setItem("nb-loaded", "true");
-      setShow(false);
-    }, HOLD_END + EXIT_DURATION);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [phase]);
+    if (counter === 100) {
+      const t1 = setTimeout(() => setPhase("exit"), HOLD_END);
+      const t2 = setTimeout(() => {
+        sessionStorage.setItem("nb-loaded", "true");
+        setShow(false);
+      }, HOLD_END + EXIT_DURATION);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
+    }
+  }, [counter]);
 
-  if (show === null || show === false) return null;
-  if (!mounted) return <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#111111]" />;
+  // If we shouldn't show it at all, just return early.
+  if (show === false) return null;
+  // If ssr/unmounted, just show the solid background
+  if (!mounted) return <div className="fixed inset-0 z-9999 bg-white dark:bg-[#111111]" />;
 
   const progress = counter / 100;
 
   return (
     <AnimatePresence>
-      {show && (
+      {phase !== "exit" && (
         <motion.div
           key="loading-screen"
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-[#111111] overflow-hidden"
+          className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white dark:bg-[#111111] overflow-hidden"
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.85, ease: [0.85, 0, 0.15, 1] }}
+          transition={{ duration: 1.0, ease: [0.85, 0, 0.15, 1] }}
         >
           {/* Subtle radial glow */}
           <motion.div
@@ -81,9 +84,9 @@ export default function LoadingScreen() {
           />
 
           {/* Progress bar at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black/5 dark:bg-white/5">
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black/5 dark:bg-white/5">
             <motion.div
-              className="h-full bg-gradient-to-r from-purple-600 via-fuchsia-500 to-purple-600 dark:from-fuchsia-500 dark:via-purple-400 dark:to-fuchsia-500"
+              className="h-full bg-linear-to-r from-purple-600 via-fuchsia-500 to-purple-600 dark:from-fuchsia-500 dark:via-purple-400 dark:to-fuchsia-500"
               initial={{ width: "0%" }}
               animate={{ width: `${counter}%` }}
               transition={{ duration: STEP_DURATION / 1000, ease: "easeOut" }}
@@ -91,17 +94,17 @@ export default function LoadingScreen() {
           </div>
 
           {/* Flipping counter */}
-          <div className="relative flex items-center justify-center" style={{ perspective: "600px" }}>
+          <div className="relative flex items-center justify-center p-10" style={{ perspective: "800px" }}>
             <AnimatePresence mode="popLayout">
               <motion.span
                 key={counter}
-                initial={{ y: 70, opacity: 0, rotateX: -80, filter: "blur(8px)" }}
-                animate={{ y: 0, opacity: 1, rotateX: 0, filter: "blur(0px)" }}
-                exit={{ y: -70, opacity: 0, rotateX: 80, filter: "blur(8px)" }}
-                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ y: 50, opacity: 0, rotateX: -60, filter: "blur(4px)", scale: 0.9 }}
+                animate={{ y: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", scale: 1 }}
+                exit={{ y: -50, opacity: 0, rotateX: 60, filter: "blur(4px)", scale: 1.1 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="text-[clamp(6rem,22vw,16rem)] font-black text-black dark:text-white font-(family-name:--font-cinzel) select-none tabular-nums leading-none tracking-tighter"
                 style={{
-                  textShadow: `0 0 ${40 + counter}px rgba(168,85,247,${0.08 + progress * 0.3})`,
+                  textShadow: `0 0 ${40 + counter}px rgba(168,85,247,${0.05 + progress * 0.25})`,
                 }}
               >
                 {counter}

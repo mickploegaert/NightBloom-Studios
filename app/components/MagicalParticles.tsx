@@ -1,7 +1,7 @@
 ﻿
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -10,10 +10,13 @@ function ParticleField({ count = 800 }) {
   const points = useRef<THREE.Points>(null);
 
   // Generate random positions and colors for particles
-  const particlesPosition = new Float32Array(count * 3);
-  for (let i = 0; i < count * 3; i++) {
-    particlesPosition[i] = (Math.random() - 0.5) * 10;
-  }
+  const particlesPosition = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count * 3; i++) {
+      pos[i] = (Math.random() - 0.5) * 10;
+    }
+    return pos;
+  }, [count]);
 
   useFrame((state, delta) => {
     if (points.current) {
