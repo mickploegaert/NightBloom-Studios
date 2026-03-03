@@ -1,7 +1,74 @@
 ﻿
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+
+function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, delay?: number, index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["100%", "0%"]);
+  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["100%", "0%"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // Calculate normalized position -0.5 to 0.5
+    const xPct = (e.clientX - rect.left) / width - 0.5;
+    const yPct = (e.clientY - rect.top) / height - 0.5;
+    
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9, y: 30 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.7, delay: delay, ease: [0.22, 1, 0.36, 1] }}
+      className="perspective-1000 w-full h-full"
+      style={{ perspective: "1000px" }}
+    >
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="relative flex flex-col sm:flex-row gap-6 p-8 sm:p-10 rounded-2xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-white to-purple-50/30 dark:from-white/[0.02] dark:to-fuchsia-900/[0.02] shadow-sm hover:shadow-xl dark:shadow-none hover:border-purple-200 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full cursor-crosshair ml-auto mr-auto w-full group"
+      >
+        <motion.div 
+          className="absolute inset-0 pointer-events-none z-10 z-[1] mix-blend-overlay opacity-0 group-hover:opacity-30 dark:group-hover:opacity-20 transition-opacity duration-500"
+          style={{
+            background: `radial-gradient(circle at ${glareX} ${glareY}, white, transparent 40%)`
+          }}
+        />
+        
+        {/* Pink/purple magical glow effect on hover */}
+        <div className="absolute -inset-full z-0 bg-gradient-to-r from-transparent via-purple-400/10 dark:via-fuchsia-400/10 to-transparent group-hover:animate-[glow-pulse_2s_ease-in-out_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl transform -rotate-45" />
+
+        <div className="relative z-10 flex flex-col justify-between w-full h-full transform-style-preserve-3d" style={{ transform: "translateZ(30px)" }}>
+          {children}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -135,36 +202,26 @@ export default function WebsitesSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
           {processSteps.map((step, index) => (
-            <motion.div 
-              key={step.number} 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              className="group relative flex flex-col sm:flex-row gap-6 p-8 sm:p-10 border border-purple-100 dark:border-white/5 bg-gradient-to-br from-white to-purple-50/30 dark:from-white/[0.02] dark:to-fuchsia-900/[0.02] hover:shadow-[0_8px_30px_rgba(168,85,247,0.12)] dark:hover:shadow-[0_8px_30px_rgba(217,70,239,0.08)] transition-all duration-500 overflow-hidden"
-            >
-              {/* Pink/purple magical glow effect on hover */}
-              <div className="absolute -inset-full z-0 bg-gradient-to-r from-transparent via-purple-400/10 dark:via-fuchsia-400/10 to-transparent group-hover:animate-[glow-pulse_2s_ease-in-out_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl transform -rotate-45" />
-
+            <TiltCard key={step.number} index={index} delay={index * 0.1}>
               {/* Icon & Step Number */}
               <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-4 flex-shrink-0 z-10 w-full sm:w-auto">
-                <div className="shrink-0 text-purple-600 dark:text-fuchsia-400">
+                <div className="shrink-0 text-purple-600 dark:text-fuchsia-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_15px_rgba(217,70,239,0.3)]">
                   {step.icon}
                 </div>
-                <span className="text-4xl sm:text-5xl font-bold tracking-tighter text-purple-900/10 dark:text-white/10 font-(family-name:--font-cinzel) group-hover:text-purple-600/30 dark:group-hover:text-fuchsia-500/30 transition-colors duration-500 leading-none">
+                <span className="text-4xl sm:text-5xl font-bold tracking-tighter text-purple-900/10 dark:text-white/10 font-(family-name:--font-cinzel) group-hover:text-purple-600/30 dark:group-hover:text-fuchsia-500/30 transition-colors duration-500 leading-none" style={{ transform: "translateZ(20px)" }}>
                   {step.number}
                 </span>
               </div>
 
-              <div className="flex flex-col justify-center z-10">
-                <h3 className="text-xl font-bold text-black dark:text-white mb-3 tracking-tight group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 transition-colors duration-300">
+              <div className="flex flex-col justify-center z-10 w-full sm:pl-4">
+                <h3 className="text-xl sm:text-2xl font-bold text-black dark:text-white mb-2 sm:mb-3 tracking-tight group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 transition-colors duration-300" style={{ transform: "translateZ(40px)" }}>
                   {step.title}
                 </h3>
-                <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed font-light">
+                <p className="text-black/60 dark:text-white/60 text-sm sm:text-base leading-relaxed font-light" style={{ transform: "translateZ(10px)" }}>
                   {step.description}
                 </p>
               </div>
-            </motion.div>
+            </TiltCard>
           ))}
         </div>
       </div>
