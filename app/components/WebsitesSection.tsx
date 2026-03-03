@@ -50,7 +50,7 @@ function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, d
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex flex-col sm:flex-row gap-6 p-8 sm:p-10 rounded-2xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-white to-purple-50/30 dark:from-white/[0.02] dark:to-fuchsia-900/[0.02] shadow-sm hover:shadow-xl dark:shadow-none hover:border-purple-200 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full cursor-crosshair ml-auto mr-auto w-full group"
+        className="relative flex flex-col sm:flex-row gap-8 p-8 sm:p-12 rounded-none border border-black/10 dark:border-white/10 bg-white/40 dark:bg-[#111111]/40 backdrop-blur-md shadow-sm hover:shadow-2xl dark:shadow-none hover:border-purple-300/50 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full cursor-crosshair ml-auto mr-auto w-full group"
       >
         <motion.div 
           className="absolute inset-0 pointer-events-none z-10 z-[1] mix-blend-overlay opacity-0 group-hover:opacity-30 dark:group-hover:opacity-20 transition-opacity duration-500"
@@ -203,23 +203,28 @@ export default function WebsitesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
           {processSteps.map((step, index) => (
             <TiltCard key={step.number} index={index} delay={index * 0.1}>
-              {/* Icon & Step Number */}
-              <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-4 flex-shrink-0 z-10 w-full sm:w-auto">
-                <div className="shrink-0 text-purple-600 dark:text-fuchsia-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-                  {step.icon}
-                </div>
-                <span className="text-4xl sm:text-5xl font-bold tracking-tighter text-purple-900/10 dark:text-white/10 font-(family-name:--font-cinzel) group-hover:text-purple-600/30 dark:group-hover:text-fuchsia-500/30 transition-colors duration-500 leading-none" style={{ transform: "translateZ(20px)" }}>
-                  {step.number}
-                </span>
+              {/* Giant Faint Number in Background */}
+              <div className="absolute -bottom-4 -right-4 text-[120px] font-bold text-black/[0.03] dark:text-white/[0.02] font-(family-name:--font-geist-mono) pointer-events-none select-none transition-transform duration-500 group-hover:scale-110 group-hover:-translate-x-4 group-hover:-translate-y-4" style={{ transform: "translateZ(0px)" }}>
+                {step.number}
               </div>
 
-              <div className="flex flex-col justify-center z-10 w-full sm:pl-4">
-                <h3 className="text-xl sm:text-2xl font-bold text-black dark:text-white mb-2 sm:mb-3 tracking-tight group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 transition-colors duration-300" style={{ transform: "translateZ(40px)" }}>
-                  {step.title}
-                </h3>
-                <p className="text-black/60 dark:text-white/60 text-sm sm:text-base leading-relaxed font-light" style={{ transform: "translateZ(10px)" }}>
-                  {step.description}
-                </p>
+              <div className="h-full flex flex-col justify-between z-10 w-full relative">
+                {/* Icon */}
+                <div className="shrink-0 text-purple-600 dark:text-fuchsia-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_15px_rgba(217,70,239,0.3)] mb-8" style={{ transform: "translateZ(30px)" }}>
+                  {step.icon}
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold tracking-[0.2em] text-purple-600 dark:text-fuchsia-400 mb-2 uppercase" style={{ transform: "translateZ(40px)" }}>
+                    Phase {step.number}
+                  </h3>
+                  <h4 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 tracking-tight group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 transition-colors duration-300 font-(family-name:--font-cinzel)" style={{ transform: "translateZ(50px)" }}>
+                    {step.title}
+                  </h4>
+                  <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed font-light max-w-sm" style={{ transform: "translateZ(20px)" }}>
+                    {step.description}
+                  </p>
+                </div>
               </div>
             </TiltCard>
           ))}

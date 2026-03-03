@@ -3,6 +3,7 @@
 import { useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Magnetic from "./Magnetic";
 
 // Seeded pseudo-random for deterministic particle placement
 function seededRandom(seed: number) {
@@ -114,15 +115,35 @@ export default function Hero() {
 
         {/* Main Heading — large left-aligned */}
         <motion.h1
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[clamp(3rem,7.5vw,8rem)] font-bold leading-[0.92] tracking-tighter text-black dark:text-white transition-colors duration-500"
+          className="text-[clamp(3rem,7.5vw,8rem)] font-bold leading-[0.92] tracking-tighter text-black dark:text-white transition-colors duration-500 overflow-hidden flex flex-col"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.15, delayChildren: 0.5 } }
+          }}
         >
-          <span className="block">Where ideas</span>
-          <span className="block bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-200 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic font-normal tracking-tight">
-            blossom.
-          </span>
+          <div className="overflow-hidden py-1">
+            <motion.span 
+              variants={{
+                hidden: { y: "100%" },
+                visible: { y: 0, transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
+              }}
+              className="block"
+            >
+              Where ideas
+            </motion.span>
+          </div>
+          <div className="overflow-hidden py-2">
+            <motion.span 
+              variants={{
+                hidden: { y: "100%" },
+                visible: { y: 0, transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
+              }}
+              className="block bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-200 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic font-normal tracking-tight"
+            >
+              blossom.
+            </motion.span>
+          </div>
         </motion.h1>
 
         {/* Subtitle */}
@@ -142,19 +163,23 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 1.0 }}
           className="mt-8 flex flex-wrap gap-4"
         >
-          <a
-            href="/#contact"
-            className="group/btn relative inline-flex items-center justify-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
-          >
-            <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-            <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Get Started</span>
-          </a>
-          <a
-            href="/websites"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3 text-xs font-bold text-black/50 dark:text-white/50 tracking-widest uppercase hover:text-black dark:hover:text-white transition-colors"
-          >
-            Our Work &rarr;
-          </a>
+          <Magnetic>
+            <a
+              href="/#contact"
+              className="group/btn relative inline-flex items-center justify-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all cursor-pointer"
+            >
+              <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+              <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Get Started</span>
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <a
+              href="/websites"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3 text-xs font-bold text-black/50 dark:text-white/50 tracking-widest uppercase hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+            >
+              Our Work &rarr;
+            </a>
+          </Magnetic>
         </motion.div>
       </div>
 
