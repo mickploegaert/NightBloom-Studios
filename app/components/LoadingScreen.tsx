@@ -66,31 +66,33 @@ export default function LoadingScreen() {
       {phase !== "exit" && (
         <motion.div
           key="loading-screen"
-          className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#f8f8f8] dark:bg-[#0a0a0a] overflow-hidden"
+          className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#f8f8f8] dark:bg-[#111111]"
           exit={{ y: "-100%" }}
           transition={{ duration: 1.2, ease: framerEase }}
         >
 
-          {/* Progress bar at top (extremely minimal) */}
+          {/* Progress bar at top */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-black/5 dark:bg-white/5">
             <motion.div
-              className="h-full bg-black dark:bg-white"
+              className="h-full bg-purple-600 dark:bg-fuchsia-500"
               initial={{ width: "0%" }}
               animate={{ width: `${counter}%` }}
               transition={{ duration: STEP_DURATION / 1000, ease: "easeOut" }}
             />
           </div>
 
-          {/* Premium Vertical Ticker Counter */}
-          <div className="relative flex items-center justify-center h-[200px] overflow-hidden">
+          {/* 3D Book Page Flip Counter */}
+          <div className="relative flex items-center justify-center w-full" style={{ perspective: "1500px" }}>
             <AnimatePresence mode="popLayout">
               <motion.span
                 key={counter}
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: "0%", opacity: 1 }}
-                exit={{ y: "-100%", opacity: 0 }}
-                transition={{ duration: 0.6, ease: framerEase }}
-                className="text-[clamp(8rem,25vw,20rem)] font-bold text-black dark:text-white font-(family-name:--font-cinzel) leading-none tabular-nums tracking-tighter mix-blend-difference pb-4"
+                // Like a page turning from right to left
+                initial={{ rotateY: 90, opacity: 0, x: 20, filter: "blur(4px)" }}
+                animate={{ rotateY: 0, opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ rotateY: -90, opacity: 0, x: -20, filter: "blur(4px)" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[clamp(6rem,25vw,16rem)] font-bold text-black dark:text-white font-(family-name:--font-cinzel) leading-none tabular-nums tracking-tighter"
+                style={{ transformOrigin: "left center" }}
               >
                 {counter}
               </motion.span>
