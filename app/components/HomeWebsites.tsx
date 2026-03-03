@@ -23,7 +23,7 @@ export default function HomeWebsites() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 lg:grid-cols-2 border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 backdrop-blur-sm overflow-hidden shadow-2xl relative"
+          className="grid grid-cols-1 lg:grid-cols-2 border-[2px] border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-sm overflow-hidden shadow-2xl relative"
         >
           {/* Subtle Magical 3D Particles behind the content */}
           <div className="absolute inset-0 z-0 opacity-40">
@@ -31,7 +31,7 @@ export default function HomeWebsites() {
           </div>
 
           {/* Left: Content */}
-          <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-black/10 dark:border-white/10 dark:bg-[#050505] bg-white z-10">
+          <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center border-b-[2px] lg:border-b-0 lg:border-r-[2px] border-black/20 dark:border-white/20 dark:bg-[#111111] bg-white z-10">
             <div className="flex items-center gap-3 mb-6">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600 dark:text-fuchsia-400">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
@@ -57,14 +57,14 @@ export default function HomeWebsites() {
                 href="/websites"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
               >
-                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:circle(0%_at_0%_0%)] group-hover/btn:[clip-path:circle(150%_at_0%_0%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">LEARN MORE &rarr;</span>
               </Link>
               <Link
                 href="/#contact"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
               >
-                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:circle(0%_at_0%_0%)] group-hover/btn:[clip-path:circle(150%_at_0%_0%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">CONTACT US</span>
               </Link>
             </div>

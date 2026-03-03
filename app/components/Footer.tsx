@@ -70,7 +70,7 @@ export default function Footer() {
   const brandName = "NIGHTBLOOM".split("");
 
   return (
-    <footer className="relative bg-[#f8f8f8] dark:bg-[#050505] pt-24 pb-8 overflow-hidden z-10 transition-colors duration-500 border-t border-black/10 dark:border-white/10">
+    <footer className="relative bg-[#f8f8f8] dark:bg-[#111111] pt-24 pb-8 z-10 transition-colors duration-500 border-t-[4px] border-black/30 dark:border-white/30">
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24">
         
         {/* Large Centered Logo */}
@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         {/* Top Section: availability, links, socials -> Formatted like one seamless block */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-20 border-t border-black/10 dark:border-white/10 pt-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-20 border-t-[4px] border-black/30 dark:border-white/30 pt-20">
           
           {/* Brand Intro / Availability (replaces redundant logo) */}
           <div className="md:col-span-4 flex flex-col gap-8">
@@ -157,9 +157,9 @@ export default function Footer() {
         </div>
 
         {/* Centerpiece: Huge Animated Brand Name anchoring the footer */}
-        <div className="flex justify-center w-full pointer-events-none pb-8 select-none border-t border-black/10 dark:border-white/10 pt-16">
+        <div className="flex justify-center w-full pointer-events-none pb-12 select-none border-t-[4px] border-black/30 dark:border-white/30 pt-16 overflow-visible">
           <motion.div
-            className="flex text-[14vw] sm:text-[13vw] leading-[0.8] font-bold text-black dark:text-white uppercase font-(family-name:--font-cinzel) tracking-tighter overflow-visible py-2"
+            className="flex text-[12vw] sm:text-[11vw] leading-[1] font-bold text-black dark:text-white uppercase font-(family-name:--font-cinzel) tracking-tighter overflow-visible"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.1 }}
@@ -187,7 +187,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/10 dark:border-white/10 z-20 relative">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t-[4px] border-black/30 dark:border-white/30 z-20 relative">
           <p className="text-[10px] font-bold text-black/40 dark:text-white/40 tracking-[0.2em] uppercase">
             &copy; 2026 NIGHTBLOOM STUDIOS. ALL RIGHTS RESERVED.
           </p>

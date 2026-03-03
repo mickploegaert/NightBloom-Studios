@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #111111;
     --foreground: #ededed;
   }
 }
@@ -99,3 +99,5 @@ html {
   50% { opacity: 0.8; }
 }
 @custom-variant dark (&:where(.dark, .dark *));
+
+

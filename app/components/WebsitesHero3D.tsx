@@ -139,7 +139,7 @@ function WireShell({ isDark }: { isDark: boolean }) {
         color={isDark ? "#c084fc" : "#7c3aed"}
         wireframe
         transparent
-        opacity={isDark ? 0.18 : 0.25}
+        opacity={isDark ? 0.4 : 0.25}
       />
     </mesh>
   );
@@ -157,16 +157,15 @@ function Scene({ isDark }: { isDark: boolean }) {
   return (
     <>
       <SceneBackground isDark={isDark} />
-      <ambientLight intensity={isDark ? 0.3 : 0.8} />
-      <pointLight position={[5, 5, 5]} intensity={isDark ? 1.2 : 1.5} color={isDark ? "#a855f7" : "#9333ea"} />
-      <pointLight position={[-5, -3, -5]} intensity={isDark ? 0.8 : 1.0} color={isDark ? "#d946ef" : "#a855f7"} />
-      <pointLight position={[0, 3, -3]} intensity={isDark ? 0.5 : 0.7} color={isDark ? "#6366f1" : "#7c3aed"} />
+      <ambientLight intensity={isDark ? 0.5 : 0.8} />
+      <pointLight position={[5, 5, 5]} intensity={isDark ? 2.0 : 1.5} color={isDark ? "#a855f7" : "#9333ea"} />
+      <pointLight position={[-5, -3, -5]} intensity={isDark ? 1.5 : 1.0} color={isDark ? "#d946ef" : "#a855f7"} />
+      <pointLight position={[0, 3, -3]} intensity={isDark ? 1.0 : 0.7} color={isDark ? "#6366f1" : "#7c3aed"} />
 
-      {isDark && <CrystalCore isDark={isDark} />}
       <WireShell isDark={isDark} />
-      <ParticleRing count={250} radius={3} color={isDark ? "#c084fc" : "#7c3aed"} />
-      <ParticleRing count={150} radius={3.8} color={isDark ? "#d946ef" : "#a855f7"} />
-      <FloatingDust count={150} />
+      <ParticleRing count={300} radius={3} color={isDark ? "#c084fc" : "#7c3aed"} />
+      <ParticleRing count={200} radius={3.8} color={isDark ? "#d946ef" : "#a855f7"} />
+      <FloatingDust count={200} />
     </>
   );
 }

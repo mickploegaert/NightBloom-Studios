@@ -89,8 +89,8 @@ export default function Hero() {
         </video>
       </div>
 
-      {/* Solid overlay instead of gradients to prevent color banding (pixelated black) */}
-      <div className="absolute inset-0 bg-white/40 dark:bg-black/60 transition-colors duration-500" />
+      {/* Gradient overlay — fades from left so text is readable, right side shows video */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-white/10 dark:from-black/80 dark:via-black/50 dark:to-black/10 transition-colors duration-500" />
 
       {/* Floating Particles */}
       <Particles />
@@ -98,19 +98,29 @@ export default function Hero() {
       {/* Vignette */}
       <div className="absolute inset-0 shadow-[inset_0_0_150px_20px_rgba(255,255,255,0.7)] dark:shadow-[inset_0_0_200px_50px_rgba(0,0,0,0.8)] transition-all duration-500" />
 
-      {/* Content */}
-      <div className="relative z-10 flex w-full flex-col justify-center items-start px-6 md:px-10 lg:px-20 text-left mt-[15vh]">
+      {/* Content — left-aligned so video bloom stays visible */}
+      <div className="relative z-10 flex w-full flex-col justify-end items-start px-6 sm:px-10 lg:px-20 pb-24 pt-[30vh] sm:pt-[35vh]">
 
-        {/* Main Heading */}
+        {/* Small label */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-6 flex items-center gap-3"
+        >
+          <span className="w-10 h-px bg-purple-600 dark:bg-fuchsia-500"></span>
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-(family-name:--font-geist-mono)">NIGHTBLOOM STUDIOS</span>
+        </motion.div>
+
+        {/* Main Heading — large left-aligned */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl font-bold leading-[1.1] tracking-tighter text-black dark:text-white sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl flex flex-col items-start -ml-2 sm:-ml-4 md:ml-0 transition-colors duration-500 overflow-visible"
+          className="text-[clamp(3rem,7.5vw,8rem)] font-bold leading-[0.92] tracking-tighter text-black dark:text-white transition-colors duration-500"
         >
-          <span className="opacity-95 drop-shadow-md pb-2">Where</span>
-          <span className="opacity-95 drop-shadow-md ml-8 md:ml-20 pb-2">ideas</span>
-          <span className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-200 dark:via-fuchsia-300 dark:to-indigo-200 bg-clip-text text-transparent font-(family-name:--font-cinzel) font-normal italic tracking-wider drop-shadow-xl translate-x-12 md:translate-x-32 mt-2 md:mt-4 transition-all duration-500 leading-[1.3] py-1 overflow-visible">
+          <span className="block">Where ideas</span>
+          <span className="block bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-200 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic font-normal tracking-tight">
             blossom.
           </span>
         </motion.h1>
@@ -120,10 +130,32 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-12 max-w-xl text-base leading-relaxed text-black/70 dark:text-white/60 sm:text-lg lg:text-xl font-light tracking-wide border-l border-purple-500/30 pl-5 ml-4 md:ml-12 backdrop-blur-sm transition-colors duration-500"
+          className="mt-8 max-w-md text-sm leading-relaxed text-black/60 dark:text-white/50 sm:text-base font-light tracking-wide transition-colors duration-500"
         >
-          We design and build digital experiences that inspire, connect, and grow. From concept to launch.
+          We design and build digital experiences that inspire, connect, and grow.
         </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          className="mt-8 flex flex-wrap gap-4"
+        >
+          <a
+            href="/#contact"
+            className="group/btn relative inline-flex items-center justify-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
+          >
+            <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+            <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Get Started</span>
+          </a>
+          <a
+            href="/websites"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 text-xs font-bold text-black/50 dark:text-white/50 tracking-widest uppercase hover:text-black dark:hover:text-white transition-colors"
+          >
+            Our Work &rarr;
+          </a>
+        </motion.div>
       </div>
 
     </section>

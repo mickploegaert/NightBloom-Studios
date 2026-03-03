@@ -57,7 +57,7 @@ export default function Navbar() {
       >
         <div className={`mx-auto flex items-center justify-between transition-all duration-[600ms] ease-[0.22,1,0.36,1] relative overflow-hidden ${
           scrolled && !menuOpen
-            ? "h-16 w-full max-w-5xl bg-white/80 dark:bg-black/70 backdrop-blur-2xl border-b md:border border-black/10 dark:border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)] px-6" 
+            ? "h-16 w-full max-w-5xl bg-white/50 dark:bg-black/40 backdrop-blur-xl border-b md:border border-black/8 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-6" 
             : "h-20 w-full max-w-[100vw] px-6 sm:px-10 lg:px-16 xl:px-24 bg-transparent border-transparent"
         }`}>
           {/* Left: Toggles */}
@@ -126,55 +126,59 @@ export default function Navbar() {
             className="group relative z-50 flex h-full w-12 items-center justify-end transition-all"
             aria-label="Toggle menu"
           >
-            <div className="relative w-8 h-8 flex items-center justify-center">
+            <motion.div
+              className="relative w-8 h-8 flex items-center justify-center"
+              animate={{ rotate: menuOpen ? 180 : 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
               {/* Top dot */}
               <motion.span
                 animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 1.2, rotate: 180 } 
-                  : { x: 0, y: -9, scale: 1, rotate: 0 }
+                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
+                  : { x: 0, y: -9, scale: 1, opacity: 1 }
                 }
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white transition-colors duration-300"
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
               />
               {/* Right dot */}
               <motion.span
                 animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 1.2, rotate: 180 } 
-                  : { x: 9, y: 0, scale: 1, rotate: 0 }
+                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
+                  : { x: 9, y: 0, scale: 1, opacity: 1 }
                 }
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.03 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white transition-colors duration-300"
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.03 }}
+                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
               />
               {/* Bottom dot */}
               <motion.span
                 animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 1.2, rotate: 180 } 
-                  : { x: 0, y: 9, scale: 1, rotate: 0 }
+                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
+                  : { x: 0, y: 9, scale: 1, opacity: 1 }
                 }
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white transition-colors duration-300"
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
+                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
               />
               {/* Left dot */}
               <motion.span
                 animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 1.2, rotate: 180 } 
-                  : { x: -9, y: 0, scale: 1, rotate: 0 }
+                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
+                  : { x: -9, y: 0, scale: 1, opacity: 1 }
                 }
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.09 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white transition-colors duration-300"
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.09 }}
+                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
               />
               {/* Center X lines appear when menu open */}
               <motion.span
                 animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.2 : 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.15 : 0 }}
                 className="absolute w-6 h-[2px] bg-black dark:bg-white rotate-45 origin-center"
               />
               <motion.span
                 animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.25 : 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.2 : 0 }}
                 className="absolute w-6 h-[2px] bg-black dark:bg-white -rotate-45 origin-center"
               />
-            </div>
+            </motion.div>
           </button>
         </div>
       </motion.nav>
@@ -187,7 +191,7 @@ export default function Navbar() {
             animate={{ opacity: 1, clipPath: "circle(150% at right top)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at right top)" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white dark:bg-[#0a0a0a] overflow-hidden transition-colors duration-500"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white dark:bg-[#111111] overflow-hidden transition-colors duration-500"
           >
             {/* Background elements for magical feel */}
             <motion.div 
@@ -241,7 +245,7 @@ export default function Navbar() {
                 transition={{ delay: 0.6, duration: 0.6 }}
                 className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-600 transition-all z-10"
               >
-                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:circle(0%_at_0%_0%)] group-hover:[clip-path:circle(150%_at_0%_0%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="group-hover:text-white transition-colors duration-300 relative z-10">Let&apos;s Talk</span>
                 <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black dark:text-white group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
