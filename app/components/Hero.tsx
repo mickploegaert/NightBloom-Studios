@@ -50,19 +50,11 @@ function Particles() {
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [playAnimation, setPlayAnimation] = useState(false);
 
   useEffect(() => {
     // Start animation shortly after component mounts
     setTimeout(() => setPlayAnimation(true), 100);
-    
-    // Force mute and play for strict mobile browsers (iOS Safari)
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(e => console.log("Autoplay prevented by browser", e));
-    }
   }, []);
 
   // Subtle parallax on mouse move (like UNESCO museum immersive feel)
@@ -93,20 +85,24 @@ export default function Hero() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white dark:bg-black transition-colors duration-500"
     >
       {/* Background Video */}
-      <div className="hero-bg absolute -inset-5 transition-transform duration-1500 ease-out">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          disablePictureInPicture
-          className="h-full w-full object-cover opacity-80 dark:opacity-100 transition-opacity duration-500 pointer-events-none select-none"
-        >
-          <source src="/herovideo.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <div 
+        className="hero-bg absolute -inset-5 transition-transform duration-1500 ease-out"
+        dangerouslySetInnerHTML={{
+          __html: `
+            <video
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="auto"
+              disablepictureinpicture
+              class="h-full w-full object-cover opacity-80 dark:opacity-100 transition-opacity duration-500 pointer-events-none select-none"
+            >
+              <source src="/herovideo.mp4" type="video/mp4" />
+            </video>
+          `
+        }}
+      />
 
       {/* Gradient overlay — fades from left so text is readable, right side shows video */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-white/10 dark:from-black/80 dark:via-black/50 dark:to-black/10 transition-colors duration-500" />
@@ -193,9 +189,10 @@ export default function Hero() {
           <Magnetic>
             <Link
               href="/websites"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3 text-xs font-bold text-black/50 dark:text-white/50 tracking-widest uppercase hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+              className="group/btn relative inline-flex items-center justify-center gap-2 border border-black/20 dark:border-white/20 bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all cursor-pointer"
             >
-              Our Work &rarr;
+              <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+              <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Our Work &rarr;</span>
             </Link>
           </Magnetic>
         </motion.div>

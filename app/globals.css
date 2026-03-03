@@ -48,6 +48,20 @@ body {
   animation: particle-float linear infinite;
 }
 
+/* Global Smooth Dark/Light Transition */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Let specific transform animations bypass the global delay if needed */
+.transition-transform {
+  transition-property: transform;
+}
+.transition-all {
+  transition-property: all;
+}
 /* Smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;

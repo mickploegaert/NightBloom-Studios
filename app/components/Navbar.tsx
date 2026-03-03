@@ -127,56 +127,40 @@ export default function Navbar() {
             aria-label="Toggle menu"
           >
             <motion.div
-              className="relative w-8 h-8 flex items-center justify-center"
+              className="relative w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
               animate={{ rotate: menuOpen ? 180 : 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Top dot */}
-              <motion.span
-                animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
-                  : { x: 0, y: -9, scale: 1, opacity: 1 }
-                }
+              {/* Rose Icon Center */}
+              <motion.div
+                animate={menuOpen ? { scale: 0, opacity: 0, rotate: 90 } : { scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
-              />
-              {/* Right dot */}
-              <motion.span
-                animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
-                  : { x: 9, y: 0, scale: 1, opacity: 1 }
-                }
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.03 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
-              />
-              {/* Bottom dot */}
-              <motion.span
-                animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
-                  : { x: 0, y: 9, scale: 1, opacity: 1 }
-                }
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
-              />
-              {/* Left dot */}
-              <motion.span
-                animate={menuOpen 
-                  ? { x: 0, y: 0, scale: 0, opacity: 0 } 
-                  : { x: -9, y: 0, scale: 1, opacity: 1 }
-                }
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.09 }}
-                className="absolute w-[6px] h-[6px] rounded-full bg-black dark:bg-white"
-              />
-              {/* Center X lines appear when menu open */}
+                className="absolute text-black dark:text-white"
+              >
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                  {/* Elegant continuous stem and base */}
+                  <path d="M12 22c0-4 2-5 2-8 0-1.5-1-2.5-2-2.5S10 12.5 10 14c0 3 2 4 2 8" />
+                  {/* Left majestic leaf */}
+                  <path d="M11 17c-2 0-3.5-1-4-2.5 1 0 3 .5 4 2.5z" />
+                  {/* Right majestic leaf */}
+                  <path d="M13.5 15c2 0 3.5-1 4-2.5-1 0-3 .5-4 2.5z" />
+                  {/* Intricate blooming petals */}
+                  <path d="M12 11.5c-3 0-5-2-5-5s2.5-4 5-4 5 1 5 4-2 5-5 5z" />
+                  <path d="M12 11.5c-1.5 0-3-1-3-3s1.5-2.5 3-2.5 3 1 3 2.5-1.5 3-3 3z" />
+                  <path d="M12 11.5c-.75 0-1.5-.5-1.5-1.5S11 8.5 12 8.5 13.5 9 13.5 10 12.75 11.5 12 11.5z" />
+                </svg>
+              </motion.div>
+              
+              {/* Cross (close menu) */}
               <motion.span
                 animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.15 : 0 }}
-                className="absolute w-6 h-[2px] bg-black dark:bg-white rotate-45 origin-center"
+                className="absolute w-6 h-[2px] bg-black dark:bg-white rotate-45 origin-center rounded-full"
               />
               <motion.span
                 animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.2 : 0 }}
-                className="absolute w-6 h-[2px] bg-black dark:bg-white -rotate-45 origin-center"
+                className="absolute w-6 h-[2px] bg-black dark:bg-white -rotate-45 origin-center rounded-full"
               />
             </motion.div>
           </button>

@@ -366,7 +366,7 @@ export default function WebsitesSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
           {pricingPackages.map((pkg, i) => (
             <motion.div
               key={pkg.name}
@@ -374,52 +374,73 @@ export default function WebsitesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className={`relative flex flex-col p-8 sm:p-10 transition-all duration-500 group border ${
-                pkg.highlight 
-                  ? "border-purple-600 dark:border-fuchsia-500 bg-transparent" 
-                  : "border-black/8 dark:border-white/8 bg-transparent"
+              className={`relative group transition-all duration-500 rounded-none ${
+                i === 2 ? "md:col-span-2" : ""
               }`}
             >
-              {/* Popular badge */}
-              {pkg.highlight && (
-                 <div className="absolute -top-3 left-8">
-                   <span className="bg-purple-600 dark:bg-fuchsia-600 text-white text-[10px] font-bold px-4 py-1 tracking-[0.15em] uppercase">Popular</span>
-                 </div>
-              )}
-
-              <span className={`text-[10px] font-bold tracking-[0.25em] uppercase font-(family-name:--font-geist-mono) mb-8 ${pkg.highlight ? "text-purple-600 dark:text-fuchsia-400" : "text-black/40 dark:text-white/40"}`}>
-                {pkg.name}
-              </span>
-
-              <div className="text-4xl sm:text-5xl font-bold tracking-tight mb-2 font-(family-name:--font-cinzel) text-black dark:text-white">
-                {pkg.price}
+              {/* Magic Moving Light Border System */}
+              <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
+                {/* 1. Spinning Gradient */}
+                <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(168,85,247,0.8)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(217,70,239,0.9)_100%)] opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* 2. Solid Inner Mask that leaves 1px of the spinning gradient exposed */}
+                <div className="absolute inset-[1px] bg-white dark:bg-[#111111] transition-colors duration-500" />
               </div>
-              <p className="text-sm font-light leading-relaxed mb-10 text-black/45 dark:text-white/45">
-                {pkg.description}
-              </p>
+              
+              {/* Static faint border overlay to keep structure visible */}
+              <div className="absolute inset-0 border border-black/10 dark:border-white/10 z-0 pointer-events-none mix-blend-overlay" />
 
-              <div className="mb-10 grow">
-                <ul className="flex flex-col gap-3">
-                  {pkg.features.map((feature, j) => (
-                    <li key={j} className="flex items-center gap-3 text-sm tracking-wide font-light text-black/55 dark:text-white/55">
-                      <span className="text-purple-600 dark:text-fuchsia-400 text-xs">&#x2713;</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+              {/* Card Content - relative to stay above the solid mask */}
+              <div className={`relative z-10 flex flex-col p-8 sm:p-10 h-full ${
+                i === 2 ? "md:flex-row md:items-center md:justify-between gap-8 md:gap-16" : ""
+              }`}>
+                {/* Popular badge */}
+                {pkg.highlight && (
+                   <div className="absolute -top-3 left-8 z-20">
+                     <span className="bg-purple-600 dark:bg-fuchsia-600 text-white text-[10px] font-bold px-4 py-1 tracking-[0.15em] uppercase shadow-lg">Popular</span>
+                   </div>
+                )}
+
+                <div className={`flex flex-col ${i === 2 ? "md:w-1/3" : ""}`}>
+                  <span className={`text-[10px] font-bold tracking-[0.25em] uppercase font-(family-name:--font-geist-mono) mb-8 ${pkg.highlight ? "text-purple-600 dark:text-fuchsia-400" : "text-black/40 dark:text-white/40"}`}>
+                    {pkg.name}
+                  </span>
+
+                  <div className="flex flex-col mb-2">
+                    <span className="text-xs font-medium text-black/40 dark:text-white/40 uppercase tracking-widest mb-1">Starting at</span>
+                    <div className="text-4xl sm:text-5xl font-bold tracking-tight font-(family-name:--font-cinzel) text-black dark:text-white">
+                      {pkg.price}
+                    </div>
+                  </div>
+                  <p className={`text-sm font-light leading-relaxed mb-10 md:mb-0 text-black/45 dark:text-white/45 ${i !== 2 ? "min-h-[60px]" : ""}`}>
+                    {pkg.description}
+                  </p>
+                </div>
+
+                <div className={`flex-grow ${i === 2 ? "md:w-1/3 md:border-l md:border-black/10 md:dark:border-white/10 md:pl-12" : "mb-10"}`}>
+                  <ul className="flex flex-col gap-3">
+                    {pkg.features.map((feature, j) => (
+                      <li key={j} className="flex items-center gap-3 text-sm tracking-wide font-light text-black/55 dark:text-white/55">
+                        <span className="text-purple-600 dark:text-fuchsia-400 text-xs">&#x2713;</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className={i === 2 ? "md:w-1/3 flex md:justify-end" : "mt-auto"}>
+                <Link
+                  href="/#contact"
+                  className={`group/btn relative flex justify-center items-center gap-2 rounded-none border px-8 py-4 text-xs font-bold tracking-widest uppercase overflow-hidden transition-all w-full ${i === 2 ? "md:w-auto" : ""} ${
+                    pkg.highlight 
+                      ? "border-purple-600 dark:border-fuchsia-500 text-purple-600 dark:text-fuchsia-400 hover:text-white dark:hover:text-white" 
+                      : "border-black/20 dark:border-white/20 text-black dark:text-white hover:border-purple-600 dark:hover:border-fuchsia-500 hover:text-white dark:hover:text-white"
+                  }`}
+                >
+                  <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                  <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{pkg.highlight ? "Start Project" : "Inquire"}</span>
+                </Link>
+                </div>
               </div>
-
-              <Link
-                href="/#contact"
-                className={`group/btn relative flex justify-center items-center gap-2 rounded-none border px-8 py-4 text-xs font-bold tracking-widest uppercase overflow-hidden transition-all w-full ${
-                  pkg.highlight 
-                    ? "border-purple-600 dark:border-fuchsia-500 text-purple-600 dark:text-fuchsia-400 hover:text-white dark:hover:text-white" 
-                    : "border-black/20 dark:border-white/20 text-black dark:text-white hover:border-purple-600 dark:hover:border-fuchsia-500"
-                }`}
-              >
-                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Get Started</span>
-              </Link>
             </motion.div>
           ))}
         </div>
