@@ -17,42 +17,8 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  const toggleTheme = (e: React.MouseEvent) => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-
-    const startViewTransition = (document as any).startViewTransition as
-      | ((callback: () => void) => { ready: Promise<void> })
-      | undefined;
-
-    if (!startViewTransition) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    const x = e.clientX;
-    const y = e.clientY;
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    const transition = startViewTransition(() => {
-      document.documentElement.classList.toggle("dark", nextTheme === "dark");
-      document.documentElement.style.colorScheme = nextTheme;
-      setTheme(nextTheme);
-    });
-
-    transition.ready.then(() => {
-      const clipAnimation = [
-        { clipPath: `circle(0px at ${x}px ${y}px)` },
-        { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` },
-      ];
-      document.documentElement.animate(clipAnimation, {
-        duration: 600,
-        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-        pseudoElement: "::view-transition-new(root)",
-      });
-    });
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   useEffect(() => {
