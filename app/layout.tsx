@@ -25,6 +25,27 @@ const myMagicalFont = Playfair_Display({
 export const metadata: Metadata = {
   title: "Nightbloom | Creative Digital Agency",
   description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
+  openGraph: {
+    title: "Nightbloom | Creative Digital Agency",
+    description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
+    url: "https://nightbloom.nl",
+    siteName: "Nightbloom",
+    images: [
+      {
+        url: "/backgroundabout.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Nightbloom Background",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nightbloom | Creative Digital Agency",
+    description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
+    images: ["/backgroundabout.jpg"],
+  },
 };
 
 export default function RootLayout({
