@@ -101,3 +101,25 @@ html {
   50% { opacity: 0.8; }
 }
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* =============================================
+   View Transition — circle-reveal from click
+   (like wavestorm.nl)
+   ============================================= */
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: vt-circle-reveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vt-circle-reveal {
+  from {
+    clip-path: circle(0% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(200vmax at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}

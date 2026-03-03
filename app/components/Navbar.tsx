@@ -8,7 +8,7 @@ const navLinks = [
   { label: "About", href: "/#about" },
   { label: "Projects", href: "/#portfolio" },
   { label: "Websites", href: "/websites" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -17,8 +17,22 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const toggleTheme = (e: React.MouseEvent) => {
+    const x = (e as React.MouseEvent).clientX;
+    const y = (e as React.MouseEvent).clientY;
+    document.documentElement.style.setProperty("--vt-x", `${x}px`);
+    document.documentElement.style.setProperty("--vt-y", `${y}px`);
+    const newTheme = theme === "dark" ? "light" : "dark";
+    const doc = document as any;
+    if (!doc.startViewTransition) {
+      setTheme(newTheme);
+      return;
+    }
+    doc.startViewTransition(() => {
+      // Synchronously flip the class so the transition captures the new state
+      document.documentElement.classList.toggle("dark", newTheme === "dark");
+      setTheme(newTheme);
+    });
   };
 
   useEffect(() => {
@@ -73,7 +87,7 @@ export default function Navbar() {
           >
             {/* Theme Toggle */}
             <button 
-              onClick={toggleTheme}
+              onClick={(e) => toggleTheme(e)}
               className={`relative flex items-center justify-center w-10 h-10 border transition-all duration-300 ${
                 scrolled
                   ? 'border-black/20 text-black/70 hover:text-black hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 bg-transparent'
@@ -225,7 +239,7 @@ export default function Navbar() {
               ))}
 
               <motion.a
-                href="/#contact"
+                href="/contact"
                 onClick={() => setMenuOpen(false)}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
