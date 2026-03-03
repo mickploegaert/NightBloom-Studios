@@ -50,11 +50,19 @@ function Particles() {
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [playAnimation, setPlayAnimation] = useState(false);
 
   useEffect(() => {
     // Start animation shortly after component mounts
     setTimeout(() => setPlayAnimation(true), 100);
+    
+    // Force mute and play for strict mobile browsers (iOS Safari)
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(e => console.log("Autoplay prevented by browser", e));
+    }
   }, []);
 
   // Subtle parallax on mouse move (like UNESCO museum immersive feel)
@@ -87,11 +95,14 @@ export default function Hero() {
       {/* Background Video */}
       <div className="hero-bg absolute -inset-5 transition-transform duration-1500 ease-out">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="h-full w-full object-cover opacity-80 dark:opacity-100 transition-opacity duration-500"
+          preload="auto"
+          disablePictureInPicture
+          className="h-full w-full object-cover opacity-80 dark:opacity-100 transition-opacity duration-500 pointer-events-none select-none"
         >
           <source src="/herovideo.mp4" type="video/mp4" />
         </video>
