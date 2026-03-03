@@ -1,13 +1,9 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Turnstile } from "@marsidev/react-turnstile";
-
-// Globe is client-only (Three.js)
-const Globe = dynamic(() => import("../components/Globe"), { ssr: false });
 
 // Seeded particles — same engine as Hero
 function seededRandom(seed: number) {
@@ -106,37 +102,8 @@ export default function ContactPage() {
 
       <Particles />
 
-      {/* Back link */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute top-24 left-6 sm:left-10 lg:left-16 z-10"
-      >
-        <Link
-          href="/"
-          className="group inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="group-hover:-translate-x-1 transition-transform duration-300"
-          >
-            <path d="M19 12H5" />
-            <path d="m12 19-7-7 7-7" />
-          </svg>
-          Back
-        </Link>
-      </motion.div>
-
       <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24 pt-32 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
 
           {/* ── LEFT COLUMN ── */}
           <div className="flex flex-col gap-10">
@@ -148,7 +115,7 @@ export default function ContactPage() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="text-xs font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] mb-4 block">
-                Contact
+                Web Agency
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
                 Let&apos;s Create
@@ -179,15 +146,15 @@ export default function ContactPage() {
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   ),
                   icon2: <polyline points="22,6 12,13 2,6" />,
-                  label: "hello@nightbloom.nl",
-                  href: "mailto:hello@nightbloom.nl",
+                  label: "info@nightbloom.nl",
+                  href: "mailto:info@nightbloom.nl",
                 },
                 {
                   icon: (
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   ),
                   icon2: <circle cx="12" cy="10" r="3" />,
-                  label: "Amsterdam, Netherlands",
+                  label: "Zeeland, Netherlands",
                   href: null,
                 },
               ].map((item, i) => (
@@ -223,14 +190,18 @@ export default function ContactPage() {
               ))}
             </motion.div>
 
-            {/* Globe */}
+            {/* 3D model placeholder — gets replaced tomorrow */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full h-[340px] lg:h-[400px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="relative flex items-center gap-6 pt-4"
             >
-              <Globe />
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent" />
+              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/25 dark:text-white/20 font-[family-name:var(--font-geist-mono)] whitespace-nowrap">
+                Nightbloom · Est. 2024
+              </span>
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent" />
             </motion.div>
           </div>
 
@@ -287,10 +258,16 @@ export default function ContactPage() {
                     onSubmit={handleSubmit}
                     className="flex flex-col gap-6"
                   >
-                    <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible">
-                      <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/40 dark:text-white/40 font-[family-name:var(--font-geist-mono)]">
-                        New Project
+                    <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="mb-2">
+                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] block mb-3">
+                        Contact
                       </span>
+                      <h2 className="text-2xl sm:text-3xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white leading-tight">
+                        Start a Project
+                      </h2>
+                      <p className="mt-2 text-sm text-black/50 dark:text-white/40 leading-relaxed">
+                        Fill in the form and we&apos;ll get back to you within 24 hours.
+                      </p>
                     </motion.div>
 
                     {/* Name + Email */}
@@ -387,9 +364,7 @@ export default function ContactPage() {
                     {/* Turnstile */}
                     <motion.div custom={6} variants={FIELD_VARIANTS} initial="hidden" animate="visible">
                       <Turnstile
-                        // ⚠️  Replace with your actual Cloudflare Turnstile site key
-                        // Get one at: https://dash.cloudflare.com → Turnstile
-                        siteKey="1x00000000000000000000AA"
+                        siteKey="0x4AAAAAAClzunK3SDVnMEWA"
                         onSuccess={(token) => setTurnstileToken(token)}
                         onExpire={() => setTurnstileToken(null)}
                         options={{
