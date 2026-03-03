@@ -82,7 +82,7 @@ export default function Footer() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             src="/logos/logo.png" 
             alt="Nightbloom Logo" 
-            className="w-48 sm:w-56 h-auto object-contain dark:invert-0 invert drop-shadow-[0_0_20px_rgba(0,0,0,0.15)] dark:drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:drop-shadow-[0_0_30px_rgba(168,85,247,0.3)] dark:hover:drop-shadow-[0_0_30px_rgba(217,70,239,0.3)] transition-all duration-700 hover:scale-105" 
+            className="w-48 sm:w-56 h-auto object-contain dark:invert-0 invert transition-all duration-700 hover:scale-105" 
           />
         </div>
 

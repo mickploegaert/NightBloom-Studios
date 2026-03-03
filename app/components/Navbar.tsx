@@ -57,7 +57,7 @@ export default function Navbar() {
       >
         <div className={`mx-auto flex items-center justify-between transition-all duration-[600ms] ease-[0.22,1,0.36,1] relative overflow-hidden ${
           scrolled && !menuOpen
-            ? "h-16 w-full max-w-5xl bg-white/50 dark:bg-black/40 backdrop-blur-xl border-b md:border border-black/8 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-6" 
+            ? "h-16 w-full max-w-5xl bg-white/20 dark:bg-[#111111]/30 backdrop-blur-xl border-b md:border border-black/5 dark:border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] px-6" 
             : "h-20 w-full max-w-[100vw] px-6 sm:px-10 lg:px-16 xl:px-24 bg-transparent border-transparent"
         }`}>
           {/* Left: Toggles */}
