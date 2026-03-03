@@ -20,8 +20,11 @@ export default function Navbar() {
   const toggleTheme = (e: React.MouseEvent) => {
     const nextTheme = theme === "dark" ? "light" : "dark";
 
-    // @ts-expect-error View Transition API
-    if (!document.startViewTransition) {
+    const startViewTransition = (document as any).startViewTransition as
+      | ((callback: () => void) => { ready: Promise<void> })
+      | undefined;
+
+    if (!startViewTransition) {
       setTheme(nextTheme);
       return;
     }
@@ -33,8 +36,7 @@ export default function Navbar() {
       Math.max(y, window.innerHeight - y)
     );
 
-    // @ts-expect-error View Transition API
-    const transition = document.startViewTransition(() => {
+    const transition = startViewTransition(() => {
       document.documentElement.classList.toggle("dark", nextTheme === "dark");
       document.documentElement.style.colorScheme = nextTheme;
       setTheme(nextTheme);
