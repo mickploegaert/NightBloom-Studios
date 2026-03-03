@@ -23,8 +23,13 @@ export default function HomeWebsites() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 lg:grid-cols-2 border-[2px] border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-sm overflow-hidden shadow-2xl relative"
+          className="group grid grid-cols-1 lg:grid-cols-2 overflow-hidden shadow-2xl relative"
         >
+          {/* Spinning light border */}
+          <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
+            <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(168,85,247,0.8)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(217,70,239,0.9)_100%)] opacity-50 group-hover:opacity-90 transition-opacity duration-500" />
+            <div className="absolute inset-[2px] bg-[#f8f8f8] dark:bg-[#111111] transition-colors duration-500" />
+          </div>
           {/* Subtle Magical 3D Particles behind the content */}
           <div className="absolute inset-0 z-0 opacity-40">
             <MagicalParticles />

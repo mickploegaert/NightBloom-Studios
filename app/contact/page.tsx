@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
 import { Turnstile } from "@marsidev/react-turnstile";
+import Footer from "../components/Footer";
 
 // Seeded particles — same engine as Hero
 function seededRandom(seed: number) {
@@ -93,7 +94,8 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-white dark:bg-[#111111] overflow-hidden transition-colors duration-500">
+    <>
+    <main className="relative bg-white dark:bg-[#111111] overflow-hidden transition-colors duration-500">
       {/* Ambient glow blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-purple-500/10 dark:bg-fuchsia-900/10 blur-[120px]" />
@@ -102,8 +104,8 @@ export default function ContactPage() {
 
       <Particles />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24 pt-32 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24 pt-24 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center">
 
           {/* ── LEFT COLUMN ── */}
           <div className="flex flex-col gap-10">
@@ -114,10 +116,10 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="text-xs font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] mb-4 block">
+              <span className="text-xs font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] mb-3 block">
                 Web Agency
               </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
                 Let&apos;s Create
                 <br />
                 <span className="bg-gradient-to-r from-purple-600 via-fuchsia-500 to-violet-600 bg-clip-text text-transparent">
@@ -126,7 +128,7 @@ export default function ContactPage() {
                 <br />
                 Magical.
               </h1>
-              <p className="mt-6 text-base text-black/60 dark:text-white/50 leading-relaxed max-w-md">
+              <p className="mt-4 text-sm text-black/60 dark:text-white/50 leading-relaxed max-w-md">
                 Tell us about your project. We&apos;ll get back to you within
                 24 hours — no fluff, just a real conversation about how we can
                 bring your vision to life.
@@ -195,13 +197,35 @@ export default function ContactPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative flex items-center gap-6 pt-4"
+              className="relative pt-2"
             >
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent" />
-              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/25 dark:text-white/20 font-[family-name:var(--font-geist-mono)] whitespace-nowrap">
-                Nightbloom · Est. 2024
-              </span>
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent" />
+              {/* Random glowing lines */}
+              <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                {[
+                  { top: "20%", left: "0%", w: "55%", rotate: "-6deg", delay: "0s", dur: "3.2s" },
+                  { top: "50%", left: "10%", w: "40%", rotate: "2deg",  delay: "0.8s", dur: "4.1s" },
+                  { top: "75%", left: "5%",  w: "65%", rotate: "-3deg", delay: "0.3s", dur: "2.8s" },
+                  { top: "38%", left: "20%", w: "30%", rotate: "8deg",  delay: "1.2s", dur: "3.7s" },
+                ].map((l, i) => (
+                  <div
+                    key={i}
+                    className="absolute h-px"
+                    style={{
+                      top: l.top, left: l.left, width: l.w,
+                      transform: `rotate(${l.rotate})`,
+                      background: "linear-gradient(90deg,transparent,rgba(168,85,247,0.55),transparent)",
+                      animation: `glow-pulse ${l.dur} ease-in-out ${l.delay} infinite`,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="relative flex items-center gap-5">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/30 dark:via-fuchsia-500/30 to-transparent" />
+                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/30 dark:text-white/25 font-[family-name:var(--font-geist-mono)] whitespace-nowrap">
+                  Nightbloom · Est. 2026
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/30 dark:via-fuchsia-500/30 to-transparent" />
+              </div>
             </motion.div>
           </div>
 
@@ -219,7 +243,7 @@ export default function ContactPage() {
             </div>
             <div className="absolute inset-0 border border-black/10 dark:border-white/10 z-0 pointer-events-none mix-blend-overlay" />
 
-            <div className="relative z-10 p-8 sm:p-10">
+            <div className="relative z-10 p-6 sm:p-8">
 
               <AnimatePresence mode="wait">
                 {submitted ? (
@@ -256,16 +280,16 @@ export default function ContactPage() {
                   <motion.form
                     key="form"
                     onSubmit={handleSubmit}
-                    className="flex flex-col gap-6"
+                    className="flex flex-col gap-4"
                   >
-                    <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="mb-2">
-                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] block mb-3">
+                    <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="mb-1">
+                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-[family-name:var(--font-geist-mono)] block mb-2">
                         Contact
                       </span>
-                      <h2 className="text-2xl sm:text-3xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white leading-tight">
+                      <h2 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white leading-tight">
                         Start a Project
                       </h2>
-                      <p className="mt-2 text-sm text-black/50 dark:text-white/40 leading-relaxed">
+                      <p className="mt-1 text-xs text-black/50 dark:text-white/40 leading-relaxed">
                         Fill in the form and we&apos;ll get back to you within 24 hours.
                       </p>
                     </motion.div>
@@ -353,7 +377,7 @@ export default function ContactPage() {
                       <textarea
                         name="message"
                         required
-                        rows={5}
+                        rows={3}
                         value={formData.message}
                         onChange={handleChange}
                         placeholder="Describe what you want to build, your goals, timeline, budget…"
@@ -406,5 +430,7 @@ export default function ContactPage() {
         </div>
       </div>
     </main>
+    <Footer />
+    </>
   );
 }

@@ -45,12 +45,18 @@ function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, d
       className="perspective-1000 w-full h-full"
       style={{ perspective: "1000px" }}
     >
+      {/* Spinning border wrapper */}
+      <div className="relative group overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
+          <div className="absolute inset-[-100%] animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(168,85,247,0.7)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(217,70,239,0.85)_100%)] opacity-40 group-hover:opacity-90 transition-opacity duration-500" />
+          <div className="absolute inset-[1px] bg-white dark:bg-[#111111] transition-colors duration-500" />
+        </div>
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex flex-col sm:flex-row gap-8 p-8 sm:p-12 rounded-none border border-black/10 dark:border-white/10 bg-white/40 dark:bg-[#111111]/40 backdrop-blur-md shadow-sm hover:shadow-2xl dark:shadow-none hover:border-purple-300/50 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full ml-auto mr-auto w-full group"
+        className="relative flex flex-col sm:flex-row gap-8 p-8 sm:p-12 rounded-none bg-transparent shadow-sm hover:shadow-2xl dark:shadow-none transition-shadow duration-500 overflow-visible h-full ml-auto mr-auto w-full"
       >
         <motion.div 
           className="absolute inset-0 pointer-events-none z-10 z-[1] mix-blend-overlay opacity-0 group-hover:opacity-30 dark:group-hover:opacity-20 transition-opacity duration-500"
@@ -66,6 +72,7 @@ function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, d
           {children}
         </div>
       </motion.div>
+      </div>
     </motion.div>
   );
 }
