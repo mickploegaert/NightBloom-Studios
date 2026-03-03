@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import Magnetic from "./Magnetic";
 
 // Seeded pseudo-random for deterministic particle placement
@@ -49,6 +50,21 @@ function Particles() {
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [playAnimation, setPlayAnimation] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(false);
+
+  useEffect(() => {
+    // Check if loading screen runs (only on very first load of session)
+    const hasLoaded = sessionStorage.getItem("hasLoadedNightbloom");
+    if (!hasLoaded) {
+      // It's the very first load, LoadingScreen will set this to true, but we know it's currently running.
+      setIsInitialLoad(true);
+      // Wait for LoadingScreen to finish (approx ~3.5s)
+      setTimeout(() => setPlayAnimation(true), 3200);
+    } else {
+      setPlayAnimation(true);
+    }
+  }, []);
 
   // Subtle parallax on mouse move (like UNESCO museum immersive feel)
   useEffect(() => {
@@ -105,7 +121,7 @@ export default function Hero() {
         {/* Small label */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={playAnimation ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-6 flex items-center gap-3"
         >
@@ -115,11 +131,11 @@ export default function Hero() {
 
         {/* Main Heading — large left-aligned */}
         <motion.h1
-          className="text-[clamp(3rem,7.5vw,8rem)] font-bold leading-[0.92] tracking-tighter text-black dark:text-white transition-colors duration-500 overflow-hidden flex flex-col"
+          className="text-[clamp(3rem,8vw,8rem)] font-bold leading-[0.95] md:leading-[0.92] tracking-tighter text-black dark:text-white transition-colors duration-500 overflow-hidden flex flex-col"
           initial="hidden"
-          animate="visible"
+          animate={playAnimation ? "visible" : "hidden"}
           variants={{
-            visible: { transition: { staggerChildren: 0.15, delayChildren: 0.5 } }
+            visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } }
           }}
         >
           <div className="overflow-hidden py-1">
@@ -149,9 +165,9 @@ export default function Hero() {
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={playAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-8 max-w-md text-sm leading-relaxed text-black/60 dark:text-white/50 sm:text-base font-light tracking-wide transition-colors duration-500"
+          className="mt-6 md:mt-8 max-w-md text-sm md:text-base leading-relaxed text-black/60 dark:text-white/50 font-light tracking-wide transition-colors duration-500"
         >
           We design and build digital experiences that inspire, connect, and grow.
         </motion.p>
@@ -159,26 +175,26 @@ export default function Hero() {
         {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={playAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 1.0 }}
           className="mt-8 flex flex-wrap gap-4"
         >
           <Magnetic>
-            <a
+            <Link
               href="/#contact"
               className="group/btn relative inline-flex items-center justify-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all cursor-pointer"
             >
               <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
               <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Get Started</span>
-            </a>
+            </Link>
           </Magnetic>
           <Magnetic>
-            <a
+            <Link
               href="/websites"
               className="inline-flex items-center justify-center gap-2 px-8 py-3 text-xs font-bold text-black/50 dark:text-white/50 tracking-widest uppercase hover:text-black dark:hover:text-white transition-colors cursor-pointer"
             >
               Our Work &rarr;
-            </a>
+            </Link>
           </Magnetic>
         </motion.div>
       </div>

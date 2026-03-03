@@ -21,6 +21,14 @@ export default function LoadingScreen() {
 
   useEffect(() => {
     setMounted(true);
+    // Check if we already showed the loading screen this session
+    const hasLoaded = sessionStorage.getItem("hasLoadedNightbloom");
+    if (hasLoaded) {
+      setShow(false);
+      setPhase("exit");
+    } else {
+      sessionStorage.setItem("hasLoadedNightbloom", "true");
+    }
   }, []);
 
   const counter = STEPS[idx];

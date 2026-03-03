@@ -50,7 +50,7 @@ function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, d
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex flex-col sm:flex-row gap-8 p-8 sm:p-12 rounded-none border border-black/10 dark:border-white/10 bg-white/40 dark:bg-[#111111]/40 backdrop-blur-md shadow-sm hover:shadow-2xl dark:shadow-none hover:border-purple-300/50 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full cursor-crosshair ml-auto mr-auto w-full group"
+        className="relative flex flex-col sm:flex-row gap-8 p-8 sm:p-12 rounded-none border border-black/10 dark:border-white/10 bg-white/40 dark:bg-[#111111]/40 backdrop-blur-md shadow-sm hover:shadow-2xl dark:shadow-none hover:border-purple-300/50 dark:hover:border-fuchsia-500/30 transition-shadow duration-500 overflow-hidden h-full ml-auto mr-auto w-full group"
       >
         <motion.div 
           className="absolute inset-0 pointer-events-none z-10 z-[1] mix-blend-overlay opacity-0 group-hover:opacity-30 dark:group-hover:opacity-20 transition-opacity duration-500"
@@ -167,24 +167,36 @@ export default function WebsitesSection() {
             <span className="text-xs font-bold tracking-[0.3em] uppercase text-purple-600 dark:text-fuchsia-400 font-(family-name:--font-geist-mono)">WEBSITES</span>
           </motion.div>
           
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-[80px] leading-[1.15] font-bold text-black dark:text-white tracking-tight mb-8 font-(family-name:--font-cinzel) overflow-visible"
-          >
-            Online<br/>
-            <span className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent italic">Experiences</span>
-          </motion.h1>
+          <div className="text-5xl sm:text-6xl lg:text-[80px] leading-[1.15] font-bold text-black dark:text-white tracking-tight mb-8 font-(family-name:--font-cinzel)">
+            <div className="overflow-hidden py-1">
+              <motion.div
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Online
+              </motion.div>
+            </div>
+            <div className="overflow-hidden py-1">
+              <motion.div
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent italic"
+              >
+                Experiences
+              </motion.div>
+            </div>
+          </div>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             className="text-black/70 dark:text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed font-light border-l-2 border-purple-500/40 pl-6"
           >
-            Custom websites engineered to perfection. From immersive landing pages to full web applications ? clean code, striking aesthetics, zero bloat.
-          </motion.p>
+            Custom websites engineered to perfection. From immersive landing pages to full web applications — clean code, striking aesthetics, zero bloat.
+          </motion.div>
         </div>
       </div>
 
@@ -193,11 +205,29 @@ export default function WebsitesSection() {
       {/* 2. HOW WE WORK */}
       <div className="mb-32">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) overflow-visible py-1">
+          <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) py-1">
             <span className="w-12 h-px bg-purple-600 dark:bg-fuchsia-500"></span>
-            How We Work
+            <div className="overflow-hidden">
+               <motion.span 
+                 initial={{ y: "100%" }} 
+                 whileInView={{ y: 0 }} 
+                 viewport={{ once: true, margin: "-100px" }} 
+                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                 className="block"
+               >
+                 How We Work
+               </motion.span>
+            </div>
           </h2>
-          <p className="text-black/40 dark:text-white/40 text-sm font-light max-w-sm">Four focused phases. No wasted time.</p>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-black/40 dark:text-white/40 text-sm font-light max-w-sm"
+          >
+            Four focused phases. No wasted time.
+          </motion.p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
@@ -236,9 +266,19 @@ export default function WebsitesSection() {
       {/* 3. FEATURED PROJECT (AXELFEST) */}
       <div id="portfolio" className="mb-32">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) overflow-visible py-1">
+          <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) py-1">
             <span className="w-12 h-px bg-purple-600 dark:bg-fuchsia-500"></span>
-            Featured Project
+            <div className="overflow-hidden">
+               <motion.span 
+                 initial={{ y: "100%" }} 
+                 whileInView={{ y: 0 }} 
+                 viewport={{ once: true, margin: "-100px" }} 
+                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                 className="block"
+               >
+                 Featured Project
+               </motion.span>
+            </div>
           </h2>
           <Link href="/projects" className="group flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-purple-600 dark:text-fuchsia-400 hover:text-purple-500 dark:hover:text-fuchsia-300 transition-colors">
             VIEW ALL PROJECTS
@@ -265,8 +305,16 @@ export default function WebsitesSection() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
 
           <div className="absolute inset-0 z-20 p-8 sm:p-12 flex flex-col justify-end">
-            <h4 className="text-4xl sm:text-5xl md:text-7xl font-black font-(family-name:--font-cinzel) text-white tracking-widest mb-2 transform transition-transform duration-500 group-hover:-translate-y-2 drop-shadow-2xl overflow-visible py-1 leading-[1.1]">
-              AXELFEST
+            <h4 className="text-4xl sm:text-5xl md:text-7xl font-black font-(family-name:--font-cinzel) text-white tracking-widest mb-2 overflow-hidden py-1 leading-[1.1]">
+              <motion.span 
+                 initial={{ y: "100%" }} 
+                 whileInView={{ y: 0 }} 
+                 viewport={{ once: true, margin: "-50px" }} 
+                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                 className="block transform transition-transform duration-500 group-hover:-translate-y-2 drop-shadow-2xl"
+               >
+                 AXELFEST
+               </motion.span>
             </h4>
             <p className="text-white/80 tracking-[0.2em] text-xs sm:text-sm font-mono uppercase transform transition-transform duration-500 group-hover:-translate-y-2 mb-8">
               Festival Website & Ticketing Experience
@@ -292,11 +340,29 @@ export default function WebsitesSection() {
         
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) overflow-visible py-1">
+            <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) py-1">
               <span className="w-12 h-px bg-purple-600 dark:bg-fuchsia-500"></span>
-              Pricing
+              <div className="overflow-hidden">
+               <motion.span 
+                 initial={{ y: "100%" }} 
+                 whileInView={{ y: 0 }} 
+                 viewport={{ once: true, margin: "-100px" }} 
+                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                 className="block"
+               >
+                 Pricing
+               </motion.span>
+              </div>
             </h2>
-            <p className="mt-4 text-black/40 dark:text-white/40 text-sm font-light max-w-md ml-16">Transparent pricing. Every package includes revision rounds and post-launch support.</p>
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="mt-4 text-black/40 dark:text-white/40 text-sm font-light max-w-md ml-16"
+            >
+              Transparent pricing. Every package includes revision rounds and post-launch support.
+            </motion.p>
           </div>
         </div>
 

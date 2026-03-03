@@ -43,11 +43,27 @@ export default function HomeWebsites() {
               </span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold text-black dark:text-white tracking-tight leading-tight mb-2 font-(family-name:--font-cinzel) overflow-visible py-1">
-              Build Your
+            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold text-black dark:text-white tracking-tight leading-tight mb-2 font-(family-name:--font-cinzel) overflow-hidden py-1">
+              <motion.span
+                initial={{ y: "100%" }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="block"
+              >
+                Build Your
+              </motion.span>
             </h2>
-            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight leading-tight mb-6 overflow-visible py-1">
-              <span className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic">Digital Presence</span>
+            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight leading-tight mb-6 overflow-hidden py-1">
+              <motion.span
+                initial={{ y: "100%" }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="block bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic"
+              >
+                Digital Presence
+              </motion.span>
             </h2>
 
             <p className="text-black/70 dark:text-white/70 leading-relaxed text-sm sm:text-base mb-10 max-w-md font-light">
@@ -79,14 +95,21 @@ export default function HomeWebsites() {
             </h3>
             <div className="flex flex-col gap-6 relative z-10">
               {processSteps.map((step, i) => (
-                <div key={i} className="flex items-center gap-6 group">
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.2 + (i * 0.1), ease: [0.22, 1, 0.36, 1] }}
+                  key={i} 
+                  className="flex items-center gap-6 group"
+                >
                   <span className="flex items-center justify-center w-10 h-10 border border-black/20 dark:border-white/20 text-purple-600 dark:text-fuchsia-400 font-mono text-sm font-bold group-hover:bg-purple-600 dark:group-hover:bg-fuchsia-600 group-hover:text-white group-hover:border-purple-600 dark:group-hover:border-fuchsia-600 transition-all duration-300">
                     {step.num}
                   </span>
                   <span className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-wider font-(family-name:--font-geist-mono) uppercase group-hover:translate-x-2 group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 transition-all duration-300">
                     {step.title}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

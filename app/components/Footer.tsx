@@ -1,8 +1,7 @@
 "use client";
 
-
-
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const footerLinks = {
   Services: [
@@ -119,13 +118,13 @@ export default function Footer() {
               <ul className="flex flex-col gap-4">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-sm text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors font-light relative w-fit group"
                     >
                       {link.label}
                       <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-500 dark:bg-fuchsia-500 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

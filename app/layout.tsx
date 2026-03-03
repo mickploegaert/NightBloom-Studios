@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./components/Providers";
 import Navbar from "./components/Navbar";
-import CustomCursor from "./components/CustomCursor";
 import NoiseTexture from "./components/NoiseTexture";
 
 const geistSans = Geist({
@@ -36,10 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} antialiased bg-white text-black dark:bg-[#111111] dark:text-white transition-colors duration-500 cursor-none`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} antialiased bg-white text-black dark:bg-[#111111] dark:text-white transition-colors duration-500`}
       >
         <NoiseTexture />
-        <CustomCursor />
         <Providers>
           <Navbar />
           {children}
