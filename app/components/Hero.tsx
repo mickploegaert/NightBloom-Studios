@@ -51,19 +51,10 @@ function Particles() {
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [playAnimation, setPlayAnimation] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(false);
 
   useEffect(() => {
-    // Check if loading screen runs (only on very first load of session)
-    const hasLoaded = sessionStorage.getItem("hasLoadedNightbloom");
-    if (!hasLoaded) {
-      // It's the very first load, LoadingScreen will set this to true, but we know it's currently running.
-      setIsInitialLoad(true);
-      // Wait for LoadingScreen to finish (approx ~3.5s)
-      setTimeout(() => setPlayAnimation(true), 3200);
-    } else {
-      setPlayAnimation(true);
-    }
+    // Start animation shortly after component mounts
+    setTimeout(() => setPlayAnimation(true), 100);
   }, []);
 
   // Subtle parallax on mouse move (like UNESCO museum immersive feel)
