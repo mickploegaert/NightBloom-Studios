@@ -15,8 +15,8 @@ const processSteps = [
     title: "Strategy",
     description: "We analyze your brand, audience, and goals. Define the sitemap, user flows, and technical requirements before a single pixel is designed.",
     icon: (
-      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
       </svg>
     )
   },
@@ -25,8 +25,8 @@ const processSteps = [
     title: "Design",
     description: "High-fidelity mockups crafted in Figma with obsessive attention to typography, spacing, and interaction design. We iterate until it feels right.",
     icon: (
-      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
       </svg>
     )
   },
@@ -35,8 +35,8 @@ const processSteps = [
     title: "Develop",
     description: "Built with Next.js, React, and modern tooling. Every component is engineered for performance, accessibility, and smooth 60fps animations.",
     icon: (
-      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
       </svg>
     )
   },
@@ -45,8 +45,9 @@ const processSteps = [
     title: "Launch",
     description: "Deployed on edge infrastructure with SSL, CDN, and analytics. Ongoing support to keep your site fast, secure, and evolving.",
     icon: (
-      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-600 dark:text-fuchsia-400 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5" />
       </svg>
     )
   },
@@ -147,8 +148,8 @@ export default function WebsitesSection() {
               <div className="absolute -inset-full z-0 bg-gradient-to-r from-transparent via-purple-400/10 dark:via-fuchsia-400/10 to-transparent group-hover:animate-[glow-pulse_2s_ease-in-out_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl transform -rotate-45" />
 
               {/* Icon & Step Number */}
-              <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-4 flex-shrink-0 z-10 w-full sm:w-16">
-                <div className="flex items-center justify-center w-14 h-14 rounded-full bg-purple-100/50 dark:bg-fuchsia-900/20 text-purple-600 dark:text-fuchsia-400 shrink-0">
+              <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-4 flex-shrink-0 z-10 w-full sm:w-auto">
+                <div className="shrink-0 text-purple-600 dark:text-fuchsia-400">
                   {step.icon}
                 </div>
                 <span className="text-4xl sm:text-5xl font-bold tracking-tighter text-purple-900/10 dark:text-white/10 font-(family-name:--font-cinzel) group-hover:text-purple-600/30 dark:group-hover:text-fuchsia-500/30 transition-colors duration-500 leading-none">

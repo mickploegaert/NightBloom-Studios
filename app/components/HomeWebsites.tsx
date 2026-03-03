@@ -34,7 +34,9 @@ export default function HomeWebsites() {
           <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center border-b-[2px] lg:border-b-0 lg:border-r-[2px] border-black/20 dark:border-white/20 dark:bg-[#111111] bg-white z-10">
             <div className="flex items-center gap-3 mb-6">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600 dark:text-fuchsia-400">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
               <span className="text-sm font-bold tracking-[0.2em] uppercase text-purple-600 dark:text-fuchsia-400 font-(family-name:--font-geist-mono)">
                 WEBSITES
@@ -42,14 +44,14 @@ export default function HomeWebsites() {
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold text-black dark:text-white tracking-tight leading-tight mb-2 font-(family-name:--font-cinzel) overflow-visible py-1">
-              Forge Your
+              Build Your
             </h2>
             <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight leading-tight mb-6 overflow-visible py-1">
-              <span className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic">Online Identity</span>
+              <span className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic">Digital Presence</span>
             </h2>
 
             <p className="text-black/70 dark:text-white/70 leading-relaxed text-sm sm:text-base mb-10 max-w-md font-light">
-              We build enchanting, high-performance websites. Clean design, elegant code, no unnecessary complexity. From landing pages to full web applications.
+              High-performance websites engineered with precision. We combine striking design with clean, scalable code to deliver digital experiences that convert visitors into customers.
             </p>
 
             <div className="flex flex-wrap gap-4">

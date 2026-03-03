@@ -1,178 +1,134 @@
-﻿"use client";
+"use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   3D wireframe icosahedron
+   Loading Screen — Flipping counter 00 → 100
+   Only shows on very first page load per session
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function WireSphere({ color = "#c084fc", speed = 1 }: { color?: string; speed?: number }) {
-  const ref = useRef<THREE.Mesh>(null);
 
-  useFrame((state) => {
-    if (ref.current) {
-      ref.current.rotation.x = state.clock.elapsedTime * 0.35 * speed;
-      ref.current.rotation.y = state.clock.elapsedTime * 0.5 * speed;
-      ref.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.15;
-    }
-  });
-
-  return (
-    <mesh ref={ref}>
-      <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color={color} wireframe transparent opacity={0.7} />
-    </mesh>
-  );
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   Mini Three.js canvas for each sphere
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function SphereCanvas({ speed = 1 }: { speed?: number }) {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 2.8], fov: 45 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }}
-      style={{ background: "transparent" }}
-    >
-      <ambientLight intensity={0.4} />
-      <pointLight position={[2, 2, 3]} intensity={1.5} color="#a855f7" />
-      <pointLight position={[-2, -1, 2]} intensity={0.8} color="#d946ef" />
-      <WireSphere color="#c084fc" speed={speed} />
-    </Canvas>
-  );
-}
+const STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const STEP_DURATION = 180;
+const HOLD_END = 400;
+const EXIT_DURATION = 900;
 
 export default function LoadingScreen() {
-  const [show, setShow] = useState(true);
-  const [phase, setPhase] = useState(0);
+  const [show, setShow] = useState<boolean | null>(null);
+  const [counter, setCounter] = useState(0);
+  const [phase, setPhase] = useState<"counting" | "done" | "exit">("counting");
   const [mounted, setMounted] = useState(false);
 
+  // Only show once per session
   useEffect(() => {
     setMounted(true);
-    
-    // Alleen bij volledige reload of eerste load. Geen sessionStorage guard!
-    const timers = [
-      setTimeout(() => setPhase(1), 800),    // show "2"
-      setTimeout(() => setPhase(2), 1600),   // show "1"
-      setTimeout(() => setPhase(3), 2400),   // huge spheres appear in center
-      setTimeout(() => setPhase(4), 3800),   // shrink and slide to form NIGHTBLOOM
-      setTimeout(() => setPhase(5), 5500),   // hold
-      setTimeout(() => setPhase(6), 6100),   // begin exit
-      setTimeout(() => setShow(false), 7100),
-    ];
-
-    return () => timers.forEach(t => clearTimeout(t));
+    if (sessionStorage.getItem("nb-loaded")) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
   }, []);
 
-  if (!show) return null;
-  if (!mounted) {
-    return <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#111111] pointer-events-none" />;
-  }
+  // Counting steps
+  useEffect(() => {
+    if (!show) return;
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx++;
+      if (idx >= STEPS.length) {
+        clearInterval(interval);
+        setCounter(100);
+        setPhase("done");
+        return;
+      }
+      setCounter(STEPS[idx]);
+    }, STEP_DURATION);
+    return () => clearInterval(interval);
+  }, [show]);
 
-  const countdownNumber = phase <= 2 ? 3 - phase : null;
-  const ease = [0.22, 1, 0.36, 1] as const;
+  // Hold at 100 then exit
+  useEffect(() => {
+    if (phase !== "done") return;
+    const t1 = setTimeout(() => setPhase("exit"), HOLD_END);
+    const t2 = setTimeout(() => {
+      sessionStorage.setItem("nb-loaded", "true");
+      setShow(false);
+    }, HOLD_END + EXIT_DURATION);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [phase]);
+
+  if (show === null || show === false) return null;
+  if (!mounted) return <div className="fixed inset-0 z-[9999] bg-white dark:bg-[#111111]" />;
+
+  const progress = counter / 100;
 
   return (
     <AnimatePresence>
-      {phase < 6 && (
+      {show && (
         <motion.div
           key="loading-screen"
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#111111]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-[#111111] overflow-hidden"
           exit={{ y: "-100%" }}
-          transition={{ duration: 1.0, ease: [0.85, 0, 0.15, 1] }}
+          transition={{ duration: 0.85, ease: [0.85, 0, 0.15, 1] }}
         >
-          {/* Countdown */}
-          <AnimatePresence mode="wait">
-            {countdownNumber !== null && (
-              <motion.span
-                key={"cd-" + countdownNumber}
-                initial={{ scale: 0.3, opacity: 0, filter: "blur(18px)" }}
-                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-                exit={{ scale: 1.8, opacity: 0, filter: "blur(12px)" }}
-                transition={{ duration: 0.4, ease }}
-                className="absolute text-[clamp(5rem,18vw,12rem)] font-bold text-black dark:text-white font-(family-name:--font-cinzel) select-none"
-                style={{ textShadow: "0 0 80px rgba(168, 85, 247, 0.4)" }}
-              >
-                {countdownNumber}
-              </motion.span>
-            )}
-          </AnimatePresence>
+          {/* Subtle radial glow */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            animate={{ opacity: progress * 0.6 }}
+            style={{
+              background: "radial-gradient(circle at 50% 50%, rgba(147,51,234,0.1) 0%, transparent 60%)",
+            }}
+          />
 
-          {/* Spheres & Text */}
-          {phase >= 1 && (
-            <motion.div 
-              className="flex items-center justify-center select-none overflow-hidden pb-4"
-              initial={{ x: "-12vw" }}
-              animate={phase >= 4 ? { x: "0vw" } : { x: "-12vw" }}
-              transition={{ duration: 1.0, ease }}
-            >
-              <motion.span
-                initial={{ opacity: 0, x: -60, filter: "blur(8px)" }}
-                animate={phase >= 4 ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: -60, filter: "blur(8px)" }}
-                transition={{ duration: 0.9, ease }}
-                className="text-[clamp(1.8rem,6.5vw,5rem)] font-bold tracking-[0.03em] text-black dark:text-white font-(family-name:--font-cinzel) leading-none"
-              >
-                NIGHTBL
-              </motion.span>
-
-              {/* Twee Spheres container: gigantisch en ver uit elkaar, krimp en kom samen als letter OO */}
-              <motion.div
-                initial={{ scale: 0, opacity: 0, gap: "12vw" }}
-                animate={
-                  phase >= 4 ? { scale: 1, opacity: 1, gap: "0vw", rotate: 0 } :
-                  phase >= 3 ? { scale: 5, opacity: 1, gap: "10vw", rotate: -5 } :
-                  { scale: 0, opacity: 0, gap: "10vw", rotate: -15 }
-                }
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center justify-center shrink-0 origin-center z-20"
-              >
-                {/* O 1 */}
-                <div className="w-[clamp(1.8rem,6.5vw,5rem)] h-[clamp(1.8rem,6.5vw,5rem)] shrink-0">
-                  {phase >= 3 && <SphereCanvas speed={1} />}
-                </div>
-
-                {/* O 2 */}
-                <div className="w-[clamp(1.8rem,6.5vw,5rem)] h-[clamp(1.8rem,6.5vw,5rem)] shrink-0">
-                  {phase >= 3 && <SphereCanvas speed={-0.85} />}
-                </div>
-              </motion.div>
-
-              <motion.span
-                initial={{ opacity: 0, x: 60, filter: "blur(8px)" }}
-                animate={phase >= 4 ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: 60, filter: "blur(8px)" }}
-                transition={{ duration: 0.9, ease, delay: 0.05 }}
-                className="text-[clamp(1.8rem,6.5vw,5rem)] font-bold tracking-[0.03em] text-black dark:text-white font-(family-name:--font-cinzel) leading-none"
-              >
-                M
-              </motion.span>
-            </motion.div>
-          )}
-
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={phase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: 0.4, ease }}
-            className="absolute bottom-[38%] sm:bottom-[40%] text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase text-purple-600/50 dark:text-fuchsia-400/50 font-(family-name:--font-geist-mono)"
-          >
-            Creative Digital Agency
-          </motion.p>
-
-          {phase >= 3 && (
+          {/* Progress bar at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black/5 dark:bg-white/5">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.08) 0%, transparent 55%)",
-              }}
+              className="h-full bg-gradient-to-r from-purple-600 via-fuchsia-500 to-purple-600 dark:from-fuchsia-500 dark:via-purple-400 dark:to-fuchsia-500"
+              initial={{ width: "0%" }}
+              animate={{ width: `${counter}%` }}
+              transition={{ duration: STEP_DURATION / 1000, ease: "easeOut" }}
             />
-          )}
+          </div>
+
+          {/* Flipping counter */}
+          <div className="relative flex items-center justify-center" style={{ perspective: "600px" }}>
+            <AnimatePresence mode="popLayout">
+              <motion.span
+                key={counter}
+                initial={{ y: 70, opacity: 0, rotateX: -80, filter: "blur(8px)" }}
+                animate={{ y: 0, opacity: 1, rotateX: 0, filter: "blur(0px)" }}
+                exit={{ y: -70, opacity: 0, rotateX: 80, filter: "blur(8px)" }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[clamp(6rem,22vw,16rem)] font-black text-black dark:text-white font-(family-name:--font-cinzel) select-none tabular-nums leading-none tracking-tighter"
+                style={{
+                  textShadow: `0 0 ${40 + counter}px rgba(168,85,247,${0.08 + progress * 0.3})`,
+                }}
+              >
+                {counter}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+
+          {/* Brand name fades in after 50% */}
+          <motion.div
+            className="absolute bottom-12 sm:bottom-16 flex flex-col items-center gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: progress > 0.4 ? 1 : 0, y: progress > 0.4 ? 0 : 10 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="text-lg sm:text-xl font-bold tracking-[0.35em] uppercase text-black dark:text-white font-(family-name:--font-cinzel)">
+              NIGHTBLOOM
+            </span>
+            <span className="text-[10px] sm:text-xs font-medium tracking-[0.3em] uppercase text-purple-600/60 dark:text-fuchsia-400/60 font-(family-name:--font-geist-mono)">
+              Creative Digital Agency
+            </span>
+          </motion.div>
+
+          {/* Corner accents */}
+          <div className="absolute top-8 left-8 w-6 h-6 border-l-[2px] border-t-[2px] border-purple-600/20 dark:border-fuchsia-400/20" />
+          <div className="absolute top-8 right-8 w-6 h-6 border-r-[2px] border-t-[2px] border-purple-600/20 dark:border-fuchsia-400/20" />
+          <div className="absolute bottom-8 left-8 w-6 h-6 border-l-[2px] border-b-[2px] border-purple-600/20 dark:border-fuchsia-400/20" />
+          <div className="absolute bottom-8 right-8 w-6 h-6 border-r-[2px] border-b-[2px] border-purple-600/20 dark:border-fuchsia-400/20" />
         </motion.div>
       )}
     </AnimatePresence>
