@@ -75,14 +75,14 @@ export default function HomeWebsites() {
                 href="/websites"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
               >
-                <span className="absolute top-0 left-[-20%] w-[140%] h-full -z-10 bg-purple-600 dark:bg-fuchsia-600 -translate-x-full skew-x-[-30deg] group-hover/btn:translate-x-0 transition-transform duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">LEARN MORE &rarr;</span>
               </Link>
               <Link
                 href="/#contact"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-500 transition-all"
               >
-                <span className="absolute top-0 left-[-20%] w-[140%] h-full -z-10 bg-purple-600 dark:bg-fuchsia-600 -translate-x-full skew-x-[-30deg] group-hover/btn:translate-x-0 transition-transform duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">CONTACT US</span>
               </Link>
             </div>

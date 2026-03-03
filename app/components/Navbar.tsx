@@ -18,10 +18,9 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
 
   const toggleTheme = (e: React.MouseEvent) => {
-    const isDark = theme === "dark";
-    const nextTheme = isDark ? "light" : "dark";
+    const nextTheme = theme === "dark" ? "light" : "dark";
 
-    // @ts-ignore: View Transition API might not be fully typed in older TS
+    // @ts-expect-error View Transition API
     if (!document.startViewTransition) {
       setTheme(nextTheme);
       return;
@@ -34,25 +33,23 @@ export default function Navbar() {
       Math.max(y, window.innerHeight - y)
     );
 
-    // @ts-ignore
+    // @ts-expect-error View Transition API
     const transition = document.startViewTransition(() => {
+      document.documentElement.classList.toggle("dark", nextTheme === "dark");
+      document.documentElement.style.colorScheme = nextTheme;
       setTheme(nextTheme);
     });
 
     transition.ready.then(() => {
-      document.documentElement.animate(
-        [
-          { clipPath: `circle(0px at ${x}px ${y}px)` },
-          { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` },
-        ],
-        {
-          duration: 500,
-          easing: "ease-out",
-          pseudoElement: isDark
-            ? "::view-transition-old(root)"
-            : "::view-transition-new(root)",
-        }
-      );
+      const clipAnimation = [
+        { clipPath: `circle(0px at ${x}px ${y}px)` },
+        { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` },
+      ];
+      document.documentElement.animate(clipAnimation, {
+        duration: 600,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        pseudoElement: "::view-transition-new(root)",
+      });
     });
   };
 
@@ -268,7 +265,7 @@ export default function Navbar() {
                 transition={{ delay: 0.6, duration: 0.6 }}
                 className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-600 transition-all z-10"
               >
-                <span className="absolute top-0 left-[-20%] w-[140%] h-full -z-10 bg-purple-600 dark:bg-fuchsia-600 -translate-x-full skew-x-[-30deg] group-hover:translate-x-0 transition-transform duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="group-hover:text-white transition-colors duration-300 relative z-10">Let&apos;s Talk</span>
                 <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black dark:text-white group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
