@@ -100,6 +100,12 @@ html {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
 }
+
+/* Infinite horizontal marquee — used by the logo cloud strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* =============================================
@@ -122,4 +128,46 @@ html {
   to {
     clip-path: circle(200vmax at var(--vt-x, 50%) var(--vt-y, 50%));
   }
+}
+
+/* =============================================
+   Accessibility — visible keyboard focus rings
+   (only shown for keyboard nav, not mouse clicks)
+   ============================================= */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgba(147, 51, 234, 0.8);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.dark a:focus-visible,
+.dark button:focus-visible,
+.dark input:focus-visible,
+.dark textarea:focus-visible,
+.dark [tabindex]:focus-visible {
+  outline-color: rgba(217, 70, 239, 0.85);
+}
+
+/* Skip-to-content link — hidden until focused via keyboard */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: #9333ea;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
 }

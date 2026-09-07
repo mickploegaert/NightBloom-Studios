@@ -114,7 +114,7 @@ export default function Globe() {
     <div className="relative w-full h-full min-h-[400px]">
       {/* Ambient glow behind globe */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="w-[280px] h-[280px] rounded-full bg-purple-600/20 dark:bg-fuchsia-600/15 blur-[60px] animate-pulse" />
+        <div className="w-[280px] h-[280px] rounded-full bg-black/10 dark:bg-pink-500/15 blur-[60px] animate-pulse" />
       </div>
 
       <Canvas

@@ -3,19 +3,23 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
-
-const navLinks = [
-  { label: "About", href: "/#about" },
-  { label: "Projects", href: "/#portfolio" },
-  { label: "Websites", href: "/websites" },
-  { label: "Contact", href: "/contact" },
-];
+import Image from "next/image";
+import { useLanguage } from "./LanguageProvider";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { lang, toggleLang, t } = useLanguage();
+
+  const navLinks = [
+    { label: t("nav_home"), href: "/" },
+    { label: t("nav_about"), href: "/about" },
+    { label: t("nav_work"), href: "/work" },
+    { label: t("nav_websites"), href: "/websites" },
+    { label: t("nav_contact"), href: "/contact" },
+  ];
 
   const toggleTheme = (e: React.MouseEvent) => {
     const x = (e as React.MouseEvent).clientX;
@@ -88,6 +92,7 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <button 
               onClick={(e) => toggleTheme(e)}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               className={`relative flex items-center justify-center w-10 h-10 border transition-all duration-300 ${
                 scrolled
                   ? 'border-black/20 text-black/70 hover:text-black hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10 bg-transparent'
@@ -116,71 +121,66 @@ export default function Navbar() {
             </button>
             
             {/* Language Switcher */}
-            <button className={`flex items-center justify-center h-10 px-4 border text-xs font-bold tracking-[0.2em] font-(family-name:--font-geist-mono) gap-2 transition-all duration-300 ${
+            <button
+              onClick={toggleLang}
+              aria-label={`Switch language to ${lang === "en" ? "Dutch" : "English"}`}
+              className={`flex items-center justify-center h-10 px-4 border text-xs font-bold tracking-[0.2em] font-(family-name:--font-geist-mono) gap-2 transition-all duration-300 ${
               scrolled
                 ? 'border-black/20 bg-transparent text-black/70 hover:text-black hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'
                 : 'border-black/20 bg-black/5 text-black/70 hover:text-black dark:border-white/20 dark:bg-white/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'
             }`}>
-              <span className="text-black dark:text-white">EN</span>
+              <span className={lang === "en" ? "text-black dark:text-white" : "opacity-40"}>EN</span>
               <span className="opacity-30">/</span>
-              <span>NL</span>
+              <span className={lang === "nl" ? "text-black dark:text-white" : "opacity-40"}>NL</span>
             </button>
           </motion.div>
 
-          {/* Center: Nightbloom Branding */}
+          {/* Center: MK Studios Logo */}
           <motion.a
             href="/"
+            aria-label="MK Studios — home"
             animate={{ opacity: menuOpen ? 0 : 1, y: menuOpen ? -20 : 0 }}
             transition={{ duration: 0.4 }}
             style={{ pointerEvents: menuOpen ? "none" : "auto" }}
-            className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-bold tracking-[0.2em] uppercase font-(family-name:--font-cinzel) hover:text-purple-600 dark:hover:text-purple-300 transition-all duration-300 hidden sm:flex justify-center items-center h-full m-0 ${scrolled ? "text-xl text-black dark:text-white" : "text-2xl md:text-3xl text-black dark:text-white"}`}
+            whileHover={{ scale: 1.06 }}
+            className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center h-full m-0 transition-transform duration-300"
           >
-            Nightbloom
+            <Image
+              src="/logos/MK.png"
+              alt="MK Studios"
+              width={220}
+              height={125}
+              priority
+              className={`w-auto object-contain brightness-0 dark:brightness-100 transition-all duration-[600ms] ${scrolled ? "h-11 md:h-12" : "h-14 md:h-16"}`}
+            />
           </motion.a>
 
-          {/* Right: 4-Dot Diamond Menu Button */}
+          {/* Right: Animated Hamburger Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="group relative z-50 flex h-full w-12 items-center justify-end transition-all"
+            className="group relative z-50 flex h-10 w-10 items-center justify-center border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-pink-400 transition-colors duration-300"
             aria-label="Toggle menu"
           >
-            <motion.div
-              className="relative w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-              animate={{ rotate: menuOpen ? 180 : 0 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {/* Rose Icon Center */}
-              <motion.div
-                animate={menuOpen ? { scale: 0, opacity: 0, rotate: 90 } : { scale: 1, opacity: 1, rotate: 0 }}
+            <div className="relative w-5 h-4 flex flex-col justify-between">
+              {/* Top line */}
+              <motion.span
+                animate={menuOpen ? { rotate: 45, y: 7, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute text-black dark:text-white"
-              >
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                  {/* Elegant continuous stem and base */}
-                  <path d="M12 22c0-4 2-5 2-8 0-1.5-1-2.5-2-2.5S10 12.5 10 14c0 3 2 4 2 8" />
-                  {/* Left majestic leaf */}
-                  <path d="M11 17c-2 0-3.5-1-4-2.5 1 0 3 .5 4 2.5z" />
-                  {/* Right majestic leaf */}
-                  <path d="M13.5 15c2 0 3.5-1 4-2.5-1 0-3 .5-4 2.5z" />
-                  {/* Intricate blooming petals */}
-                  <path d="M12 11.5c-3 0-5-2-5-5s2.5-4 5-4 5 1 5 4-2 5-5 5z" />
-                  <path d="M12 11.5c-1.5 0-3-1-3-3s1.5-2.5 3-2.5 3 1 3 2.5-1.5 3-3 3z" />
-                  <path d="M12 11.5c-.75 0-1.5-.5-1.5-1.5S11 8.5 12 8.5 13.5 9 13.5 10 12.75 11.5 12 11.5z" />
-                </svg>
-              </motion.div>
-              
-              {/* Cross (close menu) */}
-              <motion.span
-                animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.15 : 0 }}
-                className="absolute w-6 h-[2px] bg-black dark:bg-white rotate-45 origin-center rounded-full"
+                className="block h-[2px] w-full bg-black dark:bg-white origin-center group-hover:bg-black dark:group-hover:bg-pink-500 transition-colors duration-300"
               />
+              {/* Middle line */}
               <motion.span
-                animate={menuOpen ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: menuOpen ? 0.2 : 0 }}
-                className="absolute w-6 h-[2px] bg-black dark:bg-white -rotate-45 origin-center rounded-full"
+                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="block h-[2px] w-3/4 bg-black dark:bg-white origin-right group-hover:bg-black dark:group-hover:bg-pink-500 group-hover:w-full transition-all duration-300"
               />
-            </motion.div>
+              {/* Bottom line */}
+              <motion.span
+                animate={menuOpen ? { rotate: -45, y: -7, width: "100%" } : { rotate: 0, y: 0, width: "50%" }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="block h-[2px] bg-black dark:bg-white origin-center group-hover:bg-black dark:group-hover:bg-pink-500 group-hover:w-full transition-all duration-300"
+              />
+            </div>
           </button>
         </div>
       </motion.nav>
@@ -202,7 +202,7 @@ export default function Navbar() {
               transition={{ delay: 0.5, duration: 1 }}
               className="absolute pointer-events-none inset-0 flex items-center justify-center"
             >
-               <div className="w-[50vw] h-[50vw] rounded-full bg-purple-500/10 dark:bg-fuchsia-900/10 blur-[100px] animate-pulse"></div>
+               <div className="w-[50vw] h-[50vw] rounded-full bg-black/5 dark:bg-pink-900/10 blur-[100px] animate-pulse"></div>
             </motion.div>
 
             <nav className="relative flex flex-col items-center gap-6 w-full max-w-4xl px-4">
@@ -222,7 +222,7 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="group relative flex items-center justify-center py-2 text-4xl sm:text-5xl md:text-6xl font-light tracking-wide text-black/50 dark:text-white/50 font-(family-name:--font-cinzel) w-full overflow-visible leading-tight"
+                    className="group relative flex items-center justify-center py-2 text-4xl sm:text-5xl md:text-6xl font-medium tracking-wide text-black/50 dark:text-white/50 font-(family-name:--font-brand) w-full overflow-visible leading-tight"
                   >
                     <div className="relative flex items-center h-[1.4em] px-4 overflow-hidden">
                       {/* Default text - pushed up on hover */}
@@ -245,10 +245,10 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-purple-600 dark:hover:border-fuchsia-600 transition-all z-10"
+                className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-400 transition-all z-10"
               >
-                <span className="absolute inset-0 -z-10 bg-purple-600 dark:bg-fuchsia-600 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                <span className="group-hover:text-white transition-colors duration-300 relative z-10">Let&apos;s Talk</span>
+                <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="group-hover:text-white transition-colors duration-300 relative z-10">{t("nav_lets_talk")}</span>
                 <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black dark:text-white group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14"></path>

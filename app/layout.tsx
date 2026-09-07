@@ -1,9 +1,12 @@
 ﻿import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { Providers } from "./components/Providers";
 import Navbar from "./components/Navbar";
 import NoiseTexture from "./components/NoiseTexture";
+import LoadingScreen from "./components/LoadingScreen";
+import PageTransition from "./components/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,29 +25,40 @@ const myMagicalFont = Playfair_Display({
   subsets: ["latin"],
 });
 
+// Sleek, professional brand typeface — used for the MK Studios wordmark
+const brandFont = Space_Grotesk({
+  weight: ["500", "600", "700"],
+  variable: "--font-brand",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "Nightbloom | Creative Digital Agency",
-  description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
+  metadataBase: new URL("https://mkstudios.nl"),
+  title: {
+    default: "MK Studios | Creative Digital Agency",
+    template: "%s | MK Studios",
+  },
+  description: "MK Studios designs and builds digital experiences that inspire.",
+  keywords: ["MK Studios", "web design", "web development", "Next.js", "digital agency", "Zeeland"],
+  authors: [{ name: "MK Studios" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Nightbloom | Creative Digital Agency",
-    description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
-    url: "https://nightbloom.nl",
-    siteName: "Nightbloom",
-    images: [
-      {
-        url: "/backgroundabout.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Nightbloom Background",
-      },
-    ],
+    title: "MK Studios | Creative Digital Agency",
+    description: "MK Studios designs and builds digital experiences that inspire.",
+    url: "https://mkstudios.nl",
+    siteName: "MK Studios",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nightbloom | Creative Digital Agency",
-    description: "Where ideas bloom — Nightbloom designs and builds digital experiences that inspire.",
-    images: ["/backgroundabout.jpg"],
+    title: "MK Studios | Creative Digital Agency",
+    description: "MK Studios designs and builds digital experiences that inspire.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -56,13 +70,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} antialiased bg-white text-black dark:bg-[#111111] dark:text-white transition-colors duration-500`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} ${brandFont.variable} antialiased bg-white text-black dark:bg-[#111111] dark:text-white transition-colors duration-500`}
       >
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <NoiseTexture />
         <Providers>
+          <LoadingScreen />
           <Navbar />
-          {children}
+          <div id="main-content">
+            <PageTransition>{children}</PageTransition>
+          </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

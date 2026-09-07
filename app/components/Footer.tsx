@@ -1,26 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useLanguage } from "./LanguageProvider";
 
 const footerLinks = {
   Services: [
-    { label: "Websites", href: "#services" },
-    { label: "Web Applications", href: "#services" },
-    { label: "UI/UX Design", href: "#services" },
-    { label: "Branding", href: "#services" },
+    { label: "Websites", href: "/websites" },
+    { label: "Web Applications", href: "/websites" },
+    { label: "UI/UX Design", href: "/websites" },
+    { label: "Branding", href: "/about" },
   ],
   Company: [
-    { label: "About", href: "#about" },
-    { label: "Projects", href: "#portfolio" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "#contact" },
+    { label: "About", href: "/about" },
+    { label: "Projects", href: "/work" },
+    { label: "Pricing", href: "/websites#pricing" },
+    { label: "Contact", href: "/contact" },
   ],
   Resources: [
-    { label: "Blog", href: "#" },
-    { label: "FAQ", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
+    { label: "FAQ", href: "/contact" },
   ],
 };
 
@@ -66,10 +65,31 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const brandName = "NIGHTBLOOM".split("");
+  const brandName = "MK STUDIOS".split("");
+  const { t } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
+  };
 
   return (
-    <footer className="relative bg-[#f8f8f8] dark:bg-[#111111] pt-24 pb-8 z-10 transition-colors duration-500 border-t-[4px] border-black/30 dark:border-white/30">
+    <footer className="relative bg-[#f8f8f8] dark:bg-[#111111] pt-24 pb-8 z-10 transition-colors duration-500 border-t border-black/10 dark:border-white/10">
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24">
         
         {/* Large Centered Logo */}
@@ -79,34 +99,77 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            src="/logos/logo.png" 
-            alt="Nightbloom Logo" 
-            className="w-48 sm:w-56 h-auto object-contain dark:invert-0 invert transition-all duration-700 hover:scale-105" 
+            src="/logos/MK.png" 
+            alt="MK Studios Logo" 
+            className="w-48 sm:w-56 h-auto object-contain brightness-0 dark:brightness-100 transition-all duration-700 hover:scale-105" 
           />
         </div>
 
         {/* Top Section: availability, links, socials -> Formatted like one seamless block */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-20 border-t-[4px] border-black/30 dark:border-white/30 pt-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-20 border-t border-black/10 dark:border-white/10 pt-20">
           
           {/* Brand Intro / Availability (replaces redundant logo) */}
           <div className="md:col-span-4 flex flex-col gap-8">
             <div>
               <h3 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 tracking-tight leading-snug font-(family-name:--font-cinzel) overflow-visible py-1">
-                Let&apos;s build something <br className="hidden sm:block" /> brilliant together.
+                {t("footer_tagline")}
               </h3>
               <a 
-                href="mailto:info@nightbloom.nl" 
-                className="inline-flex items-center gap-2 text-sm text-purple-600 dark:text-fuchsia-400 hover:text-purple-500 dark:hover:text-fuchsia-300 transition-all font-semibold uppercase tracking-widest group"
+                href="mailto:info@mkstudios.nl" 
+                className="inline-flex items-center gap-2 text-sm text-black dark:text-pink-400 hover:text-black/70 dark:hover:text-pink-300 transition-all font-semibold uppercase tracking-widest group"
               >
-                info@nightbloom.nl
+                info@mkstudios.nl
                 <span className="transform transition-transform group-hover:translate-x-1">→</span>
               </a>
             </div>
 
-            <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light mt-4 border-l border-black/10 dark:border-white/10 pl-4 relative">
-              Zeeland, NL.<br />
-              We design and build digital experiences that inspire, connect, and grow.
+            <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light mt-4 border-l border-black/10 dark:border-white/10 pl-4 relative whitespace-pre-line">
+              {t("footer_location")}
             </p>
+
+            {/* Newsletter signup */}
+            <div className="mt-2">
+              <p className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40 mb-3">
+                {t("newsletter_heading")}
+              </p>
+              <p className="text-xs text-black/40 dark:text-white/30 mb-4 max-w-xs">
+                {t("newsletter_subtext")}
+              </p>
+              {status === "success" ? (
+                <p className="text-sm text-black dark:text-pink-400 font-semibold">
+                  {t("newsletter_success")}
+                </p>
+              ) : (
+                <form onSubmit={handleNewsletterSubmit} className="flex w-full max-w-xs">
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    Email address
+                  </label>
+                  <input
+                    id="newsletter-email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t("newsletter_placeholder")}
+                    className="w-full min-w-0 bg-transparent border border-black/15 dark:border-white/15 px-4 py-3 text-sm text-black dark:text-white placeholder-black/30 dark:placeholder-white/25 outline-none transition-all duration-300 focus:border-black dark:focus:border-pink-400"
+                  />
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    aria-label={t("newsletter_button")}
+                    className="shrink-0 flex items-center justify-center w-12 border border-l-0 border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-pink-500 hover:border-black/80 dark:hover:border-pink-500 transition-colors duration-300 disabled:opacity-40"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </button>
+                </form>
+              )}
+              {status === "error" && (
+                <p className="text-xs text-red-500 dark:text-red-400 mt-2">Something went wrong. Please try again.</p>
+              )}
+            </div>
           </div>
 
           {/* Link Columns */}
@@ -123,7 +186,7 @@ export default function Footer() {
                       className="text-sm text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors font-light relative w-fit group"
                     >
                       {link.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-500 dark:bg-fuchsia-500 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-black dark:bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </li>
                 ))}
@@ -145,7 +208,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="flex items-center justify-center w-8 h-8 border border-black/15 dark:border-white/15 bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 group-hover:text-purple-600 dark:group-hover:text-fuchsia-400 dark:group-hover:bg-fuchsia-900/20 group-hover:border-purple-600 dark:group-hover:border-fuchsia-400 transition-all duration-300 group-hover:bg-purple-100">
+                  <span className="flex items-center justify-center w-8 h-8 border border-black/15 dark:border-white/15 bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 group-hover:text-black dark:group-hover:text-pink-400 dark:group-hover:bg-pink-900/20 group-hover:border-black dark:group-hover:border-pink-400 transition-all duration-300 group-hover:bg-black/10">
                     {social.icon}
                   </span>
                   {social.label}
@@ -156,9 +219,9 @@ export default function Footer() {
         </div>
 
         {/* Centerpiece: Huge Animated Brand Name anchoring the footer */}
-        <div className="flex justify-center w-full pointer-events-none pb-12 select-none border-t-[4px] border-black/30 dark:border-white/30 pt-16 overflow-visible">
+        <div className="flex justify-center w-full pointer-events-none pb-12 select-none border-t border-black/10 dark:border-white/10 pt-16 overflow-visible">
           <motion.div
-            className="flex text-[12vw] sm:text-[11vw] leading-[1] font-bold text-black dark:text-white uppercase font-(family-name:--font-cinzel) tracking-tighter overflow-visible"
+            className="flex text-[12vw] sm:text-[11vw] leading-[1] font-bold text-black dark:text-white uppercase font-(family-name:--font-brand) tracking-tighter overflow-visible"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.1 }}
@@ -177,21 +240,21 @@ export default function Footer() {
                   hidden: { opacity: 0, y: 150, scale: 0.8 },
                   visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", damping: 15, stiffness: 100 } }
                 }}
-                className="inline-block origin-bottom text-transparent bg-clip-text bg-linear-to-b from-black to-black/40 dark:from-white dark:to-white/40 drop-shadow-2xl"
+                className="inline-block origin-bottom text-transparent bg-clip-text bg-gradient-to-b from-black to-black/40 dark:from-white dark:to-white/40 drop-shadow-2xl"
               >
-                {letter}
+                {letter === " " ? "\u00A0" : letter}
               </motion.span>
             ))}
           </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t-[4px] border-black/30 dark:border-white/30 z-20 relative">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/10 dark:border-white/10 z-20 relative">
           <p className="text-[10px] font-bold text-black/40 dark:text-white/40 tracking-[0.2em] uppercase">
-            &copy; 2026 NIGHTBLOOM STUDIOS. ALL RIGHTS RESERVED.
+            &copy; 2026 MK STUDIOS. {t("footer_rights")}
           </p>
           <p className="text-[10px] font-bold text-black/40 dark:text-white/40 tracking-[0.2em] uppercase flex items-center gap-2">
-            MADE IN THE NETHERLANDS
+            {t("footer_made_in")}
           </p>
         </div>
 

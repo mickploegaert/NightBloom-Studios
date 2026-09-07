@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import WebsitesSection from "../components/WebsitesSection";
 import Footer from "../components/Footer";
 
