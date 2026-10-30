@@ -49,7 +49,7 @@ const TECH_STACK = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] dark:bg-[#111111] transition-colors duration-500">
+    <main className="min-h-screen bg-white dark:bg-black transition-colors duration-500">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 sm:px-10 lg:px-16 xl:px-24">
         <div className="max-w-7xl mx-auto">

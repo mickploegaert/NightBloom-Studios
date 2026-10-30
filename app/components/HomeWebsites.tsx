@@ -1,4 +1,4 @@
-﻿
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -27,8 +27,8 @@ export default function HomeWebsites() {
         >
           {/* Spinning light border */}
           <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-            <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(0,0,0,0.4)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(244,114,182,0.9)_100%)] opacity-50 group-hover:opacity-90 transition-opacity duration-500" />
-            <div className="absolute inset-[2px] bg-[#f8f8f8] dark:bg-[#111111] transition-colors duration-500" />
+            <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(8,52,199,0.55)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_78%,rgba(11,70,253,0.9)_100%)] opacity-50 group-hover:opacity-90 transition-opacity duration-500" />
+            <div className="absolute inset-[2px] bg-white dark:bg-black transition-colors duration-500" />
           </div>
           {/* Subtle Magical 3D Particles behind the content */}
           <div className="absolute inset-0 z-0 opacity-40">
@@ -36,14 +36,14 @@ export default function HomeWebsites() {
           </div>
 
           {/* Left: Content */}
-          <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center border-b-[2px] lg:border-b-0 lg:border-r-[2px] border-black/20 dark:border-white/20 dark:bg-[#111111] bg-white z-10">
+          <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center border-b-[2px] lg:border-b-0 lg:border-r-[2px] border-black/20 dark:border-white/20 dark:bg-black bg-white z-10">
             <div className="flex items-center gap-3 mb-6">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black/60 dark:text-pink-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M2 12h20" />
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
-              <span className="text-sm font-bold tracking-[0.2em] uppercase text-black/60 dark:text-pink-400 font-(family-name:--font-geist-mono)">
+              <span className="text-sm font-bold tracking-[0.2em] uppercase text-brand font-(family-name:--font-geist-mono)">
                 WEBSITES
               </span>
             </div>
@@ -65,7 +65,7 @@ export default function HomeWebsites() {
                 whileInView={{ y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="block bg-gradient-to-r from-black/70 via-black/50 to-black/30 dark:from-pink-300 dark:via-pink-200 dark:to-rose-300 bg-clip-text text-transparent font-(family-name:--font-cinzel) italic"
+                className="block bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent font-(family-name:--font-cinzel) italic"
               >
                 Digital Presence
               </motion.span>
@@ -78,16 +78,16 @@ export default function HomeWebsites() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/websites"
-                className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-400 transition-all"
+                className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
               >
-                <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">LEARN MORE &rarr;</span>
               </Link>
               <Link
                 href="/#contact"
-                className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-400 transition-all"
+                className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
               >
-                <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">CONTACT US</span>
               </Link>
             </div>
@@ -108,10 +108,10 @@ export default function HomeWebsites() {
                   key={i} 
                   className="flex items-center gap-6 group"
                 >
-                  <span className="flex items-center justify-center w-10 h-10 border border-black/20 dark:border-white/20 text-black/60 dark:text-pink-400 font-mono text-sm font-bold group-hover:bg-black dark:group-hover:bg-pink-500 group-hover:text-white group-hover:border-black dark:group-hover:border-pink-500 transition-all duration-300">
+                  <span className="flex items-center justify-center w-10 h-10 border border-black/20 dark:border-white/20 text-brand font-mono text-sm font-bold group-hover:bg-brand group-hover:text-white group-hover:border-brand transition-all duration-300">
                     {step.num}
                   </span>
-                  <span className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-wider font-(family-name:--font-geist-mono) uppercase group-hover:translate-x-2 group-hover:text-black dark:group-hover:text-pink-400 transition-all duration-300">
+                  <span className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-wider font-(family-name:--font-geist-mono) uppercase group-hover:translate-x-2 group-hover:text-brand transition-all duration-300">
                     {step.title}
                   </span>
                 </motion.div>

@@ -50,7 +50,7 @@ export default function LoadingScreen() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="absolute bottom-[40%] h-[2px] w-32 origin-left bg-gradient-to-r from-pink-400 to-pink-300"
+            className="absolute bottom-[40%] h-[2px] w-32 origin-left bg-gradient-to-r from-brand to-brand-bright"
           />
         </motion.div>
       )}

@@ -79,7 +79,7 @@ export default function Navbar() {
       >
         <div className={`mx-auto flex items-center justify-between transition-all duration-[600ms] ease-[0.22,1,0.36,1] relative overflow-hidden ${
           scrolled && !menuOpen
-            ? "h-16 w-full max-w-5xl bg-white/20 dark:bg-[#111111]/30 backdrop-blur-xl border-b md:border border-black/5 dark:border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] px-6" 
+            ? "h-16 w-full max-w-5xl bg-white/20 dark:bg-black/30 backdrop-blur-xl border-b md:border border-black/5 dark:border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] px-6" 
             : "h-20 w-full max-w-[100vw] px-6 sm:px-10 lg:px-16 xl:px-24 bg-transparent border-transparent"
         }`}>
           {/* Left: Toggles */}
@@ -158,7 +158,7 @@ export default function Navbar() {
           {/* Right: Animated Hamburger Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="group relative z-50 flex h-10 w-10 items-center justify-center border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-pink-400 transition-colors duration-300"
+            className="group relative z-50 flex h-10 w-10 items-center justify-center border border-black/20 dark:border-white/20 hover:border-brand transition-colors duration-300"
             aria-label="Toggle menu"
           >
             <div className="relative w-5 h-4 flex flex-col justify-between">
@@ -166,19 +166,19 @@ export default function Navbar() {
               <motion.span
                 animate={menuOpen ? { rotate: 45, y: 7, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="block h-[2px] w-full bg-black dark:bg-white origin-center group-hover:bg-black dark:group-hover:bg-pink-500 transition-colors duration-300"
+                className="block h-[2px] w-full bg-black dark:bg-white origin-center group-hover:bg-brand transition-colors duration-300"
               />
               {/* Middle line */}
               <motion.span
                 animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="block h-[2px] w-3/4 bg-black dark:bg-white origin-right group-hover:bg-black dark:group-hover:bg-pink-500 group-hover:w-full transition-all duration-300"
+                className="block h-[2px] w-3/4 bg-black dark:bg-white origin-right group-hover:bg-brand group-hover:w-full transition-all duration-300"
               />
               {/* Bottom line */}
               <motion.span
                 animate={menuOpen ? { rotate: -45, y: -7, width: "100%" } : { rotate: 0, y: 0, width: "50%" }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="block h-[2px] bg-black dark:bg-white origin-center group-hover:bg-black dark:group-hover:bg-pink-500 group-hover:w-full transition-all duration-300"
+                className="block h-[2px] bg-black dark:bg-white origin-center group-hover:bg-brand group-hover:w-full transition-all duration-300"
               />
             </div>
           </button>
@@ -193,7 +193,7 @@ export default function Navbar() {
             animate={{ opacity: 1, clipPath: "circle(150% at right top)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at right top)" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white dark:bg-[#111111] overflow-hidden transition-colors duration-500"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white dark:bg-black overflow-hidden transition-colors duration-500"
           >
             {/* Background elements for magical feel */}
             <motion.div 
@@ -202,7 +202,7 @@ export default function Navbar() {
               transition={{ delay: 0.5, duration: 1 }}
               className="absolute pointer-events-none inset-0 flex items-center justify-center"
             >
-               <div className="w-[50vw] h-[50vw] rounded-full bg-black/5 dark:bg-pink-900/10 blur-[100px] animate-pulse"></div>
+               <div className="w-[50vw] h-[50vw] rounded-full bg-brand/10 blur-[100px] animate-pulse"></div>
             </motion.div>
 
             <nav className="relative flex flex-col items-center gap-6 w-full max-w-4xl px-4">
@@ -245,9 +245,9 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-400 transition-all z-10"
+                className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all z-10"
               >
-                <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
                 <span className="group-hover:text-white transition-colors duration-300 relative z-10">{t("nav_lets_talk")}</span>
                 <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black dark:text-white group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

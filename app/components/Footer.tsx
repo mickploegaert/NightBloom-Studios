@@ -89,7 +89,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#f8f8f8] dark:bg-[#111111] pt-24 pb-8 z-10 transition-colors duration-500 border-t border-black/10 dark:border-white/10">
+    <footer className="relative bg-white dark:bg-black pt-24 pb-8 z-10 transition-colors duration-500 border-t border-black/10 dark:border-white/10">
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24">
         
         {/* Large Centered Logo */}
@@ -116,7 +116,7 @@ export default function Footer() {
               </h3>
               <a 
                 href="mailto:info@mkstudios.nl" 
-                className="inline-flex items-center gap-2 text-sm text-black dark:text-pink-400 hover:text-black/70 dark:hover:text-pink-300 transition-all font-semibold uppercase tracking-widest group"
+                className="inline-flex items-center gap-2 text-sm text-brand hover:text-brand-bright transition-all font-semibold uppercase tracking-widest group"
               >
                 info@mkstudios.nl
                 <span className="transform transition-transform group-hover:translate-x-1">→</span>
@@ -136,7 +136,7 @@ export default function Footer() {
                 {t("newsletter_subtext")}
               </p>
               {status === "success" ? (
-                <p className="text-sm text-black dark:text-pink-400 font-semibold">
+                <p className="text-sm text-brand font-semibold">
                   {t("newsletter_success")}
                 </p>
               ) : (
@@ -151,13 +151,13 @@ export default function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t("newsletter_placeholder")}
-                    className="w-full min-w-0 bg-transparent border border-black/15 dark:border-white/15 px-4 py-3 text-sm text-black dark:text-white placeholder-black/30 dark:placeholder-white/25 outline-none transition-all duration-300 focus:border-black dark:focus:border-pink-400"
+                    className="w-full min-w-0 bg-transparent border border-black/15 dark:border-white/15 px-4 py-3 text-sm text-black dark:text-white placeholder-black/30 dark:placeholder-white/25 outline-none transition-all duration-300 focus:border-brand"
                   />
                   <button
                     type="submit"
                     disabled={status === "sending"}
                     aria-label={t("newsletter_button")}
-                    className="shrink-0 flex items-center justify-center w-12 border border-l-0 border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-pink-500 hover:border-black/80 dark:hover:border-pink-500 transition-colors duration-300 disabled:opacity-40"
+                    className="shrink-0 flex items-center justify-center w-12 border border-l-0 border-brand bg-brand text-white hover:bg-brand-bright hover:border-brand-bright transition-colors duration-300 disabled:opacity-40"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12h14" />
@@ -186,7 +186,7 @@ export default function Footer() {
                       className="text-sm text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors font-light relative w-fit group"
                     >
                       {link.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-black dark:bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-brand transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </li>
                 ))}
@@ -208,7 +208,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="flex items-center justify-center w-8 h-8 border border-black/15 dark:border-white/15 bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 group-hover:text-black dark:group-hover:text-pink-400 dark:group-hover:bg-pink-900/20 group-hover:border-black dark:group-hover:border-pink-400 transition-all duration-300 group-hover:bg-black/10">
+                  <span className="flex items-center justify-center w-8 h-8 border border-black/15 dark:border-white/15 bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 group-hover:text-brand group-hover:bg-brand/15 group-hover:border-brand transition-all duration-300">
                     {social.icon}
                   </span>
                   {social.label}

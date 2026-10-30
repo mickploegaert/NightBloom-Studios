@@ -70,7 +70,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} ${brandFont.variable} antialiased bg-white text-black dark:bg-[#111111] dark:text-white transition-colors duration-500`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myMagicalFont.variable} ${brandFont.variable} antialiased bg-white text-[#071433] dark:bg-black dark:text-white transition-colors duration-500`}
       >
         <a href="#main-content" className="skip-link">
           Skip to content

@@ -55,7 +55,7 @@ const TESTIMONIALS = [
 
 export default function WorkPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] dark:bg-[#111111] transition-colors duration-500">
+    <main className="min-h-screen bg-white dark:bg-black transition-colors duration-500">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 sm:px-10 lg:px-16 xl:px-24">
         <div className="max-w-7xl mx-auto">
@@ -272,7 +272,7 @@ export default function WorkPage() {
           >
             <Link
               href="/contact"
-              className="border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black px-10 py-4 text-sm font-bold tracking-widest uppercase hover:bg-transparent hover:text-black dark:hover:bg-transparent dark:hover:text-white transition-all duration-300"
+              className="border border-brand bg-brand text-white px-10 py-4 text-sm font-bold tracking-widest uppercase hover:bg-transparent hover:text-brand transition-all duration-300"
             >
               Start a Project
             </Link>

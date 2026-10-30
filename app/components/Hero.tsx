@@ -52,7 +52,7 @@ function LoopingTypewriter({ words, className = "" }: { words: string[]; classNa
       <motion.span
         animate={{ opacity: [1, 0, 1] }}
         transition={{ duration: 0.8, repeat: Infinity }}
-        className="inline-block w-[3px] h-[0.9em] bg-pink-500 dark:bg-pink-400 ml-1 align-middle"
+        className="inline-block w-[3px] h-[0.9em] bg-brand ml-1 align-middle"
       />
     </span>
   );
@@ -151,7 +151,7 @@ export default function Hero() {
           <h1 className="text-[clamp(2.2rem,5.5vw,4.5rem)] font-bold leading-[1.1] tracking-tight min-h-[1.2em]">
             <LoopingTypewriter 
               words={ROTATING_WORDS}
-              className="bg-gradient-to-r from-pink-600 via-pink-500 to-rose-500 dark:from-pink-400 dark:via-pink-300 dark:to-rose-300 bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent"
             />
           </h1>
         </motion.div>
@@ -175,16 +175,16 @@ export default function Hero() {
         >
           <Link
             href="/contact"
-            className="group/btn relative inline-flex items-center justify-center gap-2 border border-pink-500 dark:border-pink-400 bg-transparent px-7 sm:px-8 py-3 sm:py-3.5 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-pink-600 dark:hover:border-pink-300 transition-all cursor-pointer"
+            className="group/btn relative inline-flex items-center justify-center gap-2 border border-brand bg-transparent px-7 sm:px-8 py-3 sm:py-3.5 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand-bright transition-all cursor-pointer"
           >
-            <span className="absolute inset-0 -z-10 bg-pink-500 dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+            <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
             <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{t("hero_cta_primary")}</span>
           </Link>
           <Link
             href="/work"
-            className="group/btn relative inline-flex items-center justify-center gap-2 border border-black/25 dark:border-white/25 bg-transparent px-7 sm:px-8 py-3 sm:py-3.5 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-pink-500 dark:hover:border-pink-400 transition-all cursor-pointer"
+            className="group/btn relative inline-flex items-center justify-center gap-2 border border-black/25 dark:border-white/25 bg-transparent px-7 sm:px-8 py-3 sm:py-3.5 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all cursor-pointer"
           >
-            <span className="absolute inset-0 -z-10 bg-pink-500 dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
+            <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
             <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{t("hero_cta_secondary")}</span>
           </Link>
         </motion.div>

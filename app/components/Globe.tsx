@@ -30,7 +30,7 @@ function GlobeMesh() {
     const makeLine = (points: THREE.Vector3[], isLat: boolean) => {
       const geo = new THREE.BufferGeometry().setFromPoints(points);
       const mat = new THREE.LineBasicMaterial({
-        color: isLat ? "#c026d3" : "#7c3aed",
+        color: isLat ? "#0B46FD" : "#0834C7",
         transparent: true,
         opacity: 0.22,
       });
@@ -80,7 +80,7 @@ function GlobeMesh() {
       <mesh ref={meshRef}>
         <sphereGeometry args={[1, 64, 64]} />
         <meshStandardMaterial
-          color="#1a0a2e"
+          color="#041028"
           transparent
           opacity={0.85}
           roughness={0.8}
@@ -99,7 +99,7 @@ function GlobeMesh() {
       <mesh ref={glowRef} scale={1.18}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshStandardMaterial
-          color="#a855f7"
+          color="#0B46FD"
           transparent
           opacity={0.08}
           side={THREE.BackSide}
@@ -114,7 +114,7 @@ export default function Globe() {
     <div className="relative w-full h-full min-h-[400px]">
       {/* Ambient glow behind globe */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="w-[280px] h-[280px] rounded-full bg-black/10 dark:bg-pink-500/15 blur-[60px] animate-pulse" />
+        <div className="w-[280px] h-[280px] rounded-full bg-brand/15 blur-[60px] animate-pulse" />
       </div>
 
       <Canvas
@@ -123,8 +123,8 @@ export default function Globe() {
         gl={{ alpha: true, antialias: true }}
       >
         <ambientLight intensity={0.4} />
-        <pointLight position={[5, 5, 5]} intensity={1.2} color="#c026d3" />
-        <pointLight position={[-5, -3, -5]} intensity={0.6} color="#7c3aed" />
+        <pointLight position={[5, 5, 5]} intensity={1.2} color="#0B46FD" />
+        <pointLight position={[-5, -3, -5]} intensity={0.6} color="#0834C7" />
         <GlobeMesh />
         <OrbitControls
           enableZoom={false}

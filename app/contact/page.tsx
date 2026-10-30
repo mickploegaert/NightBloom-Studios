@@ -41,7 +41,7 @@ function Particles() {
             height: p.size,
             left: `${p.left}%`,
             top: `${p.top}%`,
-            background: `radial-gradient(circle, rgba(236,72,153,${p.opacity}) 0%, rgba(244,114,182,${p.opacity * 0.5}) 50%, transparent 70%)`,
+            background: `radial-gradient(circle, rgba(11,70,253,${p.opacity}) 0%, rgba(11,70,253,${p.opacity * 0.5}) 50%, transparent 70%)`,
             animationDuration: `${p.duration}s`,
             animationDelay: `${p.delay}s`,
           }}
@@ -180,11 +180,11 @@ export default function ContactPage() {
 
   return (
     <>
-    <main className="relative bg-white dark:bg-[#111111] overflow-hidden transition-colors duration-500">
+    <main className="relative bg-white dark:bg-black overflow-hidden transition-colors duration-500">
       {/* Ambient glow blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-black/10 dark:bg-pink-900/10 blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-pink-400/10 dark:bg-pink-900/10 blur-[100px]" />
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-brand/10 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-brand/10 blur-[100px]" />
       </div>
 
       <Particles />
@@ -201,13 +201,13 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="text-xs font-bold tracking-[0.3em] uppercase text-black dark:text-pink-400 font-[family-name:var(--font-geist-mono)] mb-3 block">
+              <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-[family-name:var(--font-geist-mono)] mb-3 block">
                 Web Studio
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
                 Let&apos;s Create
                 <br />
-                <span className="bg-gradient-to-r from-black via-pink-400 to-violet-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent">
                   Something
                 </span>
                 <br />
@@ -246,7 +246,7 @@ export default function ContactPage() {
                 },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 group">
-                  <div className="flex items-center justify-center w-10 h-10 border border-black/10 dark:border-white/10 text-black dark:text-pink-400 shrink-0">
+                  <div className="flex items-center justify-center w-10 h-10 border border-black/10 dark:border-white/10 text-brand shrink-0">
                     <svg
                       width="16"
                       height="16"
@@ -264,7 +264,7 @@ export default function ContactPage() {
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="text-sm text-black/60 dark:text-white/50 hover:text-black dark:hover:text-pink-400 transition-colors duration-300"
+                      className="text-sm text-black/60 dark:text-white/50 hover:text-brand transition-colors duration-300"
                     >
                       {item.label}
                     </a>
@@ -282,9 +282,9 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative border-l-2 border-black/30 dark:border-pink-400/30 pl-6 py-1"
+              className="relative border-l-2 border-black/30 border-brand/30 pl-6 py-1"
             >
-              <div className="flex gap-1 mb-3 text-black dark:text-pink-400">
+              <div className="flex gap-1 mb-3 text-brand">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -330,18 +330,18 @@ export default function ContactPage() {
                     style={{
                       top: l.top, left: l.left, width: l.w,
                       transform: `rotate(${l.rotate})`,
-                      background: "linear-gradient(90deg,transparent,rgba(168,85,247,0.55),transparent)",
+                      background: "linear-gradient(90deg,transparent,rgba(11,70,253,0.55),transparent)",
                       animation: `glow-pulse ${l.dur} ease-in-out ${l.delay} infinite`,
                     }}
                   />
                 ))}
               </div>
               <div className="relative flex items-center gap-5">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-pink-400/30 to-transparent" />
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-brand/30 to-transparent" />
                 <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/30 dark:text-white/25 font-[family-name:var(--font-geist-mono)] whitespace-nowrap">
                   MK Studios · Est. 2026
                 </span>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-pink-400/30 to-transparent" />
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-brand/30 to-transparent" />
               </div>
             </motion.div>
           </div>
@@ -355,8 +355,8 @@ export default function ContactPage() {
           >
             {/* Spinning conic-gradient border (same as pricing cards) */}
             <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-              <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(168,85,247,0.9)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(217,70,239,1)_100%)] opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
-              <div className="absolute inset-[1px] bg-white dark:bg-[#111111] transition-colors duration-500" />
+              <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(11,70,253,0.9)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(11,70,253,1)_100%)] opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
+              <div className="absolute inset-[1px] bg-white dark:bg-black transition-colors duration-500" />
             </div>
             <div className="absolute inset-0 border border-black/10 dark:border-white/10 z-0 pointer-events-none mix-blend-overlay" />
 
@@ -373,9 +373,9 @@ export default function ContactPage() {
                     className="flex flex-col items-center justify-center gap-6 py-20 text-center"
                   >
                     <div className="relative w-20 h-20 flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full bg-black/20 dark:bg-pink-500/20 animate-ping" />
-                      <div className="w-16 h-16 rounded-full border border-black dark:border-pink-400 flex items-center justify-center">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black dark:text-pink-400">
+                      <div className="absolute inset-0 rounded-full bg-black/20 dark:bg-brand/20 animate-ping" />
+                      <div className="w-16 h-16 rounded-full border border-brand flex items-center justify-center">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </div>
@@ -386,9 +386,9 @@ export default function ContactPage() {
                     </div>
                     <Link
                       href="/"
-                      className="mt-4 group/btn relative inline-flex items-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-500 transition-all"
+                      className="mt-4 group/btn relative inline-flex items-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
                     >
-                      <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
+                      <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
                       <span className="group-hover/btn:text-white transition-colors duration-300 relative z-10">Back to Home</span>
                     </Link>
                   </motion.div>
@@ -400,7 +400,7 @@ export default function ContactPage() {
                     className="flex flex-col gap-4"
                   >
                     <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="mb-1">
-                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black dark:text-pink-400 font-[family-name:var(--font-geist-mono)] block mb-2">
+                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-brand font-[family-name:var(--font-geist-mono)] block mb-2">
                         Contact
                       </span>
                       <h2 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white leading-tight">
@@ -414,7 +414,7 @@ export default function ContactPage() {
                     {/* Name + Email */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <motion.div custom={1} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
-                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Name <span className="text-black dark:text-pink-400">*</span></label>
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Name <span className="text-brand">*</span></label>
                         <div className="relative group/input">
                           <input
                             type="text"
@@ -423,13 +423,13 @@ export default function ContactPage() {
                             value={formData.name}
                             onChange={handleChange}
                             placeholder="Your name"
-                            className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-black dark:focus:border-pink-400 focus:shadow-[0_0_0_1px_rgba(147,51,234,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(217,70,239,0.3)]"
+                            className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                           />
                         </div>
                       </motion.div>
 
                       <motion.div custom={2} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
-                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Email <span className="text-black dark:text-pink-400">*</span></label>
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Email <span className="text-brand">*</span></label>
                         <input
                           type="email"
                           name="email"
@@ -437,7 +437,7 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="you@company.com"
-                          className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-black dark:focus:border-pink-400 focus:shadow-[0_0_0_1px_rgba(147,51,234,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(217,70,239,0.3)]"
+                          className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                         />
                       </motion.div>
                     </div>
@@ -453,7 +453,7 @@ export default function ContactPage() {
                         value={formData.company}
                         onChange={handleChange}
                         placeholder="Your company"
-                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-black dark:focus:border-pink-400 focus:shadow-[0_0_0_1px_rgba(147,51,234,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(217,70,239,0.3)]"
+                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                       />
                     </motion.div>
 
@@ -472,12 +472,12 @@ export default function ContactPage() {
                               onClick={() => toggleType(t)}
                               className={`group/pill relative px-4 py-2 text-xs font-bold tracking-[0.15em] uppercase overflow-hidden border transition-all duration-300 ${
                                 active
-                                  ? "border-black dark:border-pink-400 text-white"
-                                  : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-black/50 dark:hover:border-pink-400/50"
+                                  ? "border-brand text-white"
+                                  : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-brand/50"
                               }`}
                             >
                               {active && (
-                                <span className="absolute inset-0 bg-black dark:bg-pink-500" />
+                                <span className="absolute inset-0 bg-brand" />
                               )}
                               <span className="relative z-10">{t}</span>
                             </button>
@@ -501,12 +501,12 @@ export default function ContactPage() {
                               onClick={() => setBudget(active ? null : b)}
                               className={`group/pill relative px-4 py-2 text-xs font-bold tracking-[0.15em] uppercase overflow-hidden border transition-all duration-300 ${
                                 active
-                                  ? "border-black dark:border-pink-400 text-white"
-                                  : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-black/50 dark:hover:border-pink-400/50"
+                                  ? "border-brand text-white"
+                                  : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-brand/50"
                               }`}
                             >
                               {active && (
-                                <span className="absolute inset-0 bg-black dark:bg-pink-500" />
+                                <span className="absolute inset-0 bg-brand" />
                               )}
                               <span className="relative z-10">{b}</span>
                             </button>
@@ -518,7 +518,7 @@ export default function ContactPage() {
                     {/* Message */}
                     <motion.div custom={5} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
                       <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Tell Us About Your Project <span className="text-black dark:text-pink-400">*</span>
+                        Tell Us About Your Project <span className="text-brand">*</span>
                       </label>
                       <textarea
                         name="message"
@@ -527,7 +527,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         placeholder="Describe what you want to build, your goals, timeline, budget…"
-                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none resize-none transition-all duration-300 focus:border-black dark:focus:border-pink-400 focus:shadow-[0_0_0_1px_rgba(147,51,234,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(217,70,239,0.3)]"
+                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none resize-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                       />
                     </motion.div>
 
@@ -538,9 +538,9 @@ export default function ContactPage() {
                       </label>
                       <label
                         htmlFor="file-upload"
-                        className="w-full flex items-center gap-3 bg-transparent border border-dashed border-black/20 dark:border-white/15 px-4 py-3 text-sm cursor-pointer transition-all duration-300 hover:border-black dark:hover:border-pink-400 group/file"
+                        className="w-full flex items-center gap-3 bg-transparent border border-dashed border-black/20 dark:border-white/15 px-4 py-3 text-sm cursor-pointer transition-all duration-300 hover:border-brand group/file"
                       >
-                        <span className="flex items-center justify-center w-8 h-8 border border-black/10 dark:border-white/10 text-black/40 dark:text-white/40 group-hover/file:text-black dark:group-hover/file:text-pink-400 group-hover/file:border-black dark:group-hover/file:border-pink-400 transition-all shrink-0">
+                        <span className="flex items-center justify-center w-8 h-8 border border-black/10 dark:border-white/10 text-black/40 dark:text-white/40 group-hover/file:text-black dark:group-hover/file:text-brand group-hover/file:border-black dark:group-hover/file:border-brand transition-all shrink-0">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
                           </svg>
@@ -597,9 +597,9 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={!turnstileToken || sending}
-                        className="group/btn relative w-full inline-flex items-center justify-center gap-3 border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-black dark:hover:border-pink-500 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="group/btn relative w-full inline-flex items-center justify-center gap-3 border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        <span className="absolute inset-0 -z-10 bg-black dark:bg-pink-500 [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
+                        <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
                         <span className="group-hover/btn:text-white transition-colors duration-300 relative z-10">
                           {sending ? "Sending…" : "Send Message"}
                         </span>
@@ -632,11 +632,11 @@ export default function ContactPage() {
             transition={{ duration: 0.6 }}
             className="flex items-center gap-3 mb-10 justify-center"
           >
-            <span className="w-10 h-px bg-black dark:bg-pink-400"></span>
-            <span className="text-xs font-bold tracking-[0.3em] uppercase text-black dark:text-pink-400 font-[family-name:var(--font-geist-mono)]">
+            <span className="w-10 h-px bg-brand"></span>
+            <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-[family-name:var(--font-geist-mono)]">
               FAQ
             </span>
-            <span className="w-10 h-px bg-black dark:bg-pink-400"></span>
+            <span className="w-10 h-px bg-brand"></span>
           </motion.div>
 
           <div className="flex flex-col gap-3">
@@ -662,7 +662,7 @@ export default function ContactPage() {
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className="shrink-0 flex items-center justify-center w-7 h-7 border border-black/15 dark:border-white/15 text-black dark:text-pink-400"
+                      className="shrink-0 flex items-center justify-center w-7 h-7 border border-black/15 dark:border-white/15 text-brand"
                     >
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <path d="M12 5v14M5 12h14" />

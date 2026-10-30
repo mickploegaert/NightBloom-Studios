@@ -2,7 +2,7 @@ import Footer from "../components/Footer";
 
 export default function ProjectsPage() {
   return (
-    <div className="bg-[#f8f8f8] dark:bg-[#111111] min-h-screen transition-colors duration-500">
+    <div className="bg-white dark:bg-black min-h-screen transition-colors duration-500">
       <main className="relative w-full z-10 pt-40 pb-32 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-24">
         <h1 className="text-6xl sm:text-7xl lg:text-[100px] leading-none font-black text-black dark:text-white uppercase tracking-tighter mb-8">
           PROJECTS

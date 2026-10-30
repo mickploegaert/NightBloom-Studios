@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 import * as THREE from "three";
 
 /* ─── Orbiting particle ring ─── */
-function ParticleRing({ count = 200, radius = 2.8, color = "#a855f7" }) {
+function ParticleRing({ count = 200, radius = 2.8, color = "#0B46FD" }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
@@ -80,7 +80,7 @@ function FloatingDust({ count = 120 }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        color="#d946ef"
+        color="#0B46FD"
         size={0.02}
         transparent
         opacity={0.5}
@@ -108,7 +108,7 @@ function CrystalCore({ isDark }: { isDark: boolean }) {
       <mesh ref={meshRef} scale={1.6}>
         <icosahedronGeometry args={[1, 1]} />
         <MeshDistortMaterial
-          color={isDark ? "#9333ea" : "#7c3aed"}
+          color={isDark ? "#0B46FD" : "#0834C7"}
           roughness={isDark ? 0.1 : 0.3}
           metalness={isDark ? 0.9 : 0.6}
           distort={0.3}
@@ -136,7 +136,7 @@ function WireShell({ isDark }: { isDark: boolean }) {
     <mesh ref={ref} scale={2.2}>
       <icosahedronGeometry args={[1, 1]} />
       <meshBasicMaterial
-        color={isDark ? "#c084fc" : "#7c3aed"}
+        color={isDark ? "#6B93FF" : "#0834C7"}
         wireframe
         transparent
         opacity={isDark ? 0.4 : 0.25}
@@ -158,13 +158,13 @@ function Scene({ isDark }: { isDark: boolean }) {
     <>
       <SceneBackground isDark={isDark} />
       <ambientLight intensity={isDark ? 0.5 : 0.8} />
-      <pointLight position={[5, 5, 5]} intensity={isDark ? 2.0 : 1.5} color={isDark ? "#a855f7" : "#9333ea"} />
-      <pointLight position={[-5, -3, -5]} intensity={isDark ? 1.5 : 1.0} color={isDark ? "#d946ef" : "#a855f7"} />
-      <pointLight position={[0, 3, -3]} intensity={isDark ? 1.0 : 0.7} color={isDark ? "#6366f1" : "#7c3aed"} />
+      <pointLight position={[5, 5, 5]} intensity={isDark ? 2.0 : 1.5} color={isDark ? "#0B46FD" : "#0B46FD"} />
+      <pointLight position={[-5, -3, -5]} intensity={isDark ? 1.5 : 1.0} color={isDark ? "#0B46FD" : "#0B46FD"} />
+      <pointLight position={[0, 3, -3]} intensity={isDark ? 1.0 : 0.7} color={isDark ? "#3D6BFF" : "#0834C7"} />
 
       <WireShell isDark={isDark} />
-      <ParticleRing count={300} radius={3} color={isDark ? "#c084fc" : "#7c3aed"} />
-      <ParticleRing count={200} radius={3.8} color={isDark ? "#d946ef" : "#a855f7"} />
+      <ParticleRing count={300} radius={3} color={isDark ? "#6B93FF" : "#0834C7"} />
+      <ParticleRing count={200} radius={3.8} color={isDark ? "#0B46FD" : "#0B46FD"} />
       <FloatingDust count={200} />
     </>
   );

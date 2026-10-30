@@ -18,7 +18,7 @@ export default async function Image() {
           padding: "80px",
           backgroundColor: "#0a0a0a",
           backgroundImage:
-            "radial-gradient(circle at 15% 20%, rgba(147,51,234,0.35), transparent 45%), radial-gradient(circle at 85% 80%, rgba(217,70,239,0.3), transparent 45%)",
+            "radial-gradient(circle at 15% 20%, rgba(11,70,253,0.35), transparent 45%), radial-gradient(circle at 85% 80%, rgba(11,70,253,0.3), transparent 45%)",
           position: "relative",
         }}
       >
@@ -35,7 +35,7 @@ export default async function Image() {
               width: 10,
               height: 10,
               borderRadius: 999,
-              background: "linear-gradient(135deg, #a855f7, #d946ef)",
+              background: "linear-gradient(135deg, #0B46FD, #0B46FD)",
             }}
           />
           <span
@@ -43,7 +43,7 @@ export default async function Image() {
               fontSize: 28,
               fontWeight: 700,
               letterSpacing: 6,
-              color: "#d8b4fe",
+              color: "#9DB6FF",
               textTransform: "uppercase",
             }}
           >
@@ -65,7 +65,7 @@ export default async function Image() {
           <span>Where ideas</span>
           <span
             style={{
-              backgroundImage: "linear-gradient(90deg, #a855f7, #d946ef, #6366f1)",
+              backgroundImage: "linear-gradient(90deg, #0B46FD, #0B46FD, #3D6BFF)",
               backgroundClip: "text",
               color: "transparent",
               fontStyle: "italic",
