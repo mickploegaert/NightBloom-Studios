@@ -80,6 +80,8 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import MagicalParticles from "./MagicalParticles";
+import { useLanguage } from "./LanguageProvider";
+import type { TranslationKey } from "../i18n/translations";
 
 const WebsitesHero3D = dynamic(() => import("./WebsitesHero3D"), { ssr: false });
 
@@ -126,29 +128,27 @@ const processSteps = [
   },
 ];
 
-const pricingPackages = [
-  {
-    name: "ESSENTIAL",
-    price: "€800",
-    timeline: "1–2 weeks",
-    description: "Perfect for brands needing a robust and stunning online presence.",
-    features: ["Custom UI Design", "Responsive Layout", "Basic SEO Setup", "Contact Form", "Standard Animations"],
-  },
-  {
-    name: "ADVANCED",
-    price: "€1200",
-    timeline: "3–5 weeks",
-    description: "For established brands requiring advanced features and CMS.",
-    features: ["Premium UI/UX", "CMS Integration", "Advanced SEO", "Complex Animations", "Speed Optimization"],
-    highlight: true,
-  },
-  {
-    name: "E-COMMERCE",
-    price: "Custom",
-    timeline: "5–8 weeks",
-    description: "Scalable online stores engineered for high conversion rates.",
-    features: ["Shopify / Next.js", "Payment Gateways", "Inventory Management", "Custom Cart Flow", "Analytics"],
-  },
+type PriceRow = {
+  label: TranslationKey;
+  essential: TranslationKey;
+  advanced: TranslationKey;
+  shop: TranslationKey;
+  essentialOn: boolean;
+  advancedOn: boolean;
+  shopOn: boolean;
+};
+
+const PRICE_ROWS: PriceRow[] = [
+  { label: "price_row_pages", essential: "price_essential_pages", advanced: "price_advanced_pages", shop: "price_shop_pages", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_design", essential: "price_essential_design", advanced: "price_advanced_design", shop: "price_shop_design", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_cms", essential: "price_no_cms", advanced: "price_yes_cms", shop: "price_yes_cms", essentialOn: false, advancedOn: true, shopOn: true },
+  { label: "price_row_seo", essential: "price_essential_seo", advanced: "price_advanced_seo", shop: "price_shop_seo", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_motion", essential: "price_essential_motion", advanced: "price_advanced_motion", shop: "price_shop_motion", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_form", essential: "price_yes_form", advanced: "price_yes_form", shop: "price_yes_form", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_revisions", essential: "price_essential_revisions", advanced: "price_advanced_revisions", shop: "price_shop_revisions", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_support", essential: "price_essential_support", advanced: "price_advanced_support", shop: "price_shop_support", essentialOn: true, advancedOn: true, shopOn: true },
+  { label: "price_row_shop", essential: "price_no_shop", advanced: "price_no_shop", shop: "price_yes_shop", essentialOn: false, advancedOn: false, shopOn: true },
+  { label: "price_row_copy", essential: "price_no_copy", advanced: "price_no_copy", shop: "price_shop_copy", essentialOn: false, advancedOn: false, shopOn: false },
 ];
 
 const otherProjects = [
@@ -200,11 +200,12 @@ const techStack = [
 ];
 
 export default function WebsitesSection() {
+  const { t } = useLanguage();
   return (
     <section className="relative w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-24 pb-32">
       
       {/* 1. HERO with Three.js Crystal */}
-      <div className="pt-24 pb-20 relative min-h-[70vh] flex items-center">
+      <div className="relative flex items-center pt-28 pb-8">
         {/* 3D Background */}
         <div className="absolute inset-0 z-0">
           <WebsitesHero3D />
@@ -222,17 +223,17 @@ export default function WebsitesSection() {
             className="flex items-center gap-3 mb-6"
           >
             <span className="w-12 h-px bg-brand"></span>
-            <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-(family-name:--font-geist-mono)">WEBSITES</span>
+            <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-(family-name:--font-geist-mono)">{t("price_kicker")}</span>
           </motion.div>
           
-          <div className="text-5xl sm:text-6xl lg:text-[80px] leading-[1.15] font-bold text-black dark:text-white tracking-tight mb-8 font-(family-name:--font-cinzel)">
+          <div className="mb-6 text-4xl leading-[1.1] font-bold tracking-tight text-black sm:text-6xl dark:text-white font-(family-name:--font-cinzel)">
             <div className="overflow-hidden py-1">
               <motion.div
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
-                Online
+                {t("price_title_1")}
               </motion.div>
             </div>
             <div className="overflow-hidden py-1">
@@ -242,7 +243,7 @@ export default function WebsitesSection() {
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 className="bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent italic"
               >
-                Experiences
+                {t("price_title_2")}
               </motion.div>
             </div>
           </div>
@@ -253,10 +254,12 @@ export default function WebsitesSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-black/70 dark:text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed font-light border-l-2 border-brand/40 pl-6"
           >
-            Custom websites engineered to perfection. From immersive landing pages to full web applications — clean code, striking aesthetics, zero bloat.
+            {t("price_intro")}
           </motion.div>
         </div>
       </div>
+
+      <PricingBoard />
 
       {/* TECH STACK STRIP */}
       <motion.div
@@ -489,126 +492,114 @@ export default function WebsitesSection() {
         </div>
       </div>
 
-      <hr className="border-t border-black/10 dark:border-white/10 w-full mb-24" />
-
-      {/* 4. PRICING */}
-      <div id="pricing" className="mb-20 relative">
-        
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white uppercase tracking-tight flex items-center gap-4 font-(family-name:--font-cinzel) py-1">
-              <span className="w-12 h-px bg-brand"></span>
-              <div className="overflow-hidden">
-               <motion.span 
-                 initial={{ y: "100%" }} 
-                 whileInView={{ y: 0 }} 
-                 viewport={{ once: true, margin: "-100px" }} 
-                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                 className="block"
-               >
-                 Pricing
-               </motion.span>
-              </div>
-            </h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="mt-4 text-black/40 dark:text-white/40 text-sm font-light max-w-md ml-16"
-            >
-              Transparent pricing. Every package includes revision rounds and post-launch support.
-            </motion.p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-          {pricingPackages.map((pkg, i) => (
-            <motion.div
-              key={pkg.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className={`relative group transition-all duration-500 rounded-none ${
-                i === 2 ? "md:col-span-2" : ""
-              }`}
-            >
-              {/* Magic Moving Light Border System */}
-              <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-                {/* 1. Spinning Gradient */}
-                <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(8,52,199,0.55)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(11,70,253,0.9)_100%)] opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-                {/* 2. Solid Inner Mask that leaves 1px of the spinning gradient exposed */}
-                <div className="absolute inset-[1px] bg-white dark:bg-black transition-colors duration-500" />
-              </div>
-              
-              {/* Static faint border overlay to keep structure visible */}
-              <div className="absolute inset-0 border border-black/10 dark:border-white/10 z-0 pointer-events-none mix-blend-overlay" />
-
-              {/* Card Content - relative to stay above the solid mask */}
-              <div className={`relative z-10 flex flex-col p-8 sm:p-10 h-full ${
-                i === 2 ? "md:flex-row md:items-center md:justify-between gap-8 md:gap-16" : ""
-              }`}>
-                {/* Popular badge */}
-                {pkg.highlight && (
-                   <div className="absolute -top-3 left-8 z-20">
-                     <span className="bg-brand text-white text-[10px] font-bold px-4 py-1 tracking-[0.15em] uppercase shadow-lg">Popular</span>
-                   </div>
-                )}
-
-                <div className={`flex flex-col ${i === 2 ? "md:w-1/3" : ""}`}>
-                  <span className={`text-[10px] font-bold tracking-[0.25em] uppercase font-(family-name:--font-geist-mono) mb-8 ${pkg.highlight ? "text-brand" : "text-black/40 dark:text-white/40"}`}>
-                    {pkg.name}
-                  </span>
-
-                  <div className="flex flex-col mb-2">
-                    <span className="text-xs font-medium text-black/40 dark:text-white/40 uppercase tracking-widest mb-1">Starting at</span>
-                    <div className="text-4xl sm:text-5xl font-bold tracking-tight font-(family-name:--font-cinzel) text-black dark:text-white">
-                      {pkg.price}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 mb-4 text-black/40 dark:text-white/40">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v5l3 3" />
-                    </svg>
-                    <span className="text-xs font-bold tracking-widest uppercase">{pkg.timeline}</span>
-                  </div>
-                  <p className={`text-sm font-light leading-relaxed mb-10 md:mb-0 text-black/45 dark:text-white/45 ${i !== 2 ? "min-h-[60px]" : ""}`}>
-                    {pkg.description}
-                  </p>
-                </div>
-
-                <div className={`flex-grow ${i === 2 ? "md:w-1/3 md:border-l md:border-black/10 md:dark:border-white/10 md:pl-12" : "mb-10"}`}>
-                  <ul className="flex flex-col gap-3">
-                    {pkg.features.map((feature, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm tracking-wide font-light text-black/55 dark:text-white/55">
-                        <span className="text-brand text-xs">&#x2713;</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className={i === 2 ? "md:w-1/3 flex md:justify-end" : "mt-auto"}>
-                <Link
-                  href="/#contact"
-                  className={`group/btn relative flex justify-center items-center gap-2 rounded-none border px-8 py-4 text-xs font-bold tracking-widest uppercase overflow-hidden transition-all w-full ${i === 2 ? "md:w-auto" : ""} ${
-                    pkg.highlight 
-                      ? "border-brand text-brand hover:text-white" 
-                      : "border-black/20 dark:border-white/20 text-black dark:text-white hover:border-brand hover:text-white dark:hover:text-white"
-                  }`}
-                >
-                  <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                  <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{pkg.highlight ? "Start Project" : "Inquire"}</span>
-                </Link>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
     </section>
+  );
+}
+
+function PricingBoard() {
+  const { t } = useLanguage();
+  const columns = [
+    {
+      key: "essential" as const,
+      name: "ESSENTIAL",
+      price: "€800",
+      time: t("price_time_essential"),
+      description: t("price_desc_essential"),
+      highlight: false,
+      cta: t("price_inquire"),
+    },
+    {
+      key: "advanced" as const,
+      name: "ADVANCED",
+      price: "€1.200",
+      time: t("price_time_advanced"),
+      description: t("price_desc_advanced"),
+      highlight: true,
+      cta: t("price_start"),
+    },
+    {
+      key: "shop" as const,
+      name: "E-COMMERCE",
+      price: t("price_custom"),
+      time: t("price_time_shop"),
+      description: t("price_desc_shop"),
+      highlight: false,
+      cta: t("price_inquire"),
+    },
+  ];
+
+  return (
+    <div id="pricing" className="relative z-10 mb-24">
+      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3">
+        {columns.map((col) => (
+          <article
+            key={col.key}
+            className={`relative flex flex-col bg-white p-8 dark:bg-black ${
+              col.highlight ? "" : "border border-black/10 dark:border-white/15"
+            }`}
+          >
+            {col.highlight && (
+              <>
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                  <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(8,52,199,0.55)_100%)] opacity-80 dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_80%,rgba(11,70,253,0.9)_100%)]" />
+                  <div className="absolute inset-px bg-white dark:bg-black" />
+                </div>
+                <div className="absolute -top-3 left-8 z-20">
+                  <span className="bg-brand px-4 py-1 text-[10px] font-bold tracking-[0.15em] text-white uppercase">
+                    {t("price_popular")}
+                  </span>
+                </div>
+              </>
+            )}
+
+            <div className="relative z-10 flex h-full flex-col">
+              <span className={`mb-6 font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.25em] uppercase ${col.highlight ? "text-brand" : "text-black/40 dark:text-white/40"}`}>
+                {col.name}
+              </span>
+              <span className="text-xs font-medium tracking-widest text-black/40 uppercase dark:text-white/40">
+                {t("price_from")}
+              </span>
+              <div className="mt-1 text-4xl font-bold tracking-tight text-black sm:text-5xl dark:text-white font-(family-name:--font-cinzel)">
+                {col.price}
+              </div>
+              <p className="mt-2 text-xs font-bold tracking-widest text-black/40 uppercase dark:text-white/40">
+                {col.time}
+              </p>
+              <p className="mt-4 min-h-16 text-sm leading-relaxed font-light text-black/55 dark:text-white/50">
+                {col.description}
+              </p>
+
+              <ul className="mt-6 flex flex-col gap-2.5 border-t border-black/10 pt-6 dark:border-white/10">
+                {PRICE_ROWS.map((row) => {
+                  const on = col.key === "essential" ? row.essentialOn : col.key === "advanced" ? row.advancedOn : row.shopOn;
+                  const value = t(col.key === "essential" ? row.essential : col.key === "advanced" ? row.advanced : row.shop);
+                  return (
+                    <li key={row.label} className="flex items-baseline justify-between gap-4 text-sm">
+                      <span className="text-black/45 dark:text-white/40">{t(row.label)}</span>
+                      <span className={on ? "text-right text-black/80 dark:text-white/80" : "text-right text-black/35 line-through decoration-black/20 dark:text-white/30 dark:decoration-white/20"}>
+                        {value}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <Link
+                href="/contact"
+                className={`group/btn relative mt-8 flex items-center justify-center overflow-hidden border px-8 py-4 text-xs font-bold tracking-widest uppercase ${
+                  col.highlight
+                    ? "border-brand text-brand"
+                    : "border-black/20 text-black dark:border-white/20 dark:text-white"
+                }`}
+              >
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]" />
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{col.cta}</span>
+              </Link>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p className="mt-5 text-xs tracking-wide text-black/40 dark:text-white/40">{t("price_vat")}</p>
+    </div>
   );
 }

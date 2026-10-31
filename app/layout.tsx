@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { Providers } from "./components/Providers";
 import Navbar from "./components/Navbar";
-import NoiseTexture from "./components/NoiseTexture";
 import LoadingScreen from "./components/LoadingScreen";
 import PageTransition from "./components/PageTransition";
 
@@ -75,7 +74,11 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <NoiseTexture />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("mk-intro-seen")==="1")document.documentElement.classList.add("intro-seen")}catch(e){}`,
+          }}
+        />
         <Providers>
           <LoadingScreen />
           <Navbar />

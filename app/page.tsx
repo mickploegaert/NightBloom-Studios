@@ -7,12 +7,8 @@ export default function Home() {
   return (
     <div className="bg-white dark:bg-black min-h-screen transition-colors duration-500">
       <main className="relative w-full">
-        {/* Sticky Hero Background (Parallax Effect) */}
-        <div className="sticky top-0 h-screen w-full -z-0">
-          <Hero />
-        </div>
+        <Hero />
 
-        {/* Content scrolling OVER the Hero (This makes the footer and sections come UP over the hero) */}
         <div className="relative z-10 w-full bg-white dark:bg-black shadow-[0_-40px_80px_rgba(0,0,0,0.1)] dark:shadow-[0_-40px_80px_rgba(0,0,0,0.9)] border-t border-black/10 dark:border-white/10 transition-colors duration-500">
           <LogoCloud />
           <HomeWebsites />

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "./LanguageProvider";
 
 export default function Navbar() {
@@ -46,9 +47,11 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const nextScrolled = window.scrollY > 50;
+      setScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
     };
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -71,7 +74,7 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[600ms] flex justify-center ${
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-[600ms] ${
           scrolled
             ? "pt-0 md:pt-4"
             : "pt-4 md:pt-6"
@@ -136,14 +139,16 @@ export default function Navbar() {
           </motion.div>
 
           {/* Center: MK Studios Logo */}
-          <motion.a
-            href="/"
-            aria-label="MK Studios — home"
+          <motion.div
             animate={{ opacity: menuOpen ? 0 : 1, y: menuOpen ? -20 : 0 }}
             transition={{ duration: 0.4 }}
             style={{ pointerEvents: menuOpen ? "none" : "auto" }}
-            whileHover={{ scale: 1.06 }}
-            className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center h-full m-0 transition-transform duration-300"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-full items-center justify-center"
+          >
+          <Link
+            href="/"
+            aria-label="MK Studios — home"
+            className="flex h-full items-center justify-center transition-transform duration-300 hover:scale-[1.06]"
           >
             <Image
               src="/logos/MK.png"
@@ -153,7 +158,8 @@ export default function Navbar() {
               priority
               className={`w-auto object-contain brightness-0 dark:brightness-100 transition-all duration-[600ms] ${scrolled ? "h-11 md:h-12" : "h-14 md:h-16"}`}
             />
-          </motion.a>
+          </Link>
+          </motion.div>
 
           {/* Right: Animated Hamburger Menu Button */}
           <button
@@ -193,18 +199,8 @@ export default function Navbar() {
             animate={{ opacity: 1, clipPath: "circle(150% at right top)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at right top)" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white dark:bg-black overflow-hidden transition-colors duration-500"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center overflow-hidden bg-white transition-colors duration-500 dark:bg-[#000000]"
           >
-            {/* Background elements for magical feel */}
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 0.5 }} 
-              transition={{ delay: 0.5, duration: 1 }}
-              className="absolute pointer-events-none inset-0 flex items-center justify-center"
-            >
-               <div className="w-[50vw] h-[50vw] rounded-full bg-brand/10 blur-[100px] animate-pulse"></div>
-            </motion.div>
-
             <nav className="relative flex flex-col items-center gap-6 w-full max-w-4xl px-4">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -219,7 +215,7 @@ export default function Navbar() {
                   }}
                   className="flex w-full justify-center"
                 >
-                  <a
+                  <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
                     className="group relative flex items-center justify-center py-2 text-4xl sm:text-5xl md:text-6xl font-medium tracking-wide text-black/50 dark:text-white/50 font-(family-name:--font-brand) w-full overflow-visible leading-tight"
@@ -234,28 +230,31 @@ export default function Navbar() {
                         {link.label}
                       </span>
                     </div>
-                  </a>
+                  </Link>
                 </motion.div>
               ))}
 
-              <motion.a
-                href="/contact"
-                onClick={() => setMenuOpen(false)}
+              <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="mt-12 group relative inline-flex items-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all z-10"
               >
-                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                <span className="group-hover:text-white transition-colors duration-300 relative z-10">{t("nav_lets_talk")}</span>
-                <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black dark:text-white group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
+              <Link
+                href="/contact"
+                onClick={() => setMenuOpen(false)}
+                className="group relative mt-12 inline-flex items-center gap-2 overflow-hidden rounded-none border border-black bg-transparent px-10 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all hover:border-brand dark:border-white dark:text-white"
+              >
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]"></span>
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">{t("nav_lets_talk")}</span>
+                <span className="relative z-10 flex h-6 w-6 items-center justify-center text-black transition-all duration-300 group-hover:translate-x-1 group-hover:text-white dark:text-white">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14"></path>
                     <path d="m12 5 7 7-7 7"></path>
                   </svg>
                 </span>
-              </motion.a>
+              </Link>
+              </motion.div>
             </nav>
           </motion.div>
         )}

@@ -44,7 +44,7 @@ export default function HomeWebsites() {
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
               <span className="text-sm font-bold tracking-[0.2em] uppercase text-brand font-(family-name:--font-geist-mono)">
-                WEBSITES
+                PRICING
               </span>
             </div>
 
@@ -84,7 +84,7 @@ export default function HomeWebsites() {
                 <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">LEARN MORE &rarr;</span>
               </Link>
               <Link
-                href="/#contact"
+                href="/contact"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
               >
                 <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>

@@ -7,7 +7,7 @@ import { useLanguage } from "./LanguageProvider";
 
 const footerLinks = {
   Services: [
-    { label: "Websites", href: "/websites" },
+    { label: "Pricing", href: "/websites" },
     { label: "Web Applications", href: "/websites" },
     { label: "UI/UX Design", href: "/websites" },
     { label: "Branding", href: "/about" },
