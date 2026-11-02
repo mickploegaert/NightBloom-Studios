@@ -1,10 +1,18 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import Footer from "../components/Footer";
+import { PROJECTS } from "../data/projects";
+import { useLanguage } from "../components/LanguageProvider";
+import { useCurrency } from "../components/CurrencyProvider";
+import CurrencySwitch from "../components/CurrencySwitch";
+import { formatRange } from "../i18n/currency";
+import LineIcon, { type IconName } from "../components/LineIcon";
+import PhoneModel from "../components/models/PhoneModel";
 
 // Falls back to Cloudflare's public test key (always passes) if no env key is set,
 // so the form keeps working out of the box in local development.
@@ -51,39 +59,18 @@ function Particles() {
   );
 }
 
-const PROJECT_TYPES = ["Website", "Webshop", "Landing Page", "Web App", "Rebranding"];
-const BUDGET_RANGES = ["< €1.000", "€1.000 – €2.500", "€2.500 – €5.000", "€5.000+"];
-
-const FAQ_ITEMS = [
-  {
-    q: "How long does a typical project take?",
-    a: "Most single-page or Essential websites launch within 1–2 weeks. Advanced sites with CMS or custom functionality typically take 3–5 weeks. E-commerce builds vary based on scope — we'll give you a clear timeline after the intake call.",
-  },
-  {
-    q: "What do you need from me to get started?",
-    a: "Just your goals, brand assets (logo, colors, fonts if you have them), and any content or copy you already have. If you don't have branding yet, we can help design that too.",
-  },
-  {
-    q: "Do you offer support after launch?",
-    a: "Yes — every package includes post-launch support and revision rounds. We also offer ongoing maintenance plans for updates, hosting, and monitoring.",
-  },
-  {
-    q: "Can I request changes during the design phase?",
-    a: "Absolutely. Our process includes dedicated revision rounds so the design matches your vision before development starts.",
-  },
-  {
-    q: "What's included in the price?",
-    a: "Design, development, responsive layout, basic SEO setup, and deployment. Anything beyond the selected package (e.g. copywriting, custom integrations) is quoted separately and agreed upfront — no surprise costs.",
-  },
-];
-
-const TESTIMONIAL = {
-  quote:
-    "MK Studios turned our vague idea into a site that actually converts. Fast communication, sharp design, and they delivered ahead of schedule.",
-  name: "Sanne de Vries",
-  role: "Founder, Axelfest",
-  avatar: "https://i.pravatar.cc/100?img=47",
-};
+const KIND_IDS = ["website", "webshop", "app", "game"] as const;
+const FEEL_IDS = ["calm", "professional", "motion", "threed"] as const;
+const KIND_ICONS: IconName[] = ["monitor", "bag", "device", "game"];
+const FEEL_ICONS: IconName[] = ["calm", "briefcase", "motion", "cube"];
+const PACKAGE_IDS = ["essential", "advanced", "shop", "custom"] as const;
+const STEP_ICONS: IconName[] = ["phone", "file", "flag"];
+const BUDGETS = [
+  { id: "lt", min: null, max: 1000 },
+  { id: "mid", min: 1000, max: 2500 },
+  { id: "high", min: 2500, max: 5000 },
+  { id: "top", min: 5000, max: null },
+] as const;
 
 const FIELD_VARIANTS: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -99,14 +86,58 @@ const FIELD_VARIANTS: Variants = {
   }),
 };
 
+function ChoiceGrid({
+  ids,
+  labels,
+  icons,
+  values,
+  onToggle,
+  columns = "grid-cols-2",
+}: {
+  ids: readonly string[];
+  labels: readonly string[];
+  icons: readonly IconName[];
+  values: string[];
+  onToggle: (id: string) => void;
+  columns?: string;
+}) {
+  return (
+    <div className={`grid min-w-0 gap-2 ${columns}`}>
+      {ids.map((id, index) => {
+        const active = values.includes(id);
+        return (
+          <button
+            key={id}
+            type="button"
+            onClick={() => onToggle(id)}
+            className={`flex min-w-0 items-center gap-2 border px-2.5 py-2 text-left text-[13px] font-semibold leading-tight transition-colors duration-300 ${
+              active
+                ? "border-brand bg-brand text-white"
+                : "border-black/15 text-black hover:border-brand dark:border-white/15 dark:text-white"
+            }`}
+          >
+            <LineIcon name={icons[index]} className="h-4 w-4 shrink-0" />
+            <span className="min-w-0">{labels[index]}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ContactPage() {
+  const { copy } = useLanguage();
+  const { currency } = useCurrency();
+  const params = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
     message: "",
   });
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [kinds, setKinds] = useState<string[]>([]);
+  const [feels, setFeels] = useState<string[]>([]);
+  const [pickedPackage, setPickedPackage] = useState<string | null>(null);
   const [budget, setBudget] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -119,19 +150,38 @@ export default function ContactPage() {
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
+  useEffect(() => {
+    const allowed = (value: string | null, ids: readonly string[]) =>
+      (value ?? "").split(",").filter((id) => ids.includes(id));
+    const nextKinds = allowed(params.get("kind"), KIND_IDS);
+    const nextFeels = allowed(params.get("feel"), FEEL_IDS);
+    const nextPackage = params.get("package");
+    if (nextKinds.length) setKinds(nextKinds);
+    if (nextFeels.length) setFeels(nextFeels);
+    if (nextPackage && (PACKAGE_IDS as readonly string[]).includes(nextPackage)) {
+      setPickedPackage(nextPackage);
+      if (!nextKinds.length) setKinds([nextPackage === "shop" ? "webshop" : "website"]);
+    }
+  }, [params]);
+
+  const toggle = (id: string, values: string[], setValues: (next: string[]) => void) =>
+    setValues(values.includes(id) ? values.filter((item) => item !== id) : [...values, id]);
+
+  const packageLabel =
+    pickedPackage === "essential" ? copy.footer.essential
+    : pickedPackage === "advanced" ? copy.footer.advanced
+    : pickedPackage === "shop" ? copy.footer.shop
+    : pickedPackage === "custom" ? copy.footer.custom
+    : "";
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
-  const toggleType = (t: string) =>
-    setSelectedTypes((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0] ?? null;
     if (selected && selected.size > MAX_FILE_SIZE) {
-      setFileError("File is too large (max 10MB).");
+      setFileError(copy.contact.fileBig);
       setFile(null);
       e.target.value = "";
       return;
@@ -152,8 +202,17 @@ export default function ContactPage() {
       body.append("email", formData.email);
       body.append("company", formData.company);
       body.append("message", formData.message);
-      body.append("budget", budget ?? "");
-      selectedTypes.forEach((t) => body.append("projectTypes", t));
+      const budgetItem = BUDGETS.find((item) => item.id === budget);
+      body.append("budget", budgetItem ? formatRange(budgetItem.min, budgetItem.max, currency) : "");
+      kinds.forEach((id) => {
+        const index = KIND_IDS.indexOf(id as (typeof KIND_IDS)[number]);
+        if (index >= 0) body.append("kind", copy.contact.kinds[index]);
+      });
+      feels.forEach((id) => {
+        const index = FEEL_IDS.indexOf(id as (typeof FEEL_IDS)[number]);
+        if (index >= 0) body.append("feel", copy.contact.feels[index]);
+      });
+      if (packageLabel) body.append("package", packageLabel);
       body.append("turnstileToken", turnstileToken);
       if (file) body.append("file", file);
 
@@ -165,12 +224,12 @@ export default function ContactPage() {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
+        throw new Error(data.error || copy.contact.fail);
       }
 
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(err instanceof Error ? err.message : copy.contact.fail);
       turnstileRef.current?.reset();
       setTurnstileToken(null);
     } finally {
@@ -189,11 +248,8 @@ export default function ContactPage() {
 
       <Particles />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24 pt-36 sm:pt-44 lg:pt-48 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center">
-
-          {/* ── LEFT COLUMN ── */}
-          <div className="flex flex-col gap-10">
+      <div className="relative z-10 mx-auto max-w-[88rem] px-6 sm:px-10 lg:px-16 xl:px-24 pt-28 pb-16">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 
             {/* Headline */}
             <motion.div
@@ -202,21 +258,19 @@ export default function ContactPage() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-[family-name:var(--font-geist-mono)] mb-3 block">
-                Web Studio
+                {copy.contact.kicker}
               </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
-                Let&apos;s Create
+              <h1 className="text-3xl sm:text-4xl font-bold leading-[1.05] tracking-tight font-[family-name:var(--font-cinzel)] text-black dark:text-white">
+                {copy.contact.title1}
                 <br />
                 <span className="bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent">
-                  Something
+                  {copy.contact.title2}
                 </span>
                 <br />
-                Magical.
+                {copy.contact.title3}
               </h1>
               <p className="mt-4 text-sm text-black/60 dark:text-white/50 leading-relaxed max-w-md">
-                Tell us about your project. We&apos;ll get back to you within
-                24 hours — no fluff, just a real conversation about how we can
-                bring your vision to life.
+                {copy.contact.intro}
               </p>
             </motion.div>
 
@@ -225,7 +279,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col gap-4"
+              className="flex flex-wrap gap-x-6 gap-y-3"
             >
               {[
                 {
@@ -241,7 +295,7 @@ export default function ContactPage() {
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   ),
                   icon2: <circle cx="12" cy="10" r="3" />,
-                  label: "Zeeland, Netherlands",
+                  label: copy.contact.location,
                   href: null,
                 },
               ].map((item, i) => (
@@ -277,90 +331,57 @@ export default function ContactPage() {
               ))}
             </motion.div>
 
-            {/* Testimonial / social proof */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative border-l-2 border-black/30 border-brand/30 pl-6 py-1"
+              className="border-l-2 border-brand pl-4"
             >
-              <div className="flex gap-1 mb-3 text-brand">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-sm sm:text-base text-black/70 dark:text-white/60 italic leading-relaxed">
-                &ldquo;{TESTIMONIAL.quote}&rdquo;
+              <p className="text-[11px] font-semibold tracking-[0.32em] text-brand uppercase">
+                {copy.contact.liveKicker}
               </p>
-              <div className="mt-4 flex items-center gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={TESTIMONIAL.avatar}
-                  alt={TESTIMONIAL.name}
-                  width={36}
-                  height={36}
-                  className="w-9 h-9 rounded-full object-cover border border-black/10 dark:border-white/10"
-                />
-                <p className="text-xs font-bold tracking-[0.1em] uppercase text-black/50 dark:text-white/40">
-                  {TESTIMONIAL.name} <span className="font-normal normal-case text-black/30 dark:text-white/25">— {TESTIMONIAL.role}</span>
-                </p>
-              </div>
-            </motion.div>
-
-            {/* 3D model placeholder — gets replaced tomorrow */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative pt-2"
-            >
-              {/* Random glowing lines */}
-              <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {[
-                  { top: "20%", left: "0%", w: "55%", rotate: "-6deg", delay: "0s", dur: "3.2s" },
-                  { top: "50%", left: "10%", w: "40%", rotate: "2deg",  delay: "0.8s", dur: "4.1s" },
-                  { top: "75%", left: "5%",  w: "65%", rotate: "-3deg", delay: "0.3s", dur: "2.8s" },
-                  { top: "38%", left: "20%", w: "30%", rotate: "8deg",  delay: "1.2s", dur: "3.7s" },
-                ].map((l, i) => (
-                  <div
-                    key={i}
-                    className="absolute h-px"
-                    style={{
-                      top: l.top, left: l.left, width: l.w,
-                      transform: `rotate(${l.rotate})`,
-                      background: "linear-gradient(90deg,transparent,rgba(11,70,253,0.55),transparent)",
-                      animation: `glow-pulse ${l.dur} ease-in-out ${l.delay} infinite`,
-                    }}
-                  />
+              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                {PROJECTS.map((project) => (
+                  <li key={project.title}>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-black/70 transition-colors duration-300 hover:text-brand dark:text-white/70"
+                    >
+                      {project.title}
+                    </a>
+                  </li>
                 ))}
-              </div>
-              <div className="relative flex items-center gap-5">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-brand/30 to-transparent" />
-                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-black/30 dark:text-white/25 font-[family-name:var(--font-geist-mono)] whitespace-nowrap">
-                  MK Studios · Est. 2026
-                </span>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/30 dark:via-brand/30 to-transparent" />
-              </div>
+              </ul>
             </motion.div>
           </div>
 
-          {/* ── RIGHT COLUMN — FORM CARD ── */}
+        <div className="mt-8 grid items-stretch gap-6 lg:grid-cols-[minmax(20rem,28rem)_minmax(0,1fr)]">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-20 h-[30rem] w-full overflow-hidden sm:h-[34rem] lg:h-full"
+          >
+            <PhoneModel />
+          </motion.div>
+
+          {/* ── FORM CARD ── */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="relative group"
+            className="relative z-0 overflow-hidden group shadow-[0_24px_70px_-36px_rgba(7,20,51,0.28)]"
           >
             {/* Spinning conic-gradient border (same as pricing cards) */}
             <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
               <div className="absolute inset-[-100%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(11,70,253,0.9)_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(11,70,253,1)_100%)] opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
               <div className="absolute inset-[1px] bg-white dark:bg-black transition-colors duration-500" />
             </div>
-            <div className="absolute inset-0 border border-black/10 dark:border-white/10 z-0 pointer-events-none mix-blend-overlay" />
+            <div className="absolute inset-0 z-0 border border-black/15 pointer-events-none dark:border-white/15" />
 
-            <div className="relative z-10 p-6 sm:p-8">
+            <div className="relative z-10 p-6 sm:p-8 lg:p-10">
 
               <AnimatePresence mode="wait">
                 {submitted ? (
@@ -381,15 +402,27 @@ export default function ContactPage() {
                       </div>
                     </div>
                     <div>
-                      <h2 className="text-3xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white mb-3">Message Sent!</h2>
-                      <p className="text-black/50 dark:text-white/40 max-w-xs">We&apos;ll be in touch within 24 hours. Something magical is about to begin.</p>
+                      <h2 className="text-3xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white mb-3">{copy.contact.sent}</h2>
+                      <p className="text-black/50 dark:text-white/40 max-w-xs">{copy.contact.sentBody}</p>
+                    </div>
+                    <div className="w-full max-w-lg text-left">
+                      <p className="mb-4 text-center text-[10px] font-bold tracking-[0.25em] text-brand uppercase">{copy.contact.nextTitle}</p>
+                      <ol className="grid gap-3 sm:grid-cols-3">
+                        {copy.contact.nextSteps.map((step, index) => (
+                          <li key={step.title} className="border border-black/10 p-4 dark:border-white/15">
+                            <LineIcon name={STEP_ICONS[index]} className="mb-3 h-5 w-5 text-black dark:text-white" />
+                            <p className="text-sm font-bold text-black dark:text-white">{step.title}</p>
+                            <p className="mt-1 text-xs leading-relaxed text-black/55 dark:text-white/50">{step.body}</p>
+                          </li>
+                        ))}
+                      </ol>
                     </div>
                     <Link
                       href="/"
                       className="mt-4 group/btn relative inline-flex items-center gap-2 border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
                     >
                       <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
-                      <span className="group-hover/btn:text-white transition-colors duration-300 relative z-10">Back to Home</span>
+                      <span className="group-hover/btn:text-white transition-colors duration-300 relative z-10">{copy.contact.home}</span>
                     </Link>
                   </motion.div>
                 ) : (
@@ -397,24 +430,30 @@ export default function ContactPage() {
                   <motion.form
                     key="form"
                     onSubmit={handleSubmit}
-                    className="flex flex-col gap-4"
+                    className="flex flex-col gap-6"
                   >
                     <motion.div custom={0} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="mb-1">
                       <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-brand font-[family-name:var(--font-geist-mono)] block mb-2">
-                        Contact
+                        {copy.contact.formKicker}
                       </span>
                       <h2 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-cinzel)] text-black dark:text-white leading-tight">
-                        Start a Project
+                        {copy.contact.formTitle}
                       </h2>
                       <p className="mt-1 text-xs text-black/50 dark:text-white/40 leading-relaxed">
-                        Fill in the form and we&apos;ll get back to you within 24 hours.
+                        {copy.contact.formIntro}
                       </p>
+                      {packageLabel && (
+                        <p className="mt-4 inline-flex items-center gap-2 border border-brand/40 bg-brand/10 px-3 py-2 text-sm font-semibold text-black dark:text-white">
+                          <LineIcon name="check" className="h-4 w-4 text-brand" />
+                          {copy.contact.picked} {packageLabel}
+                        </p>
+                      )}
                     </motion.div>
 
                     {/* Name + Email */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                       <motion.div custom={1} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
-                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Name <span className="text-brand">*</span></label>
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">{copy.contact.name} <span className="text-brand">*</span></label>
                         <div className="relative group/input">
                           <input
                             type="text"
@@ -422,14 +461,14 @@ export default function ContactPage() {
                             required
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Your name"
-                            className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
+                            placeholder={copy.contact.namePh}
+                            className="w-full bg-transparent border border-black/15 dark:border-white/10 px-3 py-2 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                           />
                         </div>
                       </motion.div>
 
                       <motion.div custom={2} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
-                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">Email <span className="text-brand">*</span></label>
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">{copy.contact.email} <span className="text-brand">*</span></label>
                         <input
                           type="email"
                           name="email"
@@ -437,78 +476,74 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="you@company.com"
-                          className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
+                          className="w-full bg-transparent border border-black/15 dark:border-white/10 px-3 py-2 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
+                        />
+                      </motion.div>
+
+                      <motion.div custom={3} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
+                          {copy.contact.company} <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">{copy.contact.optional}</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="company"
+                          value={formData.company}
+                          onChange={handleChange}
+                          placeholder={copy.contact.companyPh}
+                          className="w-full bg-transparent border border-black/15 dark:border-white/10 px-3 py-2 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                         />
                       </motion.div>
                     </div>
 
-                    {/* Company */}
-                    <motion.div custom={3} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
+                    <div className="grid min-w-0 gap-6 border-t border-black/10 pt-6 dark:border-white/10 lg:grid-cols-2">
+                    <motion.div custom={4} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
                       <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Company <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">(optional)</span>
+                        {copy.contact.kind} <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">{copy.contact.kindHint}</span>
                       </label>
-                      <input
-                        type="text"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        placeholder="Your company"
-                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
-                      />
+                      <ChoiceGrid ids={KIND_IDS} labels={copy.contact.kinds} icons={KIND_ICONS} values={kinds} onToggle={(id) => toggle(id, kinds, setKinds)} columns="grid-cols-2" />
                     </motion.div>
 
-                    {/* Project type pills */}
-                    <motion.div custom={4} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-3">
+                    <motion.div custom={4.2} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
                       <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Project Type <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">(select all that apply)</span>
+                        {copy.contact.feel} <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">{copy.contact.feelHint}</span>
                       </label>
-                      <div className="flex flex-wrap gap-2">
-                        {PROJECT_TYPES.map((t) => {
-                          const active = selectedTypes.includes(t);
-                          return (
-                            <button
-                              key={t}
-                              type="button"
-                              onClick={() => toggleType(t)}
-                              className={`group/pill relative px-4 py-2 text-xs font-bold tracking-[0.15em] uppercase overflow-hidden border transition-all duration-300 ${
-                                active
-                                  ? "border-brand text-white"
-                                  : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-brand/50"
-                              }`}
-                            >
-                              {active && (
-                                <span className="absolute inset-0 bg-brand" />
-                              )}
-                              <span className="relative z-10">{t}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
+                      <ChoiceGrid ids={FEEL_IDS} labels={copy.contact.feels} icons={FEEL_ICONS} values={feels} onToggle={(id) => toggle(id, feels, setFeels)} columns="grid-cols-2" />
                     </motion.div>
+                    </div>
 
+                    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                     {/* Budget pills */}
                     <motion.div custom={4.5} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-3">
-                      <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Estimated Budget <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">(optional)</span>
-                      </label>
+                      <div className="flex items-center justify-between gap-3">
+                        <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
+                          {copy.contact.budget} <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">{copy.contact.optional}</span>
+                        </label>
+                        <CurrencySwitch />
+                      </div>
                       <div className="flex flex-wrap gap-2">
-                        {BUDGET_RANGES.map((b) => {
-                          const active = budget === b;
+                        {BUDGETS.map((item) => {
+                          const active = budget === item.id;
                           return (
                             <button
-                              key={b}
+                              key={item.id}
                               type="button"
-                              onClick={() => setBudget(active ? null : b)}
-                              className={`group/pill relative px-4 py-2 text-xs font-bold tracking-[0.15em] uppercase overflow-hidden border transition-all duration-300 ${
+                              onClick={() => setBudget(active ? null : item.id)}
+                              className={`group/pill relative overflow-hidden border px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                                 active
                                   ? "border-brand text-white"
                                   : "border-black/15 dark:border-white/10 text-black/60 dark:text-white/50 hover:border-brand/50"
                               }`}
                             >
-                              {active && (
-                                <span className="absolute inset-0 bg-brand" />
-                              )}
-                              <span className="relative z-10">{b}</span>
+                              <span
+                                className={`absolute inset-0 bg-brand transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] ${
+                                  active
+                                    ? "[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]"
+                                    : "[clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/pill:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]"
+                                }`}
+                              />
+                              <span className={`relative z-10 transition-colors duration-300 ${active ? "" : "group-hover/pill:text-white"}`}>
+                                {formatRange(item.min, item.max, currency)}
+                              </span>
                             </button>
                           );
                         })}
@@ -518,7 +553,7 @@ export default function ContactPage() {
                     {/* Message */}
                     <motion.div custom={5} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
                       <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Tell Us About Your Project <span className="text-brand">*</span>
+                        {copy.contact.message} <span className="text-brand">*</span>
                       </label>
                       <textarea
                         name="message"
@@ -526,15 +561,16 @@ export default function ContactPage() {
                         rows={3}
                         value={formData.message}
                         onChange={handleChange}
-                        placeholder="Describe what you want to build, your goals, timeline, budget…"
-                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none resize-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
+                        placeholder={copy.contact.messagePh}
+                        className="w-full bg-transparent border border-black/15 dark:border-white/10 px-3 py-2 text-sm text-black dark:text-white placeholder-black/25 dark:placeholder-white/20 outline-none resize-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)] dark:focus:shadow-[0_0_0_1px_rgba(11,70,253,0.3)]"
                       />
                     </motion.div>
+                    </div>
 
                     {/* File upload */}
                     <motion.div custom={5.5} variants={FIELD_VARIANTS} initial="hidden" animate="visible" className="flex flex-col gap-2">
                       <label className="text-xs font-bold tracking-[0.15em] uppercase text-black/50 dark:text-white/40">
-                        Attachment <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">(briefing, moodboard, current site — optional)</span>
+                        {copy.contact.file} <span className="text-black/25 dark:text-white/20 normal-case font-normal tracking-normal text-[10px]">{copy.contact.fileHint}</span>
                       </label>
                       <label
                         htmlFor="file-upload"
@@ -546,7 +582,7 @@ export default function ContactPage() {
                           </svg>
                         </span>
                         <span className="text-black/50 dark:text-white/40 truncate">
-                          {file ? file.name : "Click to attach a file (max 10MB)"}
+                          {file ? file.name : copy.contact.fileEmpty}
                         </span>
                         <input
                           id="file-upload"
@@ -560,6 +596,7 @@ export default function ContactPage() {
                       )}
                     </motion.div>
 
+                    <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                     {/* Turnstile */}
                     <motion.div custom={6} variants={FIELD_VARIANTS} initial="hidden" animate="visible">
                       <Turnstile
@@ -572,7 +609,7 @@ export default function ContactPage() {
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => {
                           setTurnstileToken(null);
-                          setError("Verification failed to load. Please refresh and try again.");
+                          setError(copy.contact.verify);
                         }}
                         options={{
                           theme: "auto",
@@ -597,11 +634,11 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={!turnstileToken || sending}
-                        className="group/btn relative w-full inline-flex items-center justify-center gap-3 border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="group/btn isolate relative inline-flex w-full items-center justify-center gap-3 overflow-hidden border border-black bg-transparent px-8 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all duration-300 hover:border-brand disabled:cursor-not-allowed disabled:opacity-40 lg:w-auto dark:border-white dark:text-white"
                       >
                         <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]" />
                         <span className="group-hover/btn:text-white transition-colors duration-300 relative z-10">
-                          {sending ? "Sending…" : "Send Message"}
+                          {sending ? copy.contact.sending : copy.contact.send}
                         </span>
                         {!sending && (
                           <span className="relative z-10 flex items-center group-hover/btn:text-white group-hover/btn:translate-x-1 transition-all duration-300">
@@ -612,10 +649,11 @@ export default function ContactPage() {
                           </span>
                         )}
                       </button>
-                      <p className="mt-3 text-[10px] text-black/30 dark:text-white/25 text-center tracking-wide">
-                        Protected by Cloudflare Turnstile · We respect your privacy
+                      <p className="mt-3 text-[10px] text-black/30 dark:text-white/25 text-center tracking-wide lg:text-right">
+                        {copy.contact.privacy}
                       </p>
                     </motion.div>
+                    </div>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -640,7 +678,7 @@ export default function ContactPage() {
           </motion.div>
 
           <div className="flex flex-col gap-3">
-            {FAQ_ITEMS.map((item, i) => {
+            {copy.contact.faq.map((item, i) => {
               const isOpen = openFaq === i;
               return (
                 <motion.div

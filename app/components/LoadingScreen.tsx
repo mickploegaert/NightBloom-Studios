@@ -9,29 +9,15 @@ const HOLD_END = 600;
 
 const EASE = [0.83, 0, 0.17, 1] as const;
 
-const INTRO_KEY = "mk-intro-seen";
-
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(true);
   const [idx, setIdx] = useState(0);
   const [done, setDone] = useState(false);
-  const [skip, setSkip] = useState(false);
 
   const counter = STEPS[idx];
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(INTRO_KEY) === "1") {
-        setSkip(true);
-        setVisible(false);
-      }
-    } catch {
-      /* private mode */
-    }
-  }, []);
-
-  useEffect(() => {
-    if (done || skip) return;
+    if (done) return;
     const interval = setInterval(() => {
       setIdx((prev) => {
         const next = prev + 1;
@@ -44,18 +30,13 @@ export default function LoadingScreen() {
       });
     }, STEP_DURATION);
     return () => clearInterval(interval);
-  }, [done, skip]);
+  }, [done]);
 
   useEffect(() => {
-    if (!done || skip) return;
-    try {
-      sessionStorage.setItem(INTRO_KEY, "1");
-    } catch {
-      /* private mode */
-    }
+    if (!done) return;
     const timer = setTimeout(() => setVisible(false), HOLD_END);
     return () => clearTimeout(timer);
-  }, [done, skip]);
+  }, [done]);
 
   const progress = counter / 100;
 

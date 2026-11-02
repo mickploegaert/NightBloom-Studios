@@ -74,11 +74,6 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(sessionStorage.getItem("mk-intro-seen")==="1")document.documentElement.classList.add("intro-seen")}catch(e){}`,
-          }}
-        />
         <Providers>
           <LoadingScreen />
           <Navbar />

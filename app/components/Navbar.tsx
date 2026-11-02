@@ -194,31 +194,45 @@ export default function Navbar() {
       {/* Fullscreen Animated Menu Overlay */}
       <AnimatePresence>
         {menuOpen && (
+          <motion.button
+            key="nav-backdrop"
+            type="button"
+            aria-label="Close menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setMenuOpen(false)}
+            className="fixed inset-0 z-40 bg-black/40 dark:bg-black/60"
+          />
+        )}
+        {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: "circle(0% at right top)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at right top)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at right top)" }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center overflow-hidden bg-white transition-colors duration-500 dark:bg-[#000000]"
+            key="nav-drawer"
+            initial={{ x: "110%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "110%" }}
+            transition={{ type: "spring", bounce: 0.32, duration: 0.68 }}
+            className="fixed inset-y-0 right-0 z-[45] flex w-[min(100%,26rem)] flex-col justify-center overflow-hidden border-l border-black/10 bg-white px-8 shadow-[-24px_0_80px_rgba(0,0,0,0.18)] dark:border-white/10 dark:bg-black sm:px-12"
           >
-            <nav className="relative flex flex-col items-center gap-6 w-full max-w-4xl px-4">
+            <nav className="relative flex w-full flex-col items-start gap-2">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.label}
-                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                  initial={{ opacity: 0, x: 72 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 48 }}
                   transition={{
                     delay: 0.1 * i + 0.2,
                     duration: 0.6,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="flex w-full justify-center"
+                  className="flex w-full justify-start"
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="group relative flex items-center justify-center py-2 text-4xl sm:text-5xl md:text-6xl font-medium tracking-wide text-black/50 dark:text-white/50 font-(family-name:--font-brand) w-full overflow-visible leading-tight"
+                    className="group relative flex items-center justify-start py-2 text-4xl sm:text-5xl font-medium tracking-wide text-black/50 dark:text-white/50 font-(family-name:--font-brand) w-full overflow-visible leading-tight"
                   >
                     <div className="relative flex items-center h-[1.4em] px-4 overflow-hidden">
                       {/* Default text - pushed up on hover */}
@@ -243,7 +257,7 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 onClick={() => setMenuOpen(false)}
-                className="group relative mt-12 inline-flex items-center gap-2 overflow-hidden rounded-none border border-black bg-transparent px-10 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all hover:border-brand dark:border-white dark:text-white"
+                className="group relative mt-10 inline-flex items-center gap-2 overflow-hidden rounded-none border border-black bg-transparent px-8 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all hover:border-brand dark:border-white dark:text-white"
               >
                 <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]"></span>
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-white">{t("nav_lets_talk")}</span>

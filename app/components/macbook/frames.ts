@@ -1,11 +1,11 @@
-const FRAME_DIR = "/background/ezgif-7bf02b80a4e8d776-jpg";
+const FRAME_DIR = "/background/ezgif-7bf02b80a4e8d776-jpg/upscayl-webp";
 
-/** ezgif-frame-001.jpg … ezgif-frame-290.jpg */
-export const FRAME_COUNT = 290;
+/** ezgif-frame-001.webp … ezgif-frame-120.webp. Rotation only. */
+export const FRAME_COUNT = 120;
 
 export function frameSrc(index: number): string {
   const n = String(index + 1).padStart(3, "0");
-  return `${FRAME_DIR}/ezgif-frame-${n}.jpg`;
+  return `${FRAME_DIR}/ezgif-frame-${n}.webp`;
 }
 
 export function frameSources(): string[] {
@@ -29,48 +29,36 @@ function uniqueIndices(count: number): number[] {
 
 const PLAYBACK = uniqueIndices(FRAME_COUNT);
 
-function slotForFrame(frame: number): number {
+export function playbackIndices(): readonly number[] {
+  return PLAYBACK;
+}
+
+/** Even steps across the turn. Repeated ezgif files are left out so the spin does not pause. */
+export function progressToFrame(progress: number): number {
+  if (PLAYBACK.length <= 1) return 0;
+  const p = Math.min(1, Math.max(0, progress));
+  const slot = Math.round(p * (PLAYBACK.length - 1));
+  return PLAYBACK[slot] ?? 0;
+}
+
+/** Playback indices around a source frame. Skips the ezgif duplicate files. */
+export function framesAround(index: number, behind: number, ahead: number): number[] {
   let slot = 0;
   for (let i = 0; i < PLAYBACK.length; i += 1) {
-    if (PLAYBACK[i] <= frame) slot = i;
+    if (PLAYBACK[i] <= index) slot = i;
     else break;
   }
-  return slot;
+  const from = Math.max(0, slot - behind);
+  const to = Math.min(PLAYBACK.length - 1, slot + ahead);
+  const out: number[] = [];
+  for (let i = from; i <= to; i += 1) out.push(PLAYBACK[i]);
+  return out;
 }
 
-/**
- * Scroll progress → unique frame. Stages follow this export:
- * assembled, rotation, explode, exploded hold, close.
- * Duplicate files are skipped so a repeated JPEG is not held twice.
- */
-const SCROLL_SLOTS: ReadonlyArray<readonly [number, number]> = [
-  [0, slotForFrame(0)],
-  [0.08, slotForFrame(18)],
-  [0.42, slotForFrame(112)],
-  [0.72, slotForFrame(215)],
-  [1, PLAYBACK.length - 1],
-];
-
-export function progressToFrame(progress: number, count: number): number {
-  if (count <= 1) return 0;
-  const list = count === FRAME_COUNT ? PLAYBACK : uniqueIndices(count);
-  const p = Math.min(1, Math.max(0, progress));
-
-  let i = 0;
-  while (i < SCROLL_SLOTS.length - 2 && p > SCROLL_SLOTS[i + 1][0]) i += 1;
-
-  const [p0, s0] = SCROLL_SLOTS[i];
-  const [p1, s1] = SCROLL_SLOTS[i + 1];
-  const span = p1 - p0 || 1;
-  const slot = s0 + ((p - p0) / span) * (s1 - s0);
-  const index = Math.min(list.length - 1, Math.max(0, Math.round(slot)));
-  return list[index] ?? 0;
-}
-
-export function nearestLoaded(
-  images: readonly (HTMLImageElement | null)[],
+export function nearestLoaded<T>(
+  images: readonly (T | null)[],
   index: number,
-): HTMLImageElement | null {
+): T | null {
   if (images[index]) return images[index];
   const max = images.length;
   for (let distance = 1; distance < max; distance++) {

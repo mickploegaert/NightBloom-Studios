@@ -1,6 +1,5 @@
 import Hero from "./components/Hero";
 import HomeWebsites from "./components/HomeWebsites";
-import LogoCloud from "./components/LogoCloud";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
         <Hero />
 
         <div className="relative z-10 w-full bg-white dark:bg-black shadow-[0_-40px_80px_rgba(0,0,0,0.1)] dark:shadow-[0_-40px_80px_rgba(0,0,0,0.9)] border-t border-black/10 dark:border-white/10 transition-colors duration-500">
-          <LogoCloud />
           <HomeWebsites />
           <Footer />
         </div>

@@ -4,6 +4,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import MagicalParticles from "./MagicalParticles";
+import ProjectCards from "./ProjectCards";
+import LineIcon from "./LineIcon";
+import { useLanguage } from "./LanguageProvider";
+import { useCurrency } from "./CurrencyProvider";
+import { PROJECTS } from "../data/projects";
+import { formatFromEur } from "../i18n/currency";
 
 const processSteps = [
   { num: "01", title: "PLAN" },
@@ -12,12 +18,25 @@ const processSteps = [
   { num: "04", title: "DEPLOY" },
 ];
 
+const HOME_PROOF = PROJECTS.filter((project) => project.package !== "custom");
+
 export default function HomeWebsites() {
+  const { copy } = useLanguage();
+  const { currency } = useCurrency();
   return (
     <section id="services" className="relative transition-colors duration-500 py-24 sm:py-32">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black/50 via-transparent to-transparent pointer-events-none" />
       
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 xl:px-24">
+        <div className="mb-16 sm:mb-20">
+          <div className="mb-8 flex items-center gap-3">
+            <LineIcon name="monitor" className="h-5 w-5 text-black dark:text-white" />
+            <span className="text-sm font-bold tracking-[0.2em] text-brand uppercase font-(family-name:--font-geist-mono)">
+              {copy.home.proof}
+            </span>
+          </div>
+          <ProjectCards projects={HOME_PROOF} />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +63,7 @@ export default function HomeWebsites() {
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
               <span className="text-sm font-bold tracking-[0.2em] uppercase text-brand font-(family-name:--font-geist-mono)">
-                PRICING
+                {copy.home.kicker}
               </span>
             </div>
 
@@ -56,7 +75,7 @@ export default function HomeWebsites() {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="block"
               >
-                Build Your
+                {copy.home.title1}
               </motion.span>
             </h2>
             <h2 className="text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight leading-tight mb-6 overflow-hidden py-1">
@@ -67,28 +86,32 @@ export default function HomeWebsites() {
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="block bg-gradient-to-r from-brand via-brand to-brand-bright bg-clip-text text-transparent font-(family-name:--font-cinzel) italic"
               >
-                Digital Presence
+                {copy.home.title2}
               </motion.span>
             </h2>
 
-            <p className="text-black/70 dark:text-white/70 leading-relaxed text-sm sm:text-base mb-10 max-w-md font-light">
-              High-performance websites engineered with precision. We combine striking design with clean, scalable code to deliver digital experiences that convert visitors into customers.
+            <p className="text-black/70 dark:text-white/70 leading-relaxed text-sm sm:text-base mb-5 max-w-md font-light">
+              {copy.home.body}
+            </p>
+            <p className="mb-10 flex max-w-md items-start gap-3 border border-black/10 px-4 py-3 text-sm leading-relaxed text-black dark:border-white/15 dark:text-white">
+              <LineIcon name="cube" className="mt-0.5 h-5 w-5 shrink-0" />
+              <span>{copy.home.models}</span>
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/websites"
+                href="/websites#pricing"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
               >
                 <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">LEARN MORE &rarr;</span>
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{copy.home.more} {formatFromEur(800, currency)}</span>
               </Link>
               <Link
                 href="/contact"
                 className="group/btn relative inline-flex items-center justify-center gap-2 rounded-none border border-black dark:border-white bg-transparent px-8 py-3 text-xs font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:border-brand transition-all"
               >
                 <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">CONTACT US</span>
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{copy.home.contact}</span>
               </Link>
             </div>
           </div>
@@ -96,7 +119,7 @@ export default function HomeWebsites() {
           {/* Right: The Process */}
           <div className="p-10 sm:p-14 lg:p-16 flex flex-col justify-center dark:bg-black/80 bg-white/80 backdrop-blur-md relative z-10">
             <h3 className="text-xl sm:text-2xl font-bold text-black/50 dark:text-white/50 tracking-[0.2em] uppercase mb-10 relative z-10 font-(family-name:--font-geist-mono)">
-              THE PROCESS
+              {copy.home.process}
             </h3>
             <div className="flex flex-col gap-6 relative z-10">
               {processSteps.map((step, i) => (
@@ -112,7 +135,7 @@ export default function HomeWebsites() {
                     {step.num}
                   </span>
                   <span className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-wider font-(family-name:--font-geist-mono) uppercase group-hover:translate-x-2 group-hover:text-brand transition-all duration-300">
-                    {step.title}
+                    {copy.home.steps[i]}
                   </span>
                 </motion.div>
               ))}

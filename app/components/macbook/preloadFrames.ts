@@ -1,6 +1,6 @@
 type Cancel = { cancelled: boolean };
 
-function loadImage(src: string, cancel: Cancel, attempt = 0): Promise<HTMLImageElement | null> {
+export function loadImage(src: string, cancel: Cancel, attempt = 0): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
     if (cancel.cancelled) {
       resolve(null);

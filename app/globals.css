@@ -177,6 +177,3 @@ textarea:focus-visible,
   top: 1rem;
 }
 
-html.intro-seen [data-intro-screen] {
-  display: none;
-}

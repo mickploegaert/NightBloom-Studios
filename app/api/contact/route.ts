@@ -17,7 +17,9 @@ export async function POST(req: NextRequest) {
   const company = form.get("company")?.toString().trim() ?? "";
   const message = form.get("message")?.toString().trim() ?? "";
   const budget = form.get("budget")?.toString().trim() ?? "";
-  const projectTypes = form.getAll("projectTypes").map((t) => t.toString());
+  const kinds = form.getAll("kind").map((item) => item.toString().trim()).filter(Boolean);
+  const feels = form.getAll("feel").map((item) => item.toString().trim()).filter(Boolean);
+  const pickedPackage = form.get("package")?.toString().trim() ?? "";
   const turnstileToken = form.get("turnstileToken")?.toString() ?? "";
   const file = form.get("file");
 
@@ -83,7 +85,9 @@ export async function POST(req: NextRequest) {
     company,
     message,
     budget,
-    projectTypes,
+    package: pickedPackage,
+    kinds,
+    feels,
     file: file instanceof File && file.size > 0 ? { name: file.name, size: file.size, type: file.type } : null,
   });
 

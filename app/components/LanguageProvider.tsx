@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { copyFor, type SiteCopy } from "../i18n/siteCopy";
 import { translations, type Lang, type TranslationKey } from "../i18n/translations";
 
 interface LanguageContextValue {
@@ -8,6 +9,7 @@ interface LanguageContextValue {
   setLang: (lang: Lang) => void;
   toggleLang: () => void;
   t: (key: TranslationKey) => string;
+  copy: SiteCopy;
 }
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
@@ -36,9 +38,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const toggleLang = () => setLang(lang === "en" ? "nl" : "en");
 
   const t = (key: TranslationKey) => translations[key][lang];
+  const copy = copyFor(lang);
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, toggleLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, toggleLang, t, copy }}>
       {children}
     </LanguageContext.Provider>
   );

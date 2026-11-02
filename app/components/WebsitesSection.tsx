@@ -1,8 +1,10 @@
 
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useTheme } from "next-themes";
+import ProductTurntable from "./models/ProductTurntable";
 
 function TiltCard({ children, delay = 0, index }: { children: React.ReactNode, delay?: number, index: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -81,6 +83,12 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import MagicalParticles from "./MagicalParticles";
 import { useLanguage } from "./LanguageProvider";
+import ProjectCards, { PackageMark } from "./ProjectCards";
+import { PROJECTS } from "../data/projects";
+import LineIcon from "./LineIcon";
+import { useCurrency } from "./CurrencyProvider";
+import CurrencySwitch from "./CurrencySwitch";
+import { formatFromEur } from "../i18n/currency";
 import type { TranslationKey } from "../i18n/translations";
 
 const WebsitesHero3D = dynamic(() => import("./WebsitesHero3D"), { ssr: false });
@@ -151,45 +159,6 @@ const PRICE_ROWS: PriceRow[] = [
   { label: "price_row_copy", essential: "price_no_copy", advanced: "price_no_copy", shop: "price_shop_copy", essentialOn: false, advancedOn: false, shopOn: false },
 ];
 
-const otherProjects = [
-  {
-    title: "Your Brand Here",
-    category: "Website",
-    status: "Coming Soon",
-  },
-  {
-    title: "Your Brand Here",
-    category: "Web Application",
-    status: "Coming Soon",
-  },
-  {
-    title: "Your Brand Here",
-    category: "E-Commerce",
-    status: "Coming Soon",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "MK Studios turned our vague idea into a site that actually converts. Fast communication, sharp design, and they delivered ahead of schedule.",
-    name: "Sanne de Vries",
-    role: "Founder, Axelfest",
-    avatar: "https://i.pravatar.cc/100?img=47",
-  },
-  {
-    quote: "The attention to detail is unreal. Every animation, every pixel feels intentional. Our site finally matches the quality of our product.",
-    name: "Tom Bakker",
-    role: "CEO, StartupName",
-    avatar: "https://i.pravatar.cc/100?img=12",
-  },
-  {
-    quote: "Clear process from day one, no surprises on price, and the end result exceeded what we pitched internally. Would work with them again in a heartbeat.",
-    name: "Lisa Jansen",
-    role: "Marketing Lead, BrandCo",
-    avatar: "https://i.pravatar.cc/100?img=33",
-  },
-];
-
 const techStack = [
   { name: "Next.js" },
   { name: "React" },
@@ -200,7 +169,7 @@ const techStack = [
 ];
 
 export default function WebsitesSection() {
-  const { t } = useLanguage();
+  const { t, copy, lang } = useLanguage();
   return (
     <section className="relative w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-24 pb-32">
       
@@ -259,6 +228,9 @@ export default function WebsitesSection() {
         </div>
       </div>
 
+      <div className="mb-6 flex justify-end">
+        <CurrencySwitch />
+      </div>
       <PricingBoard />
 
       {/* TECH STACK STRIP */}
@@ -270,7 +242,7 @@ export default function WebsitesSection() {
         className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 py-10 mb-16 border-y border-black/10 dark:border-white/10"
       >
         <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 font-(family-name:--font-geist-mono)">
-          Built With
+          {copy.sites.built}
         </span>
         {techStack.map((tech) => (
           <span
@@ -297,7 +269,7 @@ export default function WebsitesSection() {
                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                  className="block"
                >
-                 How We Work
+                 {copy.sites.how}
                </motion.span>
             </div>
           </h2>
@@ -308,7 +280,7 @@ export default function WebsitesSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-black/40 dark:text-white/40 text-sm font-light max-w-sm"
           >
-            Four focused phases. No wasted time.
+            {copy.sites.howBody}
           </motion.p>
         </div>
         
@@ -328,13 +300,13 @@ export default function WebsitesSection() {
 
                 <div>
                   <h3 className="text-sm font-bold tracking-[0.2em] text-brand mb-2 uppercase" style={{ transform: "translateZ(40px)" }}>
-                    Phase {step.number}
+                    {copy.sites.phase} {step.number}
                   </h3>
                   <h4 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 tracking-tight group-hover:text-brand transition-colors duration-300 font-(family-name:--font-cinzel)" style={{ transform: "translateZ(50px)" }}>
-                    {step.title}
+                    {copy.sites.steps[index].title}
                   </h4>
                   <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed font-light max-w-sm" style={{ transform: "translateZ(20px)" }}>
-                    {step.description}
+                    {copy.sites.steps[index].body}
                   </p>
                 </div>
               </div>
@@ -358,15 +330,18 @@ export default function WebsitesSection() {
                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                  className="block"
                >
-                 Featured Project
+                 {copy.sites.featured}
                </motion.span>
             </div>
           </h2>
           <Link href="/projects" className="group flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand hover:text-brand-bright transition-colors">
-            VIEW ALL PROJECTS
+            {copy.sites.all}
             <span className="transform transition-transform group-hover:translate-x-1">&rarr;</span>
           </Link>
         </div>
+        <p className="mb-8 max-w-2xl text-sm leading-relaxed text-black/55 dark:text-white/55">
+          {copy.sites.proof}
+        </p>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -387,6 +362,9 @@ export default function WebsitesSection() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
 
           <div className="absolute inset-0 z-20 p-8 sm:p-12 flex flex-col justify-end">
+            <div className="mb-4">
+              <PackageMark id="advanced" overlay />
+            </div>
             <h4 className="text-4xl sm:text-5xl md:text-7xl font-black font-(family-name:--font-cinzel) text-white tracking-widest mb-2 overflow-hidden py-1 leading-[1.1]">
               <motion.span 
                  initial={{ y: "100%" }} 
@@ -399,7 +377,7 @@ export default function WebsitesSection() {
                </motion.span>
             </h4>
             <p className="text-white/80 tracking-[0.2em] text-xs sm:text-sm font-mono uppercase transform transition-transform duration-500 group-hover:-translate-y-2 mb-8">
-              Festival Website & Ticketing Experience
+              {PROJECTS[0].description[lang]}
             </p>
 
             <a
@@ -409,86 +387,13 @@ export default function WebsitesSection() {
               className="w-fit pointer-events-auto bg-transparent border border-white text-white font-bold uppercase tracking-widest px-8 py-3 flex items-center justify-center gap-3 text-xs overflow-hidden relative group/btn"
             >
               <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1]"></span>
-              <span className="relative z-10 transition-colors duration-300">VIEW PROJECT &rarr;</span>
+              <span className="relative z-10 transition-colors duration-300">{copy.sites.view}</span>
             </a>
           </div>
         </motion.div>
 
-        {/* More projects grid — placeholders until case studies are ready */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
-          {otherProjects.map((project, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative aspect-[4/3] overflow-hidden border border-dashed border-black/15 dark:border-white/15 flex flex-col items-center justify-center gap-3 hover:border-brand/50 transition-colors duration-500"
-            >
-              <div className="flex items-center justify-center w-12 h-12 border border-black/10 dark:border-white/10 text-black/20 dark:text-white/20 group-hover:text-brand group-hover:border-brand group-hover:border-brand transition-all duration-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </div>
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-black/25 dark:text-white/25">
-                {project.status}
-              </span>
-              <span className="text-sm font-bold text-black/40 dark:text-white/40">
-                {project.category}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-t border-black/10 dark:border-white/10 w-full mb-24" />
-
-      {/* TESTIMONIALS */}
-      <div className="mb-32">
-        <div className="flex items-center gap-4 mb-16 justify-center">
-          <span className="w-12 h-px bg-brand"></span>
-          <span className="text-xs font-bold tracking-[0.3em] uppercase text-brand font-(family-name:--font-geist-mono)">
-            What Clients Say
-          </span>
-          <span className="w-12 h-px bg-brand"></span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.name}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="relative flex flex-col p-8 border border-black/10 dark:border-white/10 hover:border-brand/30 transition-colors duration-500"
-            >
-              <div className="flex gap-1 mb-5 text-brand">
-                {Array.from({ length: 5 }).map((_, j) => (
-                  <svg key={j} width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-sm text-black/65 dark:text-white/60 leading-relaxed italic mb-6 flex-grow">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full object-cover border border-black/10 dark:border-white/10"
-                />
-                <div>
-                  <p className="text-sm font-bold text-black dark:text-white">{t.name}</p>
-                  <p className="text-xs text-black/40 dark:text-white/40">{t.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="mt-6">
+          <ProjectCards projects={PROJECTS.slice(1)} />
         </div>
       </div>
 
@@ -497,45 +402,139 @@ export default function WebsitesSection() {
 }
 
 function PricingBoard() {
-  const { t } = useLanguage();
+  const { t, copy } = useLanguage();
+  const { currency } = useCurrency();
+  const { resolvedTheme } = useTheme();
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [pick, setPick] = useState<string | null>(null);
   const columns = [
     {
       key: "essential" as const,
       name: "ESSENTIAL",
-      price: "€800",
+      price: formatFromEur(800, currency),
+      priced: true,
       time: t("price_time_essential"),
+      timed: true,
       description: t("price_desc_essential"),
+      points: copy.sites.points.essential,
+      bring: "",
+      examples: [{ title: "Compa", href: "https://compagass.com/" }],
       highlight: false,
-      cta: t("price_inquire"),
+      cta: copy.sites.ctaEssential,
+      href: "/contact?package=essential",
     },
     {
       key: "advanced" as const,
       name: "ADVANCED",
-      price: "€1.200",
+      price: formatFromEur(1200, currency),
+      priced: true,
       time: t("price_time_advanced"),
+      timed: true,
       description: t("price_desc_advanced"),
+      points: copy.sites.points.advanced,
+      bring: "",
+      examples: [
+        { title: "Axelfest", href: "https://axelfest.nl" },
+        { title: "Exclusive Masterpiece", href: "https://exclusivemasterpiece.site/" },
+      ],
       highlight: true,
-      cta: t("price_start"),
+      cta: copy.sites.ctaAdvanced,
+      href: "/contact?package=advanced",
     },
     {
       key: "shop" as const,
-      name: "E-COMMERCE",
+      name: "WEBSHOP",
       price: t("price_custom"),
+      priced: false,
       time: t("price_time_shop"),
+      timed: true,
       description: t("price_desc_shop"),
+      points: copy.sites.points.shop,
+      bring: "",
+      examples: [] as { title: string; href: string }[],
       highlight: false,
-      cta: t("price_inquire"),
+      cta: copy.sites.ctaShop,
+      href: "/contact?package=shop",
+    },
+    {
+      key: "custom" as const,
+      name: copy.footer.custom,
+      price: t("price_intake"),
+      priced: false,
+      time: copy.sites.customWhen,
+      timed: false,
+      description: t("price_desc_custom"),
+      points: copy.sites.points.custom,
+      bring: copy.sites.customBring,
+      examples: [{ title: "MK Studios", href: "https://mkstudios.vercel.app/" }],
+      highlight: false,
+      cta: copy.sites.ctaCustom,
+      href: "/contact?package=custom",
     },
   ];
+  const compared = columns.filter((col) => col.key !== "custom");
+  const custom = columns.find((col) => col.key === "custom");
+  const customIcons = ["motion", "cube", "spark"] as const;
+
+  const picked = columns.find((col) => col.key === pick);
 
   return (
-    <div id="pricing" className="relative z-10 mb-24">
-      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3">
-        {columns.map((col) => (
+    <div id="pricing" className="relative z-10 mb-24 scroll-mt-28">
+      <div className="mb-8 border border-black/10 p-6 dark:border-white/15 sm:p-8">
+        <p className="font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.25em] text-brand uppercase">
+          {copy.sites.pick}
+        </p>
+        <p className="mt-2 max-w-xl text-sm text-black/60 dark:text-white/60">{copy.sites.pickBody}</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {copy.sites.pickOptions.map((option) => {
+            const active = pick === option.key;
+            return (
+              <button
+                key={option.key}
+                type="button"
+                onClick={() => setPick(option.key)}
+                className={`border px-4 py-2 text-left text-sm font-semibold transition-colors ${
+                  active
+                    ? "border-brand bg-brand text-white"
+                    : "border-black/15 text-black/70 hover:border-brand dark:border-white/15 dark:text-white/70"
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+        {picked && (
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-black/10 pt-5 dark:border-white/10">
+            <div>
+              <p className="font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.2em] text-brand uppercase">
+                {copy.sites.pickFit}
+              </p>
+              <p className="mt-1 font-(family-name:--font-cinzel) text-2xl font-bold text-black dark:text-white">
+                {picked.name}
+              </p>
+              <p className="text-sm text-black/60 dark:text-white/60">{picked.price}</p>
+            </div>
+            <Link
+              href={picked.href}
+              className="group/btn isolate relative inline-flex items-center justify-center overflow-hidden border border-brand px-6 py-3 text-xs font-bold tracking-widest text-white uppercase"
+            >
+              <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)]" />
+              <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-black dark:group-hover/btn:text-white">
+                {copy.sites.pickCta}
+              </span>
+            </Link>
+          </div>
+        )}
+      </div>
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
+        {compared.map((col) => (
           <article
             key={col.key}
             className={`relative flex flex-col bg-white p-8 dark:bg-black ${
-              col.highlight ? "" : "border border-black/10 dark:border-white/15"
+              col.highlight
+                ? "z-10 order-first border border-brand shadow-[0_28px_80px_rgba(11,70,253,0.22)] lg:order-none lg:-my-4 lg:px-9 lg:py-12"
+                : "border border-black/10 dark:border-white/15"
             }`}
           >
             {col.highlight && (
@@ -556,50 +555,181 @@ function PricingBoard() {
               <span className={`mb-6 font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.25em] uppercase ${col.highlight ? "text-brand" : "text-black/40 dark:text-white/40"}`}>
                 {col.name}
               </span>
-              <span className="text-xs font-medium tracking-widest text-black/40 uppercase dark:text-white/40">
-                {t("price_from")}
-              </span>
-              <div className="mt-1 text-4xl font-bold tracking-tight text-black sm:text-5xl dark:text-white font-(family-name:--font-cinzel)">
+              {col.priced && (
+                <span className="text-xs font-medium tracking-widest text-black/40 uppercase dark:text-white/40">
+                  {t("price_from")}
+                </span>
+              )}
+              <div className={`mt-1 font-bold tracking-tight text-black dark:text-white font-(family-name:--font-cinzel) ${col.highlight ? "text-5xl sm:text-6xl" : "text-4xl sm:text-5xl"}`}>
                 {col.price}
               </div>
-              <p className="mt-2 text-xs font-bold tracking-widest text-black/40 uppercase dark:text-white/40">
+              <p className="mt-3 text-sm text-black/70 dark:text-white/75">
+                {col.timed ? <span className="font-bold text-brand">{t("price_ready")} </span> : null}
                 {col.time}
               </p>
-              <p className="mt-4 min-h-16 text-sm leading-relaxed font-light text-black/55 dark:text-white/50">
+              <p className="mt-4 text-sm leading-relaxed font-light text-black/55 dark:text-white/50">
                 {col.description}
               </p>
+              {col.examples.length > 0 && (
+                <p className="mt-4 text-xs leading-relaxed text-black/50 dark:text-white/50">
+                  <span className="font-bold tracking-[0.16em] uppercase">{copy.sites.like} </span>
+                  {col.examples.map((example, index) => (
+                    <span key={example.href}>
+                      {index > 0 ? " · " : ""}
+                      <a href={example.href} target="_blank" rel="noopener noreferrer" className="font-bold text-brand hover:text-brand-bright">
+                        {example.title}
+                      </a>
+                    </span>
+                  ))}
+                </p>
+              )}
 
-              <ul className="mt-6 flex flex-col gap-2.5 border-t border-black/10 pt-6 dark:border-white/10">
-                {PRICE_ROWS.map((row) => {
-                  const on = col.key === "essential" ? row.essentialOn : col.key === "advanced" ? row.advancedOn : row.shopOn;
-                  const value = t(col.key === "essential" ? row.essential : col.key === "advanced" ? row.advanced : row.shop);
-                  return (
-                    <li key={row.label} className="flex items-baseline justify-between gap-4 text-sm">
-                      <span className="text-black/45 dark:text-white/40">{t(row.label)}</span>
-                      <span className={on ? "text-right text-black/80 dark:text-white/80" : "text-right text-black/35 line-through decoration-black/20 dark:text-white/30 dark:decoration-white/20"}>
-                        {value}
-                      </span>
-                    </li>
-                  );
-                })}
+              <ul className="mt-6 flex flex-col gap-3 border-t border-black/10 pt-6 dark:border-white/10">
+                {col.points.map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm text-black/80 dark:text-white/80">
+                    <LineIcon name="check" className={`mt-0.5 h-4 w-4 shrink-0 ${col.highlight ? "text-brand" : "text-black dark:text-white"}`} />
+                    {point}
+                  </li>
+                ))}
               </ul>
+              {col.bring ? (
+                <p className="mt-4 text-xs leading-relaxed text-black/50 dark:text-white/45">
+                  {col.bring}
+                </p>
+              ) : null}
 
               <Link
-                href="/contact"
-                className={`group/btn relative mt-8 flex items-center justify-center overflow-hidden border px-8 py-4 text-xs font-bold tracking-widest uppercase ${
+                href={col.href}
+                className={`group/btn isolate relative mt-8 flex items-center justify-center overflow-hidden border px-8 py-4 text-xs font-bold tracking-widest uppercase ${
                   col.highlight
-                    ? "border-brand text-brand"
+                    ? "border-brand text-white"
                     : "border-black/20 text-black dark:border-white/20 dark:text-white"
                 }`}
               >
-                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]" />
-                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{col.cta}</span>
+                <span
+                  className={`absolute inset-0 -z-10 bg-brand transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] ${
+                    col.highlight
+                      ? "[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)]"
+                      : "[clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]"
+                  }`}
+                />
+                <span className={`relative z-10 transition-colors duration-300 ${col.highlight ? "group-hover/btn:text-black dark:group-hover/btn:text-white" : "group-hover/btn:text-white"}`}>{col.cta}</span>
               </Link>
             </div>
           </article>
         ))}
       </div>
-      <p className="mt-5 text-xs tracking-wide text-black/40 dark:text-white/40">{t("price_vat")}</p>
+
+      {custom && (
+        <article className="mt-5 border border-black/10 bg-white p-8 dark:border-white/15 dark:bg-black lg:p-10">
+          <div className="grid items-stretch gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,34rem)]">
+            <div>
+              <span className="mb-6 block font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.25em] text-brand uppercase">
+                {custom.name}
+              </span>
+              <div className="text-4xl font-bold tracking-tight text-black sm:text-5xl dark:text-white font-(family-name:--font-cinzel)">
+                {custom.price}
+              </div>
+              <p className="mt-3 text-sm text-black/70 dark:text-white/75">{custom.time}</p>
+              <p className="mt-4 max-w-md text-sm leading-relaxed font-light text-black/55 dark:text-white/50">
+                {custom.description}
+              </p>
+              {custom.examples.length > 0 && (
+                <p className="mt-4 text-xs leading-relaxed text-black/50 dark:text-white/50">
+                  <span className="font-bold tracking-[0.16em] uppercase">{copy.sites.like} </span>
+                  {custom.examples.map((example) => (
+                    <a key={example.href} href={example.href} target="_blank" rel="noopener noreferrer" className="font-bold text-brand hover:text-brand-bright">
+                      {example.title}
+                    </a>
+                  ))}
+                </p>
+              )}
+              <Link
+                href={custom.href}
+                className="group/btn isolate relative mt-8 inline-flex items-center justify-center overflow-hidden border border-brand px-8 py-4 text-xs font-bold tracking-widest text-white uppercase"
+              >
+                <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)]" />
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-black dark:group-hover/btn:text-white">{custom.cta}</span>
+              </Link>
+              <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+                {custom.points.map((point, index) => (
+                  <li key={point} className="border border-black/10 p-4 dark:border-white/15">
+                    <LineIcon name={customIcons[index] ?? "spark"} className="mb-4 h-5 w-5 text-black dark:text-white" />
+                    <p className="text-sm leading-relaxed text-black/80 dark:text-white/80">{point}</p>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-xs leading-relaxed text-black/50 dark:text-white/45">{custom.bring}</p>
+            </div>
+            <div className="relative z-20 h-[24rem] w-full sm:h-[28rem] lg:h-full lg:min-h-[26rem]">
+              <ProductTurntable
+                url="/models/retro_computer_setup_free.glb"
+                light={resolvedTheme === "light"}
+                fit={1.85}
+                cameraZ={6.4}
+                fov={26}
+                restYaw={0.42}
+                restPitch={0.1}
+                autoYaw={0.1}
+                pitchMin={-0.2}
+                pitchMax={0.28}
+                className="relative h-full w-full"
+              />
+            </div>
+          </div>
+        </article>
+      )}
+
+      <p className="mt-5 text-xs tracking-wide text-black/40 dark:text-white/40">
+        {t("price_vat")} {currency.code !== "EUR" ? copy.fxNote : ""}
+      </p>
+
+      <button
+        type="button"
+        onClick={() => setCompareOpen((open) => !open)}
+        className="group/btn relative mt-6 inline-flex items-center overflow-hidden border border-black/20 px-6 py-3 text-xs font-bold tracking-widest text-black uppercase dark:border-white/20 dark:text-white"
+      >
+        <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]" />
+        <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">
+          {compareOpen ? copy.sites.compareHide : copy.sites.compare}
+        </span>
+      </button>
+
+      {compareOpen && (
+        <div className="mt-4 overflow-x-auto border border-black/10 dark:border-white/15">
+          <table className="w-full min-w-[40rem] text-left text-sm">
+            <thead>
+              <tr className="border-b border-black/10 dark:border-white/10">
+                <th className="px-4 py-3" />
+                {compared.map((col) => (
+                  <th key={col.key} className="px-4 py-3 font-(family-name:--font-geist-mono) text-[10px] font-bold tracking-[0.2em] text-black/50 uppercase dark:text-white/50">
+                    {col.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {PRICE_ROWS.map((row) => (
+                <tr key={row.label} className="border-b border-black/5 last:border-0 dark:border-white/5">
+                  <th className="px-4 py-3 font-normal text-black/45 dark:text-white/40">{t(row.label)}</th>
+                  {compared.map((col) => {
+                    const on = col.key === "essential" ? row.essentialOn : col.key === "advanced" ? row.advancedOn : row.shopOn;
+                    const value = t(col.key === "essential" ? row.essential : col.key === "advanced" ? row.advanced : row.shop);
+                    return (
+                      <td
+                        key={col.key}
+                        className={on ? "px-4 py-3 text-black/80 dark:text-white/80" : "px-4 py-3 text-black/35 line-through decoration-black/20 dark:text-white/30 dark:decoration-white/20"}
+                      >
+                        {value}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

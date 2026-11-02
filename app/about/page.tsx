@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/Footer";
+import { useLanguage } from "../components/LanguageProvider";
 
 const VALUES = [
   {
@@ -48,6 +49,12 @@ const TECH_STACK = [
 ];
 
 export default function AboutPage() {
+  const { copy } = useLanguage();
+  const values = [
+    { title: copy.about.craft, description: copy.about.craftBody, icon: VALUES[0].icon },
+    { title: copy.about.speed, description: copy.about.speedBody, icon: VALUES[1].icon },
+    { title: copy.about.clarity, description: copy.about.clarityBody, icon: VALUES[2].icon },
+  ];
   return (
     <main className="min-h-screen bg-white dark:bg-black transition-colors duration-500">
       {/* Hero Section */}
@@ -61,7 +68,7 @@ export default function AboutPage() {
           >
             <span className="w-12 h-px bg-black/30 dark:bg-white/30"></span>
             <span className="text-xs font-bold tracking-[0.3em] uppercase text-black/50 dark:text-white/50 font-(family-name:--font-geist-mono)">
-              ABOUT US
+              {copy.about.kicker}
             </span>
           </motion.div>
 
@@ -73,9 +80,9 @@ export default function AboutPage() {
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black dark:text-white tracking-tight leading-[1.1] mb-8"
               >
-                We build websites
+                {copy.about.title1}
                 <br />
-                <span className="text-black/40 dark:text-white/40">that work.</span>
+                <span className="text-black/40 dark:text-white/40">{copy.about.title2}</span>
               </motion.h1>
 
               <motion.p
@@ -84,7 +91,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-lg text-black/60 dark:text-white/60 leading-relaxed mb-6 max-w-xl"
               >
-                MK Studios is a web design studio based in Zeeland, Netherlands. We specialize in creating high-performance websites that look great and convert visitors into customers.
+                {copy.about.p1}
               </motion.p>
 
               <motion.p
@@ -93,7 +100,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-black/50 dark:text-white/50 leading-relaxed max-w-xl"
               >
-                Founded with a simple mission: deliver exceptional digital experiences without the agency overhead. No bloated teams, no endless meetings — just focused work that gets results.
+                {copy.about.p2}
               </motion.p>
             </div>
 
@@ -127,11 +134,11 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-3xl sm:text-4xl font-bold text-black dark:text-white tracking-tight mb-16"
           >
-            What we stand for
+            {copy.about.values}
           </motion.h2>
 
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            {VALUES.map((value, i) => (
+            {values.map((value, i) => (
               <motion.div
                 key={value.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -166,10 +173,10 @@ export default function AboutPage() {
             className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12"
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white tracking-tight">
-              Our tools
+              {copy.about.tools}
             </h2>
             <p className="text-black/50 dark:text-white/50 max-w-md">
-              We use modern, battle-tested technologies to build fast, scalable, and maintainable websites.
+              {copy.about.toolsBody}
             </p>
           </motion.div>
 
@@ -200,7 +207,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-3xl sm:text-4xl font-bold text-black dark:text-white tracking-tight mb-6"
           >
-            Ready to start?
+            {copy.about.ready}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -209,7 +216,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-black/50 dark:text-white/50 mb-10 max-w-md mx-auto"
           >
-            Let's talk about your project and see how we can help bring your vision to life.
+            {copy.about.readyBody}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -219,9 +226,10 @@ export default function AboutPage() {
           >
             <Link
               href="/contact"
-              className="group/btn relative inline-flex items-center justify-center gap-2 border border-black dark:border-white bg-transparent px-10 py-4 text-sm font-bold text-black dark:text-white tracking-widest uppercase overflow-hidden hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
+              className="group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden border border-black bg-transparent px-10 py-4 text-sm font-bold tracking-widest text-black uppercase dark:border-white dark:text-white"
             >
-              Get in Touch
+              <span className="absolute inset-0 -z-10 bg-brand [clip-path:polygon(0_0,0_0,-30%_100%,-30%_100%)] transition-[clip-path] duration-500 ease-[0.19,1,0.22,1] group-hover/btn:[clip-path:polygon(0_0,130%_0,100%_100%,-30%_100%)]" />
+              <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">{copy.about.cta}</span>
             </Link>
           </motion.div>
         </div>
