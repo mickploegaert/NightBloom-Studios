@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { Suspense, useEffect, useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -125,7 +125,7 @@ function ChoiceGrid({
   );
 }
 
-export default function ContactPage() {
+function ContactPage() {
   const { copy } = useLanguage();
   const { currency } = useCurrency();
   const params = useSearchParams();
@@ -731,5 +731,13 @@ export default function ContactPage() {
     </main>
     <Footer />
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-white dark:bg-black" />}>
+      <ContactPage />
+    </Suspense>
   );
 }
